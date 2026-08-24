@@ -45,14 +45,14 @@ export default async function AdminDashboardPage() {
   );
 
   return (
-    <div className="space-y-10">
+    <div className="space-y-6 sm:space-y-10">
       {/* Top Header */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-6 border-b border-luxury-800">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-4 sm:pb-6 border-b border-luxury-800">
         <div>
           <span className="text-[10px] uppercase tracking-ultra text-gold font-semibold block">
             Executive Control
           </span>
-          <h1 className="font-serif text-3xl text-luxury-100 font-normal">
+          <h1 className="font-serif text-2xl sm:text-3xl text-luxury-100 font-normal">
             Atelier Overview
           </h1>
         </div>

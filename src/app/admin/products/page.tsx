@@ -13,15 +13,15 @@ export default async function AdminProductsPage() {
   const productsData = await getProducts({ limit: 100 });
 
   return (
-    <div className="space-y-8">
-      <div className="border-b border-luxury-800 pb-6">
+    <div className="space-y-6 sm:space-y-8">
+      <div className="border-b border-luxury-800 pb-4 sm:pb-6">
         <span className="text-[10px] uppercase tracking-ultra text-gold font-semibold block">
           Inventory Control
         </span>
-        <h1 className="font-serif text-3xl text-luxury-100 font-normal">
+        <h1 className="font-serif text-2xl sm:text-3xl text-luxury-100 font-normal">
           Timepiece Vault Management
         </h1>
-        <p className="text-xs text-luxury-400 mt-1">
+        <p className="text-xs text-luxury-400 mt-1 hidden sm:block">
           Manage listings, toggle featured curations, inspect photography, and edit specifications.
         </p>
       </div>
