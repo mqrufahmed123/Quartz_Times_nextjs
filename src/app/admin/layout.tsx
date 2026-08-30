@@ -3,7 +3,7 @@ import { getAdminSession } from '@/lib/auth';
 import { AdminShell } from '@/components/admin/AdminShell';
 
 export const metadata = {
-  title: 'Director Portal | Quartz Times Atelier',
+  title: 'Admin | Quartz Times',
   robots: {
     index: false,
     follow: false,

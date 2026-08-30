@@ -2,10 +2,7 @@ import type { Metadata } from 'next';
 import { Inter, Playfair_Display } from 'next/font/google';
 import './globals.css';
 import { ThemeProvider } from '@/components/common/ThemeProvider';
-import { AnnouncementBar } from '@/components/common/AnnouncementBar';
-import { Navbar } from '@/components/common/Navbar';
-import { Footer } from '@/components/common/Footer';
-import { WhatsAppFloatingButton } from '@/components/common/WhatsAppButton';
+import { AppShell } from '@/components/common/AppShell';
 
 const inter = Inter({
   subsets: ['latin'],
@@ -81,11 +78,7 @@ export default function RootLayout({
       </head>
       <body className="bg-slate-50 dark:bg-[#0A0A0B] text-slate-900 dark:text-[#F0EFF4] min-h-screen flex flex-col antialiased transition-colors duration-200">
         <ThemeProvider>
-          <AnnouncementBar />
-          <Navbar />
-          <main className="flex-1">{children}</main>
-          <Footer />
-          <WhatsAppFloatingButton />
+          <AppShell>{children}</AppShell>
         </ThemeProvider>
       </body>
     </html>

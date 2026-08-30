@@ -45,7 +45,7 @@ export const InquiryList: React.FC<InquiryListProps> = ({ initialInquiries }) =>
     const rawNumber = inquiry.phone.replace(/[^0-9]/g, '');
     const text = `Hello ${inquiry.name},
 
-Thank you for reaching out to Quartz Times Horology regarding ${inquiry.product || 'our collection'}.
+Thank you for contacting Quartz Times about ${inquiry.product || 'our watches'}.
 I am following up on your message: "${inquiry.message}".
 
 How may I assist you with high-definition media or acquisition details today?`;
@@ -56,7 +56,7 @@ How may I assist you with high-definition media or acquisition details today?`;
   return (
     <div className="space-y-6">
       {/* Filter Tabs */}
-      <div className="flex flex-wrap items-center gap-2 border-b border-luxury-800 pb-3">
+      <div className="flex flex-wrap items-center gap-2 border-b border-slate-200 dark:border-slate-800 pb-3">
         {[
           { id: 'all', label: 'All Inquiries' },
           { id: 'new', label: 'New / Unread' },
@@ -69,8 +69,8 @@ How may I assist you with high-definition media or acquisition details today?`;
             onClick={() => setFilterStatus(tab.id)}
             className={`px-3 py-1.5 rounded-full text-xs font-medium transition-colors ${
               filterStatus === tab.id
-                ? 'bg-gold text-luxury-950 font-semibold'
-                : 'bg-luxury-900 text-luxury-300 hover:text-white border border-luxury-800'
+                ? 'bg-amber-500 text-slate-950 font-semibold'
+                : 'bg-slate-100 dark:bg-slate-900 text-slate-600 dark:text-slate-300 hover:text-white border border-slate-200 dark:border-slate-800'
             }`}
           >
             {tab.label}
@@ -93,18 +93,18 @@ How may I assist you with high-definition media or acquisition details today?`;
             return (
               <div
                 key={id}
-                className="p-5 rounded-xl bg-luxury-900/40 border border-luxury-800 hover:border-luxury-700 transition-all space-y-4"
+                className="p-5 rounded-xl bg-white dark:bg-slate-900/50 border border-slate-200 dark:border-slate-800 hover:border-slate-300 dark:border-slate-700 transition-all space-y-4"
               >
-                <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 border-b border-luxury-800/80 pb-3">
+                <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 border-b border-slate-200 dark:border-slate-800/80 pb-3">
                   <div className="flex items-center gap-3">
-                    <div className="w-8 h-8 rounded-full bg-gold/15 text-gold border border-gold/30 flex items-center justify-center font-bold text-xs">
+                    <div className="w-8 h-8 rounded-full bg-amber-50 dark:bg-amber-500/15 text-amber-600 dark:text-amber-400 border border-amber-300 dark:border-amber-500/30 flex items-center justify-center font-bold text-xs">
                       <User className="w-4 h-4" />
                     </div>
                     <div>
-                      <h4 className="font-serif text-sm font-semibold text-luxury-100">
+                      <h4 className="font-serif text-sm font-semibold text-slate-900 dark:text-slate-100">
                         {inq.name}
                       </h4>
-                      <span className="text-[10px] text-luxury-400">
+                      <span className="text-[10px] text-slate-500 dark:text-slate-400">
                         Received on {formatDate(inq.createdAt)}
                       </span>
                     </div>
@@ -119,7 +119,7 @@ How may I assist you with high-definition media or acquisition details today?`;
                       value={inq.status}
                       onChange={(e) => handleStatusChange(id, e.target.value as any)}
                       aria-label="Change inquiry status"
-                      className="bg-luxury-950 border border-luxury-800 rounded px-2.5 py-1 text-xs text-luxury-200 focus:outline-none"
+                      className="bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 rounded px-2.5 py-1 text-xs text-slate-700 dark:text-slate-200 focus:outline-none"
                     >
                       <option value="new">Mark as New</option>
                       <option value="contacted">Mark Contacted</option>
@@ -131,27 +131,27 @@ How may I assist you with high-definition media or acquisition details today?`;
 
                 {/* Inquired Product info */}
                 {inq.product && (
-                  <div className="bg-luxury-950/70 p-2.5 rounded border border-luxury-800/60 text-xs flex items-center justify-between">
-                    <span className="text-luxury-400">Target Timepiece:</span>
-                    <span className="font-medium text-gold">{inq.product}</span>
+                  <div className="bg-slate-50 dark:bg-slate-950/70 p-2.5 rounded border border-slate-200 dark:border-slate-800/60 text-xs flex items-center justify-between">
+                    <span className="text-slate-500 dark:text-slate-400">Watch:</span>
+                    <span className="font-medium text-amber-600 dark:text-amber-400">{inq.product}</span>
                   </div>
                 )}
 
                 {/* Message Body */}
-                <p className="text-xs text-luxury-200 leading-relaxed font-light whitespace-pre-line bg-luxury-950/40 p-3 rounded-lg border border-luxury-900">
+                <p className="text-xs text-slate-700 dark:text-slate-200 leading-relaxed font-light whitespace-pre-line bg-slate-50 dark:bg-slate-950/40 p-3 rounded-lg border border-slate-100 dark:border-slate-900">
                   &ldquo;{inq.message}&rdquo;
                 </p>
 
                 {/* Client Contact Info & Action Buttons */}
                 <div className="flex flex-wrap items-center justify-between gap-4 pt-2">
-                  <div className="flex flex-wrap items-center gap-4 text-xs text-luxury-400">
+                  <div className="flex flex-wrap items-center gap-4 text-xs text-slate-500 dark:text-slate-400">
                     <div className="flex items-center gap-1.5">
-                      <Phone className="w-3.5 h-3.5 text-gold" />
+                      <Phone className="w-3.5 h-3.5 text-amber-600 dark:text-amber-400" />
                       <span>{inq.phone}</span>
                     </div>
                     {inq.email && (
                       <div className="flex items-center gap-1.5">
-                        <Mail className="w-3.5 h-3.5 text-gold" />
+                        <Mail className="w-3.5 h-3.5 text-amber-600 dark:text-amber-400" />
                         <span>{inq.email}</span>
                       </div>
                     )}
@@ -161,7 +161,7 @@ How may I assist you with high-definition media or acquisition details today?`;
                     href={getWhatsAppReplyUrl(inq)}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="inline-flex items-center gap-2 bg-[#25D366] hover:bg-[#20bd5a] text-luxury-950 font-bold text-xs uppercase tracking-wider px-4 py-2 rounded-lg transition-all"
+                    className="inline-flex items-center gap-2 bg-[#25D366] hover:bg-[#20bd5a] text-slate-950 font-bold text-xs uppercase tracking-wider px-4 py-2 rounded-lg transition-all"
                   >
                     <MessageCircle className="w-4 h-4 fill-current" />
                     <span>Reply on WhatsApp</span>
@@ -171,7 +171,7 @@ How may I assist you with high-definition media or acquisition details today?`;
             );
           })
         ) : (
-          <div className="p-8 rounded-xl border border-luxury-800 bg-luxury-900/20 text-center text-xs text-luxury-500">
+          <div className="p-8 rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900/30 text-center text-xs text-slate-400 dark:text-slate-500">
             No inquiries under &ldquo;{filterStatus}&rdquo; status.
           </div>
         )}

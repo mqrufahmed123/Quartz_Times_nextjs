@@ -49,9 +49,9 @@ export async function POST(req: NextRequest) {
     }
 
     const data = await req.json();
-    if (!data.name || !data.brand || !data.price || !data.sku) {
+    if (!data.name || !data.brand || !data.description || !data.price || !data.sku) {
       return NextResponse.json(
-        { error: 'Name, brand, price, and SKU are required fields.' },
+        { error: 'Name, brand, description, price, and SKU are required.' },
         { status: 400 }
       );
     }

@@ -32,6 +32,7 @@ export const AdminShell: React.FC<{ children: React.ReactNode }> = ({ children }
   const pathname = usePathname();
   const router = useRouter();
   const [sidebarOpen, setSidebarOpen] = useState(false);
+  const [loggingOut, setLoggingOut] = useState(false);
   const { theme, toggleTheme } = useTheme();
 
   useEffect(() => {
@@ -44,12 +45,14 @@ export const AdminShell: React.FC<{ children: React.ReactNode }> = ({ children }
   }, [sidebarOpen]);
 
   const handleLogout = async () => {
+    setLoggingOut(true);
     try {
       await fetch('/api/auth/logout', { method: 'POST' });
       router.push('/admin/login');
       router.refresh();
     } catch (e) {
       console.error('Logout error:', e);
+      setLoggingOut(false);
     }
   };
 
@@ -134,10 +137,11 @@ export const AdminShell: React.FC<{ children: React.ReactNode }> = ({ children }
 
           <button
             onClick={handleLogout}
+            disabled={loggingOut}
             className="text-xs uppercase tracking-wider text-rose-600 dark:text-rose-400 hover:text-rose-500 font-bold transition-colors flex items-center gap-1.5 bg-rose-50 dark:bg-rose-950/40 border border-rose-200 dark:border-rose-900/60 px-3 py-1.5 rounded-lg"
           >
-            <LogOut className="w-3.5 h-3.5" />
-            <span className="hidden sm:inline">Sign Out</span>
+            {loggingOut ? <span className="h-3.5 w-3.5 animate-spin rounded-full border-2 border-rose-300 border-t-rose-600" /> : <LogOut className="w-3.5 h-3.5" />}
+            <span className="hidden sm:inline">{loggingOut ? 'Signing Out...' : 'Sign Out'}</span>
           </button>
         </div>
       </header>

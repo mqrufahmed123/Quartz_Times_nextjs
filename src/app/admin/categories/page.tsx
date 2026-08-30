@@ -14,15 +14,15 @@ export default async function AdminCategoriesPage() {
 
   return (
     <div className="space-y-8">
-      <div className="border-b border-luxury-800 pb-6">
-        <span className="text-[10px] uppercase tracking-ultra text-gold font-semibold block">
+      <div className="border-b border-slate-200 dark:border-slate-800 pb-6">
+        <span className="text-[10px] uppercase tracking-ultra text-amber-600 dark:text-amber-400 font-semibold block">
           Taxonomy
         </span>
-        <h1 className="font-serif text-3xl text-luxury-100 font-normal">
-          Horological Classifications & Categories
+        <h1 className="font-serif text-3xl text-slate-900 dark:text-slate-100 font-normal">
+          Product Categories
         </h1>
-        <p className="text-xs text-luxury-400 mt-1">
-          Define timepiece genres (Automatic, Chronograph, Quartz, Vintage, Dress, Diver).
+        <p className="text-xs text-slate-500 dark:text-slate-400 mt-1">
+          Create and manage the categories customers use to browse watches.
         </p>
       </div>
 

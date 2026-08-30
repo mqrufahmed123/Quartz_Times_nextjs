@@ -35,6 +35,12 @@ export async function PUT(
     }
 
     const data = await req.json();
+    if (!data.name || !data.brand || !data.description || !data.price || !data.sku) {
+      return NextResponse.json(
+        { error: 'Name, brand, description, price, and SKU are required.' },
+        { status: 400 }
+      );
+    }
     const updated = await updateProduct(params.id, data);
     if (!updated) {
       return NextResponse.json({ error: 'Product not found for update' }, { status: 404 });
@@ -60,7 +66,7 @@ export async function DELETE(
     }
 
     await deleteProduct(params.id);
-    return NextResponse.json({ success: true, message: 'Timepiece removed from vault' });
+    return NextResponse.json({ success: true, message: 'Watch deleted' });
   } catch (err: any) {
     return NextResponse.json(
       { error: err.message || 'Error deleting product' },
