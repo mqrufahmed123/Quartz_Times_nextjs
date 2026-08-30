@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useState } from 'react';
-import { Plus, Edit2, Trash2, Check, X, FolderTree, AlertCircle } from 'lucide-react';
+import { Edit2, Trash2, FolderTree, AlertCircle, Loader2 } from 'lucide-react';
 import { ICategory } from '@/types';
 import { slugify } from '@/lib/utils';
 
@@ -16,6 +16,7 @@ export const CategoryManager: React.FC<CategoryManagerProps> = ({ initialCategor
   const [image, setImage] = useState('');
   const [editingId, setEditingId] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
+  const [deletingId, setDeletingId] = useState<string | null>(null);
   const [error, setError] = useState('');
 
   const handleSave = async (e: React.FormEvent) => {
@@ -77,6 +78,7 @@ export const CategoryManager: React.FC<CategoryManagerProps> = ({ initialCategor
   const handleDelete = async (id: string, catName: string) => {
     if (!confirm(`Delete category "${catName}"?`)) return;
 
+    setDeletingId(id);
     try {
       const res = await fetch(`/api/categories/${id}`, { method: 'DELETE' });
       if (res.ok) {
@@ -84,6 +86,8 @@ export const CategoryManager: React.FC<CategoryManagerProps> = ({ initialCategor
       }
     } catch (e) {
       console.error(e);
+    } finally {
+      setDeletingId(null);
     }
   };
 
@@ -163,7 +167,10 @@ export const CategoryManager: React.FC<CategoryManagerProps> = ({ initialCategor
             disabled={loading}
             className="w-full bg-amber-500 hover:bg-amber-600 text-slate-950 font-bold text-xs uppercase tracking-wider py-3 rounded-lg shadow-md transition-all disabled:opacity-50"
           >
-            {editingId ? 'Update Category' : 'Create Category'}
+            <span className="inline-flex items-center justify-center gap-2">
+              {loading && <Loader2 className="h-4 w-4 animate-spin" />}
+              {loading ? 'Saving...' : editingId ? 'Update Category' : 'Create Category'}
+            </span>
           </button>
         </form>
       </div>
@@ -208,10 +215,11 @@ export const CategoryManager: React.FC<CategoryManagerProps> = ({ initialCategor
                         </button>
                         <button
                           onClick={() => handleDelete(id, cat.name)}
+                          disabled={deletingId === id}
                           className="p-1.5 rounded text-rose-400 hover:text-rose-300"
                           title="Delete"
                         >
-                          <Trash2 className="w-3.5 h-3.5" />
+                          {deletingId === id ? <Loader2 className="w-3.5 h-3.5 animate-spin" /> : <Trash2 className="w-3.5 h-3.5" />}
                         </button>
                       </div>
                     </td>

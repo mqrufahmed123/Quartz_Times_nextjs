@@ -3,7 +3,7 @@
 import React, { useState } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
-import { Edit2, Trash2, ExternalLink, Search, Star, Plus } from 'lucide-react';
+import { Edit2, Trash2, ExternalLink, Search, Star, Plus, Loader2 } from 'lucide-react';
 import { IProduct } from '@/types';
 import { formatPrice } from '@/lib/utils';
 import { Badge } from '@/components/common/Badge';
@@ -16,6 +16,7 @@ export const ProductTable: React.FC<ProductTableProps> = ({ initialProducts }) =
   const [products, setProducts] = useState<IProduct[]>(initialProducts);
   const [search, setSearch] = useState('');
   const [deletingId, setDeletingId] = useState<string | null>(null);
+  const [updatingFeaturedId, setUpdatingFeaturedId] = useState<string | null>(null);
 
   const filtered = products.filter(
     (p) =>
@@ -46,8 +47,10 @@ export const ProductTable: React.FC<ProductTableProps> = ({ initialProducts }) =
 
   const handleToggleFeatured = async (product: IProduct) => {
     const newFeatured = !product.featured;
+    const id = product.id || product._id;
+    if (!id) return;
+    setUpdatingFeaturedId(id);
     try {
-      const id = product.id || product._id;
       const res = await fetch(`/api/products/${id}`, {
         method: 'PUT',
         headers: { 'Content-Type': 'application/json' },
@@ -63,6 +66,8 @@ export const ProductTable: React.FC<ProductTableProps> = ({ initialProducts }) =
       }
     } catch (err) {
       console.error(err);
+    } finally {
+      setUpdatingFeaturedId(null);
     }
   };
 
@@ -168,6 +173,7 @@ export const ProductTable: React.FC<ProductTableProps> = ({ initialProducts }) =
                       <td className="py-3.5 px-4 text-center">
                         <button
                           type="button"
+                          disabled={updatingFeaturedId === id}
                           onClick={() => handleToggleFeatured(prod)}
                           title="Toggle Featured on Homepage"
                           className={`p-1.5 rounded-full transition-colors ${
@@ -176,7 +182,11 @@ export const ProductTable: React.FC<ProductTableProps> = ({ initialProducts }) =
                               : 'text-slate-300 dark:text-slate-600 hover:text-slate-500 dark:text-slate-400'
                           }`}
                         >
-                          <Star className={`w-4 h-4 ${prod.featured ? 'fill-current' : ''}`} />
+                          {updatingFeaturedId === id ? (
+                            <Loader2 className="w-4 h-4 animate-spin" />
+                          ) : (
+                            <Star className={`w-4 h-4 ${prod.featured ? 'fill-current' : ''}`} />
+                          )}
                         </button>
                       </td>
 
@@ -206,7 +216,7 @@ export const ProductTable: React.FC<ProductTableProps> = ({ initialProducts }) =
                             className="p-1.5 rounded text-rose-400 hover:text-rose-300 transition-colors disabled:opacity-50"
                             title="Delete watch"
                           >
-                            <Trash2 className="w-3.5 h-3.5" />
+                            {deletingId === id ? <Loader2 className="w-3.5 h-3.5 animate-spin" /> : <Trash2 className="w-3.5 h-3.5" />}
                           </button>
                         </div>
                       </td>

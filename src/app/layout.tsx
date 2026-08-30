@@ -1,8 +1,10 @@
 import type { Metadata } from 'next';
+import { Suspense } from 'react';
 import { Inter, Playfair_Display } from 'next/font/google';
 import './globals.css';
 import { ThemeProvider } from '@/components/common/ThemeProvider';
 import { AppShell } from '@/components/common/AppShell';
+import { NavigationProgress } from '@/components/common/NavigationProgress';
 
 const inter = Inter({
   subsets: ['latin'],
@@ -78,6 +80,9 @@ export default function RootLayout({
       </head>
       <body className="bg-slate-50 dark:bg-[#0A0A0B] text-slate-900 dark:text-[#F0EFF4] min-h-screen flex flex-col antialiased transition-colors duration-200">
         <ThemeProvider>
+          <Suspense fallback={null}>
+            <NavigationProgress />
+          </Suspense>
           <AppShell>{children}</AppShell>
         </ThemeProvider>
       </body>

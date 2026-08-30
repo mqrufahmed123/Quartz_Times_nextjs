@@ -35,7 +35,10 @@ export async function PUT(
     }
 
     const data = await req.json();
-    if (!data.name || !data.brand || !data.description || !data.price || !data.sku) {
+    const isFullProductUpdate = ['name', 'brand', 'description', 'price', 'sku'].some(
+      (field) => field in data
+    );
+    if (isFullProductUpdate && (!data.name || !data.brand || !data.description || !data.price || !data.sku)) {
       return NextResponse.json(
         { error: 'Name, brand, description, price, and SKU are required.' },
         { status: 400 }

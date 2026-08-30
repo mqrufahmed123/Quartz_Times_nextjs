@@ -1,9 +1,9 @@
 'use client';
 
-import React from 'react';
+import React, { useState } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
-import { MessageCircle, ArrowUpRight } from 'lucide-react';
+import { MessageCircle, ArrowUpRight, Loader2 } from 'lucide-react';
 import { IProduct } from '@/types';
 import { formatPrice } from '@/lib/utils';
 import { getProductWhatsAppUrl } from '@/lib/whatsapp';
@@ -15,6 +15,7 @@ export interface ProductCardProps {
 }
 
 export const ProductCard: React.FC<ProductCardProps> = ({ product, priority = false }) => {
+  const [opening, setOpening] = useState(false);
   const primaryImage =
     product.images?.find((img) => img.isPrimary) ||
     product.images?.[0] || {
@@ -44,6 +45,8 @@ export const ProductCard: React.FC<ProductCardProps> = ({ product, priority = fa
       {/* Product Image Stage */}
       <Link
         href={`/watches/${product.slug}`}
+        onClick={() => setOpening(true)}
+        aria-label={`View ${product.brand} ${product.name}`}
         className="relative aspect-[4/5] sm:aspect-[1/1] w-full overflow-hidden bg-slate-100 dark:bg-slate-950 block"
       >
         <Image
@@ -56,6 +59,15 @@ export const ProductCard: React.FC<ProductCardProps> = ({ product, priority = fa
         />
 
         <div className="absolute inset-0 bg-gradient-to-t from-slate-950/60 via-transparent to-transparent opacity-40 group-hover:opacity-20 transition-opacity" />
+
+        {opening && (
+          <div className="absolute inset-0 z-20 flex items-center justify-center bg-slate-950/55 backdrop-blur-[2px]" role="status">
+            <span className="flex items-center gap-2 rounded-full bg-white/95 px-4 py-2 text-xs font-semibold text-slate-900 shadow-lg dark:bg-slate-900/95 dark:text-slate-100">
+              <Loader2 className="h-4 w-4 animate-spin text-amber-500" />
+              Opening watch...
+            </span>
+          </div>
+        )}
 
         {/* Top Status Badges */}
         <div className="absolute top-3 left-3 right-3 flex items-center justify-between pointer-events-none z-10">
@@ -90,7 +102,7 @@ export const ProductCard: React.FC<ProductCardProps> = ({ product, priority = fa
           </div>
 
           {/* Watch Title */}
-          <Link href={`/watches/${product.slug}`} className="block">
+          <Link href={`/watches/${product.slug}`} onClick={() => setOpening(true)} className="block">
             <h3 className="font-serif text-base sm:text-lg font-bold text-slate-900 dark:text-slate-100 group-hover:text-amber-600 dark:group-hover:text-amber-400 transition-colors line-clamp-2 leading-snug">
               {product.name}
             </h3>
