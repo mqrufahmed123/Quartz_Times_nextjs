@@ -7,6 +7,20 @@ import { slugify } from '@/lib/utils';
 // In-memory runtime store for dev/demonstration when DB is not actively reachable
 let inMemoryProducts: IProduct[] = [...sampleProducts];
 
+function serializeImages(images: any[]): any[] {
+  if (!Array.isArray(images)) return [];
+  return images.map((img) => ({
+    url: img.url ?? '',
+    publicId: img.publicId ?? undefined,
+    alt: img.alt ?? '',
+    isPrimary: img.isPrimary ?? false,
+    width: img.width ?? undefined,
+    height: img.height ?? undefined,
+    // Intentionally omit _id — IProductMedia has no _id field and sub-doc ObjectIds
+    // with toJSON methods break Next.js Server → Client serialization.
+  }));
+}
+
 function documentToProduct(doc: any): IProduct {
   if (!doc) return doc;
   const obj = doc.toObject ? doc.toObject() : doc;
@@ -14,6 +28,7 @@ function documentToProduct(doc: any): IProduct {
     ...obj,
     id: obj._id ? obj._id.toString() : obj.id,
     _id: obj._id ? obj._id.toString() : obj.id,
+    images: serializeImages(obj.images),
     createdAt: obj.createdAt ? new Date(obj.createdAt).toISOString() : undefined,
     updatedAt: obj.updatedAt ? new Date(obj.updatedAt).toISOString() : undefined,
   };
@@ -91,6 +106,7 @@ export async function getProducts(
           ...d,
           id: d._id.toString(),
           _id: d._id.toString(),
+          images: serializeImages(d.images),
         }));
         return {
           items,
@@ -190,6 +206,7 @@ export async function getProductBySlug(slug: string): Promise<IProduct | null> {
           ...doc,
           id: (doc as any)._id.toString(),
           _id: (doc as any)._id.toString(),
+          images: serializeImages((doc as any).images),
         } as IProduct;
       }
     }
@@ -213,6 +230,7 @@ export async function getProductById(id: string): Promise<IProduct | null> {
           ...doc,
           id: (doc as any)._id.toString(),
           _id: (doc as any)._id.toString(),
+          images: serializeImages((doc as any).images),
         } as IProduct;
       }
     }

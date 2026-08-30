@@ -13,29 +13,29 @@ export const ProductSpecs: React.FC<ProductSpecsProps> = ({
   category,
 }) => {
   const specsList = [
-    { label: 'Manufacture', value: brand },
-    { label: 'Classification', value: category },
-    { label: 'Calibre / Movement', value: specifications.movement },
+    { label: 'Brand', value: brand },
+    { label: 'Category', value: category },
+    { label: 'Movement', value: specifications.movement },
     { label: 'Case Material', value: specifications.caseMaterial },
     { label: 'Case Diameter', value: specifications.caseDiameter },
-    { label: 'Dial & Luminescence', value: specifications.dialColor },
-    { label: 'Crystal / Glass', value: specifications.crystal },
+    { label: 'Dial Color', value: specifications.dialColor },
+    { label: 'Glass', value: specifications.crystal },
     { label: 'Strap / Bracelet', value: specifications.strapMaterial },
     { label: 'Water Resistance', value: specifications.waterResistance },
     { label: 'Power Reserve', value: specifications.powerReserve },
     { label: 'Reference Number', value: specifications.referenceNumber },
-    { label: 'Condition Grade', value: specifications.condition },
-    { label: 'Warranty & Coverage', value: specifications.warranty },
+    { label: 'Condition', value: specifications.condition },
+    { label: 'Warranty', value: specifications.warranty },
   ].filter((item) => Boolean(item.value));
 
   return (
-    <div className="rounded-xl border border-luxury-800 bg-luxury-900/30 p-6 sm:p-8">
-      <div className="border-b border-luxury-800 pb-4 mb-6">
-        <h3 className="font-serif text-lg sm:text-xl font-medium text-luxury-100">
-          Technical Specifications
+    <div className="rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900/30 p-6 sm:p-8 transition-colors shadow-sm">
+      <div className="border-b border-slate-200 dark:border-slate-800 pb-4 mb-6">
+        <h3 className="font-serif text-lg sm:text-xl font-bold text-slate-900 dark:text-slate-100">
+          Watch Specifications
         </h3>
-        <p className="text-xs uppercase tracking-widest text-luxury-400 mt-1">
-          Atelier Certification & Dimensions
+        <p className="text-xs uppercase tracking-wider text-slate-500 dark:text-slate-400 mt-1 font-medium">
+          Detailed technical and material information
         </p>
       </div>
 
@@ -43,12 +43,12 @@ export const ProductSpecs: React.FC<ProductSpecsProps> = ({
         {specsList.map((spec) => (
           <div
             key={spec.label}
-            className="flex items-center justify-between py-2.5 border-b border-luxury-800/60"
+            className="flex items-center justify-between py-2.5 border-b border-slate-100 dark:border-slate-800/60"
           >
-            <span className="text-luxury-400 font-medium tracking-wider uppercase text-[11px]">
+            <span className="text-slate-500 dark:text-slate-400 font-medium tracking-wider uppercase text-[11px]">
               {spec.label}
             </span>
-            <span className="text-luxury-100 font-medium text-right max-w-[60%]">
+            <span className="text-slate-900 dark:text-slate-100 font-semibold text-right max-w-[60%]">
               {spec.value}
             </span>
           </div>

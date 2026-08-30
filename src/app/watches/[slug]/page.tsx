@@ -2,7 +2,7 @@ import React from 'react';
 import { notFound } from 'next/navigation';
 import { Metadata } from 'next';
 import Link from 'next/link';
-import { ChevronRight, ShieldCheck, Home } from 'lucide-react';
+import { ChevronRight, Home } from 'lucide-react';
 import { getProductBySlug, getRelatedProducts } from '@/services/productService';
 import { ProductGallery } from '@/components/product/ProductGallery';
 import { ProductInfo } from '@/components/product/ProductInfo';
@@ -23,18 +23,18 @@ export async function generateMetadata({
   const product = await getProductBySlug(params.slug);
   if (!product) {
     return {
-      title: 'Timepiece Not Found | Quartz Times',
+      title: 'Watch Not Found | Quartz Times',
     };
   }
 
   const primaryImage = product.images?.[0]?.url || '';
 
   return {
-    title: `${product.brand} - ${product.name} | Quartz Times Horology`,
-    description: `${product.brand} ${product.name}. ${product.description.substring(0, 150)}... Certified authentic luxury timepiece with WhatsApp concierge.`,
+    title: `${product.brand} ${product.name} | Quartz Times`,
+    description: `${product.brand} ${product.name}. ${product.description.substring(0, 150)}... 100% authentic luxury watch with fast WhatsApp support.`,
     openGraph: {
       title: `${product.brand} ${product.name} | Quartz Times`,
-      description: `${product.brand} ${product.name} - ${formatPrice(product.price, product.currency)}. Certified Authentic.`,
+      description: `${product.brand} ${product.name} - ${formatPrice(product.price, product.currency)}. 100% Authentic.`,
       images: primaryImage ? [{ url: primaryImage, alt: product.name }] : [],
     },
   };
@@ -55,7 +55,6 @@ export default async function ProductDetailPage({
     4
   );
 
-  // Structured Data (JSON-LD) for SEO
   const jsonLd = {
     '@context': 'https://schema.org',
     '@type': 'Product',
@@ -80,40 +79,38 @@ export default async function ProductDetailPage({
   };
 
   return (
-    <div className="py-8 sm:py-12 bg-luxury-950 min-h-screen">
-      {/* Inject Structured Data */}
+    <div className="py-8 sm:py-12 bg-slate-50 dark:bg-[#0A0A0B] min-h-screen text-slate-900 dark:text-slate-100 transition-colors">
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
       />
 
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-12">
-        {/* Breadcrumb Bar */}
-        <nav className="flex items-center space-x-2 text-xs uppercase tracking-wider text-luxury-400">
-          <Link href="/" className="hover:text-gold transition-colors flex items-center gap-1">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-10">
+        {/* Breadcrumbs */}
+        <nav className="flex items-center space-x-2 text-xs uppercase tracking-wider text-slate-500 dark:text-slate-400 font-medium">
+          <Link href="/" className="hover:text-amber-500 transition-colors flex items-center gap-1">
             <Home className="w-3.5 h-3.5" />
             <span className="hidden sm:inline">Home</span>
           </Link>
-          <ChevronRight className="w-3.5 h-3.5 text-luxury-600" />
-          <Link href="/watches" className="hover:text-gold transition-colors">
-            Vault
+          <ChevronRight className="w-3.5 h-3.5 text-slate-400 dark:text-slate-600" />
+          <Link href="/watches" className="hover:text-amber-500 transition-colors">
+            Watches
           </Link>
-          <ChevronRight className="w-3.5 h-3.5 text-luxury-600" />
+          <ChevronRight className="w-3.5 h-3.5 text-slate-400 dark:text-slate-600" />
           <Link
             href={`/watches?category=${product.category.toLowerCase()}`}
-            className="hover:text-gold transition-colors"
+            className="hover:text-amber-500 transition-colors"
           >
             {product.category}
           </Link>
-          <ChevronRight className="w-3.5 h-3.5 text-luxury-600" />
-          <span className="text-luxury-200 truncate max-w-[200px] sm:max-w-none">
+          <ChevronRight className="w-3.5 h-3.5 text-slate-400 dark:text-slate-600" />
+          <span className="text-slate-800 dark:text-slate-200 truncate max-w-[200px] sm:max-w-none font-semibold">
             {product.name}
           </span>
         </nav>
 
-        {/* Primary Stage: Gallery + Info */}
+        {/* Gallery + Info */}
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-14 items-start">
-          {/* Left: Dominant Watch Photography Gallery */}
           <div className="lg:col-span-7">
             <ProductGallery
               images={product.images}
@@ -122,15 +119,13 @@ export default async function ProductDetailPage({
             />
           </div>
 
-          {/* Right: Watch Info, Pricing & WhatsApp Conversion */}
           <div className="lg:col-span-5">
             <ProductInfo product={product} />
           </div>
         </div>
 
-        {/* Middle Stage: Specifications Grid + Direct Inquiry Form */}
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-14 pt-8 border-t border-luxury-900">
-          {/* Left: Technical Specifications Table */}
+        {/* Specifications + Inquiry Form */}
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-14 pt-8 border-t border-slate-200 dark:border-slate-800">
           <div className="lg:col-span-7">
             <ProductSpecs
               specifications={product.specifications}
@@ -139,13 +134,12 @@ export default async function ProductDetailPage({
             />
           </div>
 
-          {/* Right: Concierge Booking / Inquiry Form */}
           <div className="lg:col-span-5">
             <DirectInquiryForm product={product} />
           </div>
         </div>
 
-        {/* Bottom: Related Timepieces */}
+        {/* Related Products */}
         <RelatedProducts products={relatedProducts} />
       </div>
     </div>

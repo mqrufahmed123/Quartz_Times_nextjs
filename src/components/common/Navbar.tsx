@@ -8,12 +8,13 @@ import {
   X,
   Search,
   MessageCircle,
-  Shield,
   ChevronRight,
-  Sparkles,
   Lock,
+  Sun,
+  Moon,
 } from 'lucide-react';
-import { getGeneralWhatsAppUrl, getFormattedWhatsAppDisplay } from '@/lib/whatsapp';
+import { getGeneralWhatsAppUrl } from '@/lib/whatsapp';
+import { useTheme } from '@/components/common/ThemeProvider';
 import { cn } from '@/lib/utils';
 
 export const Navbar: React.FC = () => {
@@ -23,6 +24,7 @@ export const Navbar: React.FC = () => {
   const [searchQuery, setSearchQuery] = useState('');
   const pathname = usePathname();
   const router = useRouter();
+  const { theme, toggleTheme } = useTheme();
 
   useEffect(() => {
     const handleScroll = () => {
@@ -36,7 +38,6 @@ export const Navbar: React.FC = () => {
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
-  // Close mobile menu on route change
   useEffect(() => {
     setIsMobileMenuOpen(false);
     setIsSearchOpen(false);
@@ -52,11 +53,11 @@ export const Navbar: React.FC = () => {
   };
 
   const navLinks = [
-    { label: 'Collection', href: '/watches' },
+    { label: 'Shop All', href: '/watches' },
     { label: 'Automatic', href: '/watches?category=automatic' },
     { label: 'Chronographs', href: '/watches?category=chronograph' },
-    { label: 'Heritage', href: '/watches?category=vintage' },
-    { label: 'Boutique Story', href: '/about' },
+    { label: 'Vintage', href: '/watches?category=vintage' },
+    { label: 'About Us', href: '/about' },
     { label: 'Contact', href: '/contact' },
   ];
 
@@ -64,33 +65,32 @@ export const Navbar: React.FC = () => {
     <>
       <header
         className={cn(
-          'sticky top-0 z-40 w-full transition-all duration-300',
+          'sticky top-0 z-40 w-full transition-all duration-300 border-b',
           isScrolled
-            ? 'bg-luxury-950/95 backdrop-blur-md border-b border-luxury-800/80 shadow-luxury py-3.5'
-            : 'bg-luxury-950/70 backdrop-blur-sm border-b border-luxury-900 py-5'
+            ? 'bg-white/95 dark:bg-[#0A0A0B]/95 backdrop-blur-md border-slate-200 dark:border-slate-800 shadow-sm py-3'
+            : 'bg-white/80 dark:bg-[#0A0A0B]/80 backdrop-blur-sm border-slate-100 dark:border-slate-900 py-4'
         )}
       >
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex items-center justify-between">
-          {/* Mobile Menu Button */}
+          {/* Mobile Menu Toggle */}
           <div className="flex items-center lg:hidden">
             <button
               onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-              className="p-2 text-luxury-300 hover:text-gold focus:outline-none"
-              aria-label="Toggle navigation menu"
+              className="p-2 text-slate-700 dark:text-slate-300 hover:text-amber-600 dark:hover:text-amber-400 focus:outline-none"
+              aria-label="Toggle menu"
             >
               {isMobileMenuOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
             </button>
           </div>
 
-          {/* Boutique Brand Logo */}
+          {/* Logo */}
           <div className="flex items-center">
             <Link href="/" className="group flex flex-col items-center sm:items-start">
-              <span className="font-serif text-xl sm:text-2xl font-bold tracking-widest text-luxury-100 group-hover:text-gold transition-colors flex items-center gap-1.5">
+              <span className="font-serif text-xl sm:text-2xl font-bold tracking-wider text-slate-900 dark:text-slate-100 group-hover:text-amber-600 dark:group-hover:text-amber-400 transition-colors">
                 QUARTZ TIMES
-                <span className="text-gold text-sm font-normal">✦</span>
               </span>
-              <span className="text-[9px] tracking-ultra uppercase text-gold/70 -mt-0.5 hidden sm:block">
-                Haute Horology & Fine Timepieces
+              <span className="text-[10px] tracking-widest uppercase text-amber-600 dark:text-amber-400/80 -mt-0.5 font-medium hidden sm:block">
+                Luxury & Premium Watches
               </span>
             </Link>
           </div>
@@ -108,16 +108,16 @@ export const Navbar: React.FC = () => {
                   key={link.label}
                   href={link.href}
                   className={cn(
-                    'text-xs uppercase tracking-widest transition-all duration-200 py-1 relative group font-medium',
+                    'text-xs uppercase tracking-wider font-semibold transition-colors py-1 relative group',
                     isActive
-                      ? 'text-gold'
-                      : 'text-luxury-300 hover:text-luxury-100'
+                      ? 'text-amber-600 dark:text-amber-400'
+                      : 'text-slate-600 dark:text-slate-300 hover:text-slate-900 dark:hover:text-white'
                   )}
                 >
                   {link.label}
                   <span
                     className={cn(
-                      'absolute bottom-0 left-0 w-0 h-[1px] bg-gold transition-all duration-300 group-hover:w-full',
+                      'absolute bottom-0 left-0 w-0 h-[2px] bg-amber-500 transition-all duration-300 group-hover:w-full',
                       isActive && 'w-full'
                     )}
                   />
@@ -126,33 +126,43 @@ export const Navbar: React.FC = () => {
             })}
           </nav>
 
-          {/* Action Tools */}
-          <div className="flex items-center space-x-3 sm:space-x-4">
+          {/* Header Action Icons */}
+          <div className="flex items-center space-x-2 sm:space-x-3">
             {/* Search Trigger */}
             <button
               onClick={() => setIsSearchOpen(true)}
-              className="p-2 text-luxury-300 hover:text-gold transition-colors rounded-full hover:bg-luxury-900/50"
+              className="p-2 text-slate-600 dark:text-slate-300 hover:text-amber-600 dark:hover:text-amber-400 transition-colors rounded-full hover:bg-slate-100 dark:hover:bg-slate-800"
               aria-label="Search watches"
             >
               <Search className="w-4 h-4" />
             </button>
 
-            {/* Direct WhatsApp Concierge Link */}
+            {/* Dark/Light Theme Toggle */}
+            <button
+              onClick={toggleTheme}
+              className="p-2 text-slate-600 dark:text-slate-300 hover:text-amber-600 dark:hover:text-amber-400 transition-colors rounded-full hover:bg-slate-100 dark:hover:bg-slate-800"
+              aria-label="Toggle light/dark theme"
+              title={`Switch to ${theme === 'dark' ? 'light' : 'dark'} mode`}
+            >
+              {theme === 'dark' ? <Sun className="w-4 h-4 text-amber-400" /> : <Moon className="w-4 h-4 text-slate-700" />}
+            </button>
+
+            {/* WhatsApp Link */}
             <a
               href={getGeneralWhatsAppUrl()}
               target="_blank"
               rel="noopener noreferrer"
-              className="hidden sm:inline-flex items-center gap-2 bg-luxury-900 border border-luxury-700 hover:border-gold text-luxury-200 hover:text-gold text-xs uppercase tracking-wider px-3.5 py-2 rounded-full transition-all duration-300"
+              className="hidden sm:inline-flex items-center gap-2 bg-emerald-50 dark:bg-slate-900 border border-emerald-300 dark:border-slate-700 hover:border-emerald-500 text-emerald-700 dark:text-emerald-400 text-xs font-semibold uppercase tracking-wider px-3.5 py-2 rounded-full transition-all"
             >
-              <MessageCircle className="w-3.5 h-3.5 text-emerald-400" />
+              <MessageCircle className="w-3.5 h-3.5 fill-current" />
               <span>WhatsApp</span>
             </a>
 
-            {/* Subtle Admin Entrance */}
+            {/* Admin Entrance */}
             <Link
               href="/admin"
-              className="p-2 text-luxury-400 hover:text-gold transition-colors opacity-70 hover:opacity-100"
-              title="Admin Portal"
+              className="p-2 text-slate-400 hover:text-amber-600 dark:hover:text-amber-400 transition-colors"
+              title="Admin Panel"
             >
               <Lock className="w-3.5 h-3.5" />
             </Link>
@@ -160,20 +170,20 @@ export const Navbar: React.FC = () => {
         </div>
       </header>
 
-      {/* Search Modal Overlay */}
+      {/* Search Modal */}
       {isSearchOpen && (
-        <div className="fixed inset-0 z-50 bg-luxury-950/90 backdrop-blur-md flex items-start justify-center pt-24 px-4">
-          <div className="w-full max-w-2xl bg-luxury-900 border border-luxury-700 rounded-xl p-6 shadow-2xl animate-in fade-in zoom-in-95 duration-200">
-            <div className="flex items-center justify-between border-b border-luxury-800 pb-4 mb-5">
-              <div className="flex items-center gap-2 text-gold">
+        <div className="fixed inset-0 z-50 bg-slate-900/60 dark:bg-black/80 backdrop-blur-sm flex items-start justify-center pt-20 px-4">
+          <div className="w-full max-w-2xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-xl p-6 shadow-2xl animate-in fade-in zoom-in-95 duration-200">
+            <div className="flex items-center justify-between border-b border-slate-200 dark:border-slate-800 pb-4 mb-5">
+              <div className="flex items-center gap-2 text-amber-600 dark:text-amber-400">
                 <Search className="w-5 h-5" />
-                <span className="font-serif text-lg font-medium text-luxury-100">
-                  Search Timepiece Vault
+                <span className="font-serif text-lg font-semibold text-slate-900 dark:text-slate-100">
+                  Search Watches
                 </span>
               </div>
               <button
                 onClick={() => setIsSearchOpen(false)}
-                className="text-luxury-400 hover:text-white p-1"
+                className="text-slate-400 hover:text-slate-700 dark:hover:text-white p-1"
               >
                 <X className="w-5 h-5" />
               </button>
@@ -185,29 +195,29 @@ export const Navbar: React.FC = () => {
                 autoFocus
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
-                placeholder="Search by brand, reference, model (e.g. Rolex Daytona, Omega, Royal Oak)..."
-                className="w-full bg-luxury-950 border border-luxury-700 rounded-lg px-4 py-3.5 text-sm text-luxury-100 placeholder-luxury-500 focus:outline-none focus:border-gold transition-colors"
+                placeholder="Search by brand or model (e.g. Rolex, Omega, Seiko, Chronograph)..."
+                className="w-full bg-slate-50 dark:bg-slate-950 border border-slate-300 dark:border-slate-700 rounded-lg px-4 py-3 text-sm text-slate-900 dark:text-slate-100 placeholder-slate-400 focus:outline-none focus:border-amber-500 transition-colors"
               />
               <button
                 type="submit"
-                className="absolute right-2.5 top-2.5 bg-gold hover:bg-gold-hover text-luxury-950 px-4 py-1.5 rounded text-xs font-semibold uppercase tracking-wider transition-colors"
+                className="absolute right-2.5 top-2 bg-amber-500 hover:bg-amber-600 text-slate-950 px-4 py-1.5 rounded text-xs font-bold uppercase tracking-wider transition-colors"
               >
                 Search
               </button>
             </form>
 
             <div className="space-y-3">
-              <p className="text-[11px] uppercase tracking-widest text-luxury-400">
+              <p className="text-[11px] uppercase tracking-wider font-medium text-slate-400">
                 Popular Searches
               </p>
               <div className="flex flex-wrap gap-2">
                 {[
-                  'Rolex Daytona',
+                  'Rolex',
                   'Audemars Piguet',
                   'Patek Philippe',
-                  'Omega Moonwatch',
-                  'Cartier Tank',
-                  'Grand Seiko Snowflake',
+                  'Omega',
+                  'Cartier',
+                  'Grand Seiko',
                   'Automatic',
                   'Chronograph',
                 ].map((term) => (
@@ -218,7 +228,7 @@ export const Navbar: React.FC = () => {
                       router.push(`/watches?search=${encodeURIComponent(term)}`);
                       setIsSearchOpen(false);
                     }}
-                    className="text-xs bg-luxury-950/80 hover:bg-luxury-800 border border-luxury-800 hover:border-luxury-700 text-luxury-300 hover:text-gold px-3 py-1.5 rounded-full transition-colors"
+                    className="text-xs bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-300 hover:text-amber-600 dark:hover:text-amber-400 px-3 py-1.5 rounded-full transition-colors font-medium"
                   >
                     {term}
                   </button>
@@ -233,23 +243,23 @@ export const Navbar: React.FC = () => {
       {isMobileMenuOpen && (
         <div className="fixed inset-0 z-50 lg:hidden">
           <div
-            className="fixed inset-0 bg-luxury-950/80 backdrop-blur-sm"
+            className="fixed inset-0 bg-slate-900/60 dark:bg-black/80 backdrop-blur-sm"
             onClick={() => setIsMobileMenuOpen(false)}
           />
 
-          <div className="fixed inset-y-0 left-0 w-4/5 max-w-sm bg-luxury-900 border-r border-luxury-800 p-6 flex flex-col justify-between shadow-2xl z-50 overflow-y-auto">
+          <div className="fixed inset-y-0 left-0 w-4/5 max-w-sm bg-white dark:bg-slate-900 border-r border-slate-200 dark:border-slate-800 p-6 flex flex-col justify-between shadow-2xl z-50 overflow-y-auto">
             <div>
-              <div className="flex items-center justify-between border-b border-luxury-800 pb-4 mb-6">
+              <div className="flex items-center justify-between border-b border-slate-200 dark:border-slate-800 pb-4 mb-6">
                 <Link
                   href="/"
                   onClick={() => setIsMobileMenuOpen(false)}
-                  className="font-serif text-lg font-bold tracking-widest text-luxury-100"
+                  className="font-serif text-lg font-bold tracking-wider text-slate-900 dark:text-slate-100"
                 >
                   QUARTZ TIMES
                 </Link>
                 <button
                   onClick={() => setIsMobileMenuOpen(false)}
-                  className="text-luxury-400 hover:text-white p-1"
+                  className="text-slate-400 hover:text-slate-700 dark:hover:text-white p-1"
                 >
                   <X className="w-5 h-5" />
                 </button>
@@ -261,23 +271,35 @@ export const Navbar: React.FC = () => {
                     key={link.label}
                     href={link.href}
                     onClick={() => setIsMobileMenuOpen(false)}
-                    className="flex items-center justify-between py-3 px-3 text-sm text-luxury-200 hover:text-gold hover:bg-luxury-950/50 rounded-lg transition-colors"
+                    className="flex items-center justify-between py-3 px-3 text-sm text-slate-700 dark:text-slate-200 hover:text-amber-600 dark:hover:text-amber-400 hover:bg-slate-100 dark:hover:bg-slate-800 rounded-lg transition-colors font-medium"
                   >
                     <span>{link.label}</span>
-                    <ChevronRight className="w-4 h-4 text-luxury-500" />
+                    <ChevronRight className="w-4 h-4 text-slate-400" />
                   </Link>
                 ))}
               </div>
 
-              <div className="border-t border-luxury-800 pt-6 space-y-3">
-                <p className="text-[11px] uppercase tracking-widest text-luxury-400">
-                  Direct Horologist Contact
+              {/* Theme switch in mobile menu */}
+              <div className="border-t border-slate-200 dark:border-slate-800 pt-4 mb-6 flex items-center justify-between">
+                <span className="text-xs font-semibold text-slate-600 dark:text-slate-300">Theme</span>
+                <button
+                  onClick={toggleTheme}
+                  className="flex items-center gap-2 text-xs font-semibold px-3 py-1.5 rounded-lg bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300"
+                >
+                  {theme === 'dark' ? <Sun className="w-4 h-4 text-amber-400" /> : <Moon className="w-4 h-4" />}
+                  <span>{theme === 'dark' ? 'Dark Mode' : 'Light Mode'}</span>
+                </button>
+              </div>
+
+              <div className="border-t border-slate-200 dark:border-slate-800 pt-6 space-y-3">
+                <p className="text-[11px] uppercase tracking-wider text-slate-400 font-medium">
+                  Direct WhatsApp Support
                 </p>
                 <a
                   href={getGeneralWhatsAppUrl('Mobile Menu')}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="w-full flex items-center justify-center gap-2 bg-[#25D366] text-luxury-950 font-semibold text-xs uppercase tracking-wider py-3 rounded-lg transition-all"
+                  className="w-full flex items-center justify-center gap-2 bg-[#25D366] text-white font-bold text-xs uppercase tracking-wider py-3 rounded-lg shadow-sm"
                 >
                   <MessageCircle className="w-4 h-4 fill-current" />
                   <span>Chat on WhatsApp</span>
@@ -285,9 +307,9 @@ export const Navbar: React.FC = () => {
               </div>
             </div>
 
-            <div className="border-t border-luxury-800 pt-4 text-[11px] text-luxury-500 text-center">
-              <p>Quartz Times Horology Atelier</p>
-              <p className="text-gold/70 mt-1">100% Certified Authentic</p>
+            <div className="border-t border-slate-200 dark:border-slate-800 pt-4 text-[11px] text-slate-400 text-center">
+              <p>Quartz Times Watch Boutique</p>
+              <p className="text-amber-600 dark:text-amber-400 font-medium mt-1">100% Authentic Guarantee</p>
             </div>
           </div>
         </div>

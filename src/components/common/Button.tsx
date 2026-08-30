@@ -32,27 +32,27 @@ export const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
     ref
   ) => {
     const baseStyles =
-      'inline-flex items-center justify-center font-medium tracking-wider uppercase transition-all duration-300 select-none disabled:opacity-50 disabled:pointer-events-none focus:outline-none focus:ring-1 focus:ring-gold/50';
+      'inline-flex items-center justify-center font-bold tracking-wider uppercase transition-all duration-200 select-none disabled:opacity-50 disabled:pointer-events-none focus:outline-none focus:ring-2 focus:ring-amber-500/50';
 
     const variants = {
       primary:
-        'bg-gold text-luxury-950 hover:bg-gold-hover hover:shadow-luxury-glow active:scale-[0.98] border border-gold',
+        'bg-amber-500 text-slate-950 hover:bg-amber-600 active:scale-[0.98] border border-amber-500 shadow-sm',
       secondary:
-        'bg-luxury-800 text-luxury-100 hover:bg-luxury-700 hover:text-white border border-luxury-700 active:scale-[0.98]',
+        'bg-slate-100 dark:bg-slate-800 text-slate-900 dark:text-slate-100 hover:bg-slate-200 dark:hover:bg-slate-700 border border-slate-300 dark:border-slate-700 active:scale-[0.98]',
       outline:
-        'bg-transparent text-luxury-200 border border-luxury-700 hover:border-gold hover:text-gold active:scale-[0.98]',
+        'bg-transparent text-slate-800 dark:text-slate-200 border border-slate-300 dark:border-slate-700 hover:border-amber-500 hover:text-amber-600 dark:hover:text-amber-400 active:scale-[0.98]',
       ghost:
-        'bg-transparent text-luxury-300 hover:text-gold hover:bg-luxury-900/50 active:scale-[0.98]',
+        'bg-transparent text-slate-700 dark:text-slate-300 hover:text-amber-600 dark:hover:text-amber-400 hover:bg-slate-100 dark:hover:bg-slate-800 active:scale-[0.98]',
       whatsapp:
-        'bg-[#25D366] text-luxury-950 font-semibold hover:bg-[#20bd5a] hover:shadow-[0_0_20px_-3px_rgba(37,211,102,0.4)] active:scale-[0.98] border border-[#25D366]',
+        'bg-[#25D366] text-white font-bold hover:bg-[#20bd5a] active:scale-[0.98] border border-[#25D366] shadow-sm',
       danger:
-        'bg-rose-900/80 text-rose-100 border border-rose-700 hover:bg-rose-800 active:scale-[0.98]',
+        'bg-rose-600 text-white hover:bg-rose-700 active:scale-[0.98]',
     };
 
     const sizes = {
-      sm: 'text-[11px] px-3.5 py-1.5 rounded-sm gap-1.5',
-      md: 'text-xs px-5 py-2.5 rounded-sm gap-2',
-      lg: 'text-sm px-7 py-3.5 rounded-sm gap-2.5',
+      sm: 'text-[11px] px-3.5 py-1.5 rounded-lg gap-1.5',
+      md: 'text-xs px-5 py-2.5 rounded-lg gap-2',
+      lg: 'text-sm px-7 py-3.5 rounded-lg gap-2.5',
     };
 
     const content = (

@@ -15,8 +15,8 @@ export const DirectInquiryForm: React.FC<DirectInquiryFormProps> = ({ product })
   const [email, setEmail] = useState('');
   const [message, setMessage] = useState(
     product
-      ? `Hello, I am interested in inquiring about the ${product.brand} ${product.name} (SKU: ${product.sku}). Please let me know the acquisition steps and live video inspection schedule.`
-      : 'Hello, I would like to inquire regarding timepiece sourcing and boutique services.'
+      ? `Hi, I am interested in buying the ${product.brand} ${product.name} (SKU: ${product.sku}). Please let me know current availability and delivery process.`
+      : 'Hi, I would like to inquire about your watch collection and availability.'
   );
 
   const [loading, setLoading] = useState(false);
@@ -62,47 +62,47 @@ export const DirectInquiryForm: React.FC<DirectInquiryFormProps> = ({ product })
   };
 
   const directWhatsAppUrl = getInquiryWhatsAppUrl({
-    name: name || 'Valued Client',
+    name: name || 'Customer',
     product: product ? `${product.brand} ${product.name} (${product.sku})` : undefined,
     message,
   });
 
   return (
-    <div className="rounded-xl border border-luxury-800 bg-luxury-900/40 p-6 sm:p-8">
-      <div className="border-b border-luxury-800 pb-4 mb-6">
-        <h3 className="font-serif text-lg sm:text-xl font-medium text-luxury-100">
-          Concierge Inquiry & Private Viewing
+    <div className="rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900/40 p-6 sm:p-8 transition-colors shadow-sm">
+      <div className="border-b border-slate-200 dark:border-slate-800 pb-4 mb-6">
+        <h3 className="font-serif text-lg sm:text-xl font-bold text-slate-900 dark:text-slate-100">
+          Inquire About This Watch
         </h3>
-        <p className="text-xs text-luxury-400 mt-1">
-          Submit your contact details and our senior watch advisor will respond promptly.
+        <p className="text-xs text-slate-500 dark:text-slate-400 mt-1 font-medium">
+          Send us a message and our team will get back to you right away.
         </p>
       </div>
 
       {success ? (
-        <div className="p-6 rounded-lg bg-emerald-950/40 border border-emerald-800/60 text-center space-y-4">
-          <CheckCircle2 className="w-10 h-10 text-emerald-400 mx-auto" />
-          <h4 className="font-serif text-lg text-emerald-200">
-            Inquiry Dispatched to Concierge
+        <div className="p-6 rounded-lg bg-emerald-50 dark:bg-emerald-950/40 border border-emerald-300 dark:border-emerald-800/60 text-center space-y-4">
+          <CheckCircle2 className="w-10 h-10 text-emerald-600 dark:text-emerald-400 mx-auto" />
+          <h4 className="font-serif text-lg font-bold text-emerald-900 dark:text-emerald-200">
+            Inquiry Sent Successfully!
           </h4>
-          <p className="text-xs text-luxury-300 max-w-md mx-auto leading-relaxed">
-            Thank you, <strong className="text-white">{name}</strong>. Our horological director has received your request and will reach out via WhatsApp / Phone shortly.
+          <p className="text-xs text-slate-600 dark:text-slate-300 max-w-md mx-auto leading-relaxed">
+            Thank you, <strong className="text-slate-900 dark:text-white">{name}</strong>. Our team has received your message and will reach out via Phone / WhatsApp shortly.
           </p>
           <div className="pt-2">
             <a
               href={directWhatsAppUrl}
               target="_blank"
               rel="noopener noreferrer"
-              className="inline-flex items-center gap-2 bg-[#25D366] hover:bg-[#20bd5a] text-luxury-950 font-bold text-xs uppercase tracking-wider px-5 py-2.5 rounded-lg transition-all"
+              className="inline-flex items-center gap-2 bg-[#25D366] hover:bg-[#20bd5a] text-white font-bold text-xs uppercase tracking-wider px-5 py-2.5 rounded-lg transition-all"
             >
               <MessageCircle className="w-4 h-4 fill-current" />
-              <span>Continue Directly on WhatsApp</span>
+              <span>Chat Directly on WhatsApp</span>
             </a>
           </div>
         </div>
       ) : (
         <form onSubmit={handleSubmit} className="space-y-4">
           {error && (
-            <div className="p-3 rounded bg-rose-950/60 border border-rose-800/80 text-rose-300 text-xs flex items-center gap-2">
+            <div className="p-3 rounded bg-rose-50 dark:bg-rose-950/60 border border-rose-200 dark:border-rose-800/80 text-rose-700 dark:text-rose-300 text-xs flex items-center gap-2">
               <AlertCircle className="w-4 h-4 shrink-0" />
               <span>{error}</span>
             </div>
@@ -110,7 +110,7 @@ export const DirectInquiryForm: React.FC<DirectInquiryFormProps> = ({ product })
 
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <div className="space-y-1">
-              <label className="text-[11px] uppercase tracking-widest text-luxury-400 font-medium block">
+              <label className="text-[11px] uppercase tracking-wider text-slate-600 dark:text-slate-400 font-bold block">
                 Your Full Name *
               </label>
               <input
@@ -118,13 +118,13 @@ export const DirectInquiryForm: React.FC<DirectInquiryFormProps> = ({ product })
                 required
                 value={name}
                 onChange={(e) => setName(e.target.value)}
-                placeholder="e.g. Vikramaditya Singhania"
-                className="w-full bg-luxury-950 border border-luxury-800 focus:border-gold rounded-lg px-3.5 py-2.5 text-xs text-luxury-100 placeholder-luxury-600 focus:outline-none transition-colors"
+                placeholder="e.g. Rahul Sharma"
+                className="w-full bg-slate-50 dark:bg-slate-950 border border-slate-300 dark:border-slate-700 focus:border-amber-500 rounded-lg px-3.5 py-2.5 text-xs text-slate-900 dark:text-slate-100 placeholder-slate-400 focus:outline-none transition-colors font-medium"
               />
             </div>
 
             <div className="space-y-1">
-              <label className="text-[11px] uppercase tracking-widest text-luxury-400 font-medium block">
+              <label className="text-[11px] uppercase tracking-wider text-slate-600 dark:text-slate-400 font-bold block">
                 WhatsApp / Phone Number *
               </label>
               <input
@@ -133,34 +133,34 @@ export const DirectInquiryForm: React.FC<DirectInquiryFormProps> = ({ product })
                 value={phone}
                 onChange={(e) => setPhone(e.target.value)}
                 placeholder="+91 98765 43210"
-                className="w-full bg-luxury-950 border border-luxury-800 focus:border-gold rounded-lg px-3.5 py-2.5 text-xs text-luxury-100 placeholder-luxury-600 focus:outline-none transition-colors"
+                className="w-full bg-slate-50 dark:bg-slate-950 border border-slate-300 dark:border-slate-700 focus:border-amber-500 rounded-lg px-3.5 py-2.5 text-xs text-slate-900 dark:text-slate-100 placeholder-slate-400 focus:outline-none transition-colors font-medium"
               />
             </div>
           </div>
 
           <div className="space-y-1">
-            <label className="text-[11px] uppercase tracking-widest text-luxury-400 font-medium block">
+            <label className="text-[11px] uppercase tracking-wider text-slate-600 dark:text-slate-400 font-bold block">
               Email Address (Optional)
             </label>
             <input
               type="email"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
-              placeholder="client@luxury.com"
-              className="w-full bg-luxury-950 border border-luxury-800 focus:border-gold rounded-lg px-3.5 py-2.5 text-xs text-luxury-100 placeholder-luxury-600 focus:outline-none transition-colors"
+              placeholder="rahul@example.com"
+              className="w-full bg-slate-50 dark:bg-slate-950 border border-slate-300 dark:border-slate-700 focus:border-amber-500 rounded-lg px-3.5 py-2.5 text-xs text-slate-900 dark:text-slate-100 placeholder-slate-400 focus:outline-none transition-colors font-medium"
             />
           </div>
 
           <div className="space-y-1">
-            <label className="text-[11px] uppercase tracking-widest text-luxury-400 font-medium block">
-              Message or Specific Requirements *
+            <label className="text-[11px] uppercase tracking-wider text-slate-600 dark:text-slate-400 font-bold block">
+              Your Message *
             </label>
             <textarea
               rows={3}
               required
               value={message}
               onChange={(e) => setMessage(e.target.value)}
-              className="w-full bg-luxury-950 border border-luxury-800 focus:border-gold rounded-lg px-3.5 py-2.5 text-xs text-luxury-100 placeholder-luxury-600 focus:outline-none transition-colors"
+              className="w-full bg-slate-50 dark:bg-slate-950 border border-slate-300 dark:border-slate-700 focus:border-amber-500 rounded-lg px-3.5 py-2.5 text-xs text-slate-900 dark:text-slate-100 placeholder-slate-400 focus:outline-none transition-colors font-medium"
             />
           </div>
 
@@ -168,17 +168,17 @@ export const DirectInquiryForm: React.FC<DirectInquiryFormProps> = ({ product })
             <button
               type="submit"
               disabled={loading}
-              className="w-full sm:w-auto flex-1 bg-gold hover:bg-gold-hover text-luxury-950 font-bold text-xs uppercase tracking-wider py-3 px-6 rounded-lg transition-all flex items-center justify-center gap-2 shadow-md disabled:opacity-50"
+              className="w-full sm:w-auto flex-1 bg-amber-500 hover:bg-amber-600 text-slate-950 font-bold text-xs uppercase tracking-wider py-3 px-6 rounded-lg transition-all flex items-center justify-center gap-2 shadow-sm disabled:opacity-50"
             >
               <Send className="w-4 h-4" />
-              <span>{loading ? 'Submitting...' : 'Submit Inquiry'}</span>
+              <span>{loading ? 'Sending...' : 'Submit Inquiry'}</span>
             </button>
 
             <a
               href={directWhatsAppUrl}
               target="_blank"
               rel="noopener noreferrer"
-              className="w-full sm:w-auto flex items-center justify-center gap-2 bg-[#25D366]/20 hover:bg-[#25D366] text-[#25D366] hover:text-luxury-950 border border-[#25D366]/40 hover:border-[#25D366] text-xs font-semibold uppercase tracking-wider py-3 px-5 rounded-lg transition-all"
+              className="w-full sm:w-auto flex items-center justify-center gap-2 bg-emerald-50 dark:bg-emerald-950/40 hover:bg-emerald-600 dark:hover:bg-emerald-500 text-emerald-700 dark:text-emerald-400 hover:text-white border border-emerald-300 dark:border-emerald-700/60 text-xs font-bold uppercase tracking-wider py-3 px-5 rounded-lg transition-all"
             >
               <MessageCircle className="w-4 h-4 fill-current" />
               <span>Instant WhatsApp</span>

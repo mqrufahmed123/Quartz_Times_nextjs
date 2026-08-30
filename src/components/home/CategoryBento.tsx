@@ -10,17 +10,17 @@ export interface CategoryBentoProps {
 
 export const CategoryBento: React.FC<CategoryBentoProps> = ({ categories }) => {
   return (
-    <section className="py-16 sm:py-24 bg-luxury-900/30 border-y border-luxury-900">
+    <section className="py-14 sm:py-20 bg-white dark:bg-slate-900/30 border-y border-slate-200 dark:border-slate-800 transition-colors">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="text-center max-w-2xl mx-auto mb-14 space-y-3">
-          <span className="text-[11px] uppercase tracking-ultra text-gold font-semibold block">
-            Horological Classifications
+        <div className="text-center max-w-2xl mx-auto mb-12 space-y-2">
+          <span className="text-xs uppercase tracking-wider text-amber-600 dark:text-amber-400 font-bold block">
+            Browse Categories
           </span>
-          <h2 className="font-serif text-3xl sm:text-4xl text-luxury-100 font-normal">
-            Discover by Complication & Style
+          <h2 className="font-serif text-3xl sm:text-4xl text-slate-900 dark:text-slate-100 font-bold">
+            Shop by Style & Movement
           </h2>
-          <p className="text-xs sm:text-sm text-luxury-400 font-light">
-            From precision automatic rotors to iconic motorsport chronographs and dress silhouettes.
+          <p className="text-sm text-slate-600 dark:text-slate-400 font-normal">
+            Explore automatic watches, chronographs, vintage classics, and diver styles.
           </p>
         </div>
 
@@ -29,7 +29,7 @@ export const CategoryBento: React.FC<CategoryBentoProps> = ({ categories }) => {
             <Link
               key={cat.slug}
               href={`/watches?category=${cat.slug}`}
-              className={`group relative rounded-xl overflow-hidden bg-luxury-950 border border-luxury-800/80 hover:border-gold/60 transition-all duration-500 hover:shadow-luxury ${
+              className={`group relative rounded-xl overflow-hidden bg-slate-900 border border-slate-200 dark:border-slate-800 hover:border-amber-500 transition-all duration-300 shadow-md ${
                 idx === 0 || idx === 3 ? 'md:col-span-2 aspect-[16/9] sm:aspect-[21/9]' : 'aspect-[4/3] sm:aspect-[1/1]'
               }`}
             >
@@ -43,26 +43,26 @@ export const CategoryBento: React.FC<CategoryBentoProps> = ({ categories }) => {
                 />
               )}
 
-              {/* Gradient Dark Overlay */}
-              <div className="absolute inset-0 bg-gradient-to-t from-luxury-950/95 via-luxury-950/60 to-transparent transition-opacity group-hover:opacity-90" />
+              {/* Dark Gradient Overlay for legible text */}
+              <div className="absolute inset-0 bg-gradient-to-t from-slate-950/90 via-slate-950/40 to-transparent transition-opacity group-hover:opacity-90" />
 
-              {/* Content Box */}
-              <div className="absolute inset-0 p-6 sm:p-8 flex flex-col justify-end">
+              {/* Content */}
+              <div className="absolute inset-0 p-6 flex flex-col justify-end">
                 <div className="flex items-end justify-between">
-                  <div className="space-y-1.5 max-w-md">
-                    <span className="text-[10px] uppercase tracking-ultra text-gold font-medium">
+                  <div className="space-y-1 max-w-md">
+                    <span className="text-[10px] uppercase tracking-wider text-amber-400 font-bold">
                       Category
                     </span>
-                    <h3 className="font-serif text-xl sm:text-2xl text-luxury-100 group-hover:text-gold transition-colors font-medium">
+                    <h3 className="font-serif text-xl sm:text-2xl text-white group-hover:text-amber-400 transition-colors font-bold">
                       {cat.name}
                     </h3>
-                    <p className="text-xs text-luxury-400 line-clamp-2 font-light">
+                    <p className="text-xs text-slate-300 line-clamp-2 font-normal">
                       {cat.description}
                     </p>
                   </div>
 
-                  <span className="w-10 h-10 rounded-full bg-luxury-900/90 text-gold border border-gold/30 flex items-center justify-center group-hover:bg-gold group-hover:text-luxury-950 transition-all duration-300 shrink-0">
-                    <ArrowUpRight className="w-5 h-5" />
+                  <span className="w-9 h-9 rounded-full bg-slate-800/90 text-amber-400 border border-amber-400/40 flex items-center justify-center group-hover:bg-amber-500 group-hover:text-slate-950 transition-all duration-300 shrink-0">
+                    <ArrowUpRight className="w-4 h-4" />
                   </span>
                 </div>
               </div>

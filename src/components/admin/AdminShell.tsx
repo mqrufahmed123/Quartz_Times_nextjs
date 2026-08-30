@@ -14,28 +14,30 @@ import {
   ExternalLink,
   LogOut,
   Shield,
+  Sun,
+  Moon,
 } from 'lucide-react';
+import { useTheme } from '@/components/common/ThemeProvider';
 import { cn } from '@/lib/utils';
 
 const navLinks = [
   { label: 'Dashboard', href: '/admin', icon: LayoutDashboard, exact: true },
   { label: 'All Watches', href: '/admin/products', icon: Watch },
-  { label: 'Add Timepiece', href: '/admin/products/new', icon: PlusCircle },
+  { label: 'Add Watch', href: '/admin/products/new', icon: PlusCircle },
   { label: 'Categories', href: '/admin/categories', icon: FolderTree },
-  { label: 'Client Inquiries', href: '/admin/inquiries', icon: MessageSquare },
+  { label: 'Customer Inquiries', href: '/admin/inquiries', icon: MessageSquare },
 ];
 
 export const AdminShell: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const pathname = usePathname();
   const router = useRouter();
   const [sidebarOpen, setSidebarOpen] = useState(false);
+  const { theme, toggleTheme } = useTheme();
 
-  // Close sidebar on route change
   useEffect(() => {
     setSidebarOpen(false);
   }, [pathname]);
 
-  // Lock body scroll when sidebar open on mobile
   useEffect(() => {
     document.body.style.overflow = sidebarOpen ? 'hidden' : '';
     return () => { document.body.style.overflow = ''; };
@@ -55,8 +57,8 @@ export const AdminShell: React.FC<{ children: React.ReactNode }> = ({ children }
     <div className="flex flex-col h-full justify-between">
       <div className="space-y-6">
         <div className="space-y-1">
-          <p className="text-[10px] uppercase tracking-ultra text-luxury-500 font-semibold px-3 mb-2">
-            Navigation
+          <p className="text-[10px] uppercase tracking-wider text-slate-400 font-bold px-3 mb-2">
+            Admin Menu
           </p>
           {navLinks.map((link) => {
             const Icon = link.icon;
@@ -68,10 +70,10 @@ export const AdminShell: React.FC<{ children: React.ReactNode }> = ({ children }
                 key={link.href}
                 href={link.href}
                 className={cn(
-                  'flex items-center gap-3 px-3.5 py-2.5 rounded-lg text-xs font-medium uppercase tracking-wider transition-colors',
+                  'flex items-center gap-3 px-3.5 py-2.5 rounded-lg text-xs font-bold uppercase tracking-wider transition-colors',
                   isActive
-                    ? 'bg-gold/15 text-gold border border-gold/30'
-                    : 'text-luxury-400 hover:text-luxury-100 hover:bg-luxury-900'
+                    ? 'bg-amber-500/15 text-amber-600 dark:text-amber-400 border border-amber-500/30'
+                    : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-slate-100 hover:bg-slate-100 dark:hover:bg-slate-800'
                 )}
               >
                 <Icon className="w-4 h-4 shrink-0" />
@@ -81,51 +83,58 @@ export const AdminShell: React.FC<{ children: React.ReactNode }> = ({ children }
           })}
         </div>
       </div>
-      <div className="p-3 rounded-lg bg-luxury-900/60 border border-luxury-800 text-[11px] text-luxury-400 space-y-1">
-        <p className="text-luxury-200 font-medium">Cloudinary & MongoDB</p>
-        <p className="text-luxury-500">Autonomous Server Sync Active</p>
+      <div className="p-3 rounded-lg bg-slate-100 dark:bg-slate-900 border border-slate-200 dark:border-slate-800 text-[11px] text-slate-500 dark:text-slate-400 space-y-1">
+        <p className="text-slate-800 dark:text-slate-200 font-bold">Cloudinary & MongoDB</p>
+        <p className="text-slate-500">Sync Active</p>
       </div>
     </div>
   );
 
   return (
-    <div className="min-h-screen bg-luxury-950 text-luxury-100 flex flex-col">
-      {/* ── Admin Navbar ── */}
-      <header className="bg-luxury-950 border-b border-luxury-800 py-3.5 px-4 sm:px-6 sticky top-0 z-30 flex items-center justify-between">
+    <div className="min-h-screen bg-slate-50 dark:bg-[#0A0A0B] text-slate-900 dark:text-slate-100 flex flex-col transition-colors">
+      {/* Navbar */}
+      <header className="bg-white dark:bg-[#0A0A0B] border-b border-slate-200 dark:border-slate-800 py-3 px-4 sm:px-6 sticky top-0 z-30 flex items-center justify-between shadow-sm">
         <div className="flex items-center gap-3">
-          {/* Mobile sidebar toggle — in navbar top-left */}
           <button
             onClick={() => setSidebarOpen(true)}
-            className="lg:hidden p-2 -ml-1 text-luxury-300 hover:text-gold transition-colors"
-            aria-label="Open navigation menu"
+            className="lg:hidden p-2 -ml-1 text-slate-700 dark:text-slate-300 hover:text-amber-500 transition-colors"
+            aria-label="Open menu"
           >
             <Menu className="w-5 h-5" />
           </button>
 
           <Link href="/admin" className="flex items-center gap-2">
-            <Shield className="w-5 h-5 text-gold hidden sm:block" />
-            <span className="font-serif text-base sm:text-lg font-bold tracking-wider text-luxury-100">
+            <Shield className="w-5 h-5 text-amber-500 hidden sm:block" />
+            <span className="font-serif text-base sm:text-lg font-bold tracking-wider text-slate-900 dark:text-slate-100">
               QUARTZ TIMES
             </span>
-            <span className="text-[9px] sm:text-[10px] uppercase tracking-widest text-gold bg-gold/15 px-2 py-0.5 rounded border border-gold/30 hidden xs:inline">
-              Atelier
+            <span className="text-[10px] uppercase tracking-wider text-amber-600 dark:text-amber-400 bg-amber-500/15 px-2 py-0.5 rounded border border-amber-500/30 hidden xs:inline font-bold">
+              Admin
             </span>
           </Link>
         </div>
 
         <div className="flex items-center gap-2 sm:gap-4">
+          <button
+            onClick={toggleTheme}
+            className="p-2 text-slate-600 dark:text-slate-300 hover:text-amber-500 transition-colors rounded-full hover:bg-slate-100 dark:hover:bg-slate-800"
+            title="Toggle theme"
+          >
+            {theme === 'dark' ? <Sun className="w-4 h-4 text-amber-400" /> : <Moon className="w-4 h-4 text-slate-700" />}
+          </button>
+
           <Link
             href="/"
             target="_blank"
-            className="text-xs uppercase tracking-wider text-luxury-300 hover:text-gold transition-colors hidden sm:flex items-center gap-1.5"
+            className="text-xs uppercase tracking-wider text-slate-600 dark:text-slate-300 hover:text-amber-500 font-bold transition-colors hidden sm:flex items-center gap-1.5"
           >
-            <span>View Boutique</span>
+            <span>View Website</span>
             <ExternalLink className="w-3.5 h-3.5" />
           </Link>
 
           <button
             onClick={handleLogout}
-            className="text-xs uppercase tracking-wider text-rose-400 hover:text-rose-300 transition-colors flex items-center gap-1.5 bg-rose-950/40 border border-rose-900/60 px-2.5 sm:px-3 py-1.5 rounded"
+            className="text-xs uppercase tracking-wider text-rose-600 dark:text-rose-400 hover:text-rose-500 font-bold transition-colors flex items-center gap-1.5 bg-rose-50 dark:bg-rose-950/40 border border-rose-200 dark:border-rose-900/60 px-3 py-1.5 rounded-lg"
           >
             <LogOut className="w-3.5 h-3.5" />
             <span className="hidden sm:inline">Sign Out</span>
@@ -133,28 +142,24 @@ export const AdminShell: React.FC<{ children: React.ReactNode }> = ({ children }
         </div>
       </header>
 
-      {/* ── Body: Sidebar + Content ── */}
+      {/* Main layout */}
       <div className="flex-1 flex relative">
-
-        {/* Mobile overlay backdrop */}
         {sidebarOpen && (
           <div
-            className="fixed inset-0 z-40 bg-luxury-950/80 backdrop-blur-sm lg:hidden"
+            className="fixed inset-0 z-40 bg-slate-900/60 dark:bg-black/80 backdrop-blur-sm lg:hidden"
             onClick={() => setSidebarOpen(false)}
           />
         )}
 
-        {/* Mobile drawer */}
         <div
           className={cn(
-            'fixed inset-y-0 left-0 z-50 w-72 bg-luxury-950 border-r border-luxury-800 p-6 flex flex-col shadow-2xl transition-transform duration-300 lg:hidden',
+            'fixed inset-y-0 left-0 z-50 w-72 bg-white dark:bg-[#0A0A0B] border-r border-slate-200 dark:border-slate-800 p-6 flex flex-col shadow-2xl transition-transform duration-300 lg:hidden',
             sidebarOpen ? 'translate-x-0' : '-translate-x-full'
           )}
         >
           <button
             onClick={() => setSidebarOpen(false)}
-            className="absolute top-4 right-4 p-1.5 text-luxury-400 hover:text-white"
-            aria-label="Close menu"
+            className="absolute top-4 right-4 p-1.5 text-slate-400 hover:text-slate-900 dark:hover:text-white"
           >
             <X className="w-5 h-5" />
           </button>
@@ -163,12 +168,10 @@ export const AdminShell: React.FC<{ children: React.ReactNode }> = ({ children }
           </div>
         </div>
 
-        {/* Desktop sidebar — always visible */}
-        <aside className="hidden lg:flex w-64 bg-luxury-950 border-r border-luxury-800 p-6 flex-col shrink-0 min-h-[calc(100vh-61px)]">
+        <aside className="hidden lg:flex w-64 bg-white dark:bg-[#0A0A0B] border-r border-slate-200 dark:border-slate-800 p-6 flex-col shrink-0 min-h-[calc(100vh-61px)]">
           <SidebarLinks />
         </aside>
 
-        {/* Main content */}
         <main className="flex-1 p-4 sm:p-6 lg:p-10 overflow-y-auto w-full min-w-0">
           {children}
         </main>

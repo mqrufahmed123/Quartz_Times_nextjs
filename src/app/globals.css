@@ -4,17 +4,26 @@
 
 @layer base {
   :root {
+    --background: 255 255 255;
+    --foreground: 15 23 42;
+  }
+
+  .dark {
     --background: 10 10 12;
     --foreground: 240 239 244;
   }
 
   body {
-    background-color: #0A0A0B;
-    color: #F0EFF4;
+    background-color: #f8fafc;
+    color: #0f172a;
     font-family: 'Inter', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
     overflow-x: hidden;
-    selection-background-color: #C5A880;
-    selection-color: #0A0A0B;
+    transition: background-color 0.2s ease, color 0.2s ease;
+  }
+
+  .dark body {
+    background-color: #0A0A0B;
+    color: #F0EFF4;
   }
 
   ::selection {
@@ -23,28 +32,36 @@
   }
 }
 
-/* Custom Luxury Scrollbar */
+/* Custom Scrollbar */
 ::-webkit-scrollbar {
   width: 7px;
   height: 7px;
 }
 
 ::-webkit-scrollbar-track {
+  background: #f1f5f9;
+}
+
+.dark ::-webkit-scrollbar-track {
   background: #0A0A0B;
 }
 
 ::-webkit-scrollbar-thumb {
-  background: #282832;
+  background: #cbd5e1;
   border-radius: 4px;
+}
+
+.dark ::-webkit-scrollbar-thumb {
+  background: #282832;
 }
 
 ::-webkit-scrollbar-thumb:hover {
   background: #C5A880;
 }
 
-/* Typography Enhancements */
+/* Typography */
 .font-serif {
-  font-family: 'Playfair Display', 'Cinzel', Georgia, serif;
+  font-family: 'Playfair Display', Georgia, serif;
 }
 
 /* Subtle Shimmer Animation */

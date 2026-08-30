@@ -2,7 +2,7 @@
 
 import React, { useState } from 'react';
 import Image from 'next/image';
-import { Maximize2, X, ChevronLeft, ChevronRight, Play, Film } from 'lucide-react';
+import { Maximize2, X, ChevronLeft, ChevronRight, Film } from 'lucide-react';
 import { IProductMedia, IProductVideo } from '@/types';
 
 export interface ProductGalleryProps {
@@ -45,7 +45,7 @@ export const ProductGallery: React.FC<ProductGalleryProps> = ({
   return (
     <div className="space-y-4">
       {/* Primary Stage */}
-      <div className="relative aspect-[4/5] sm:aspect-[1/1] w-full rounded-xl overflow-hidden bg-luxury-950 border border-luxury-800 shadow-luxury group">
+      <div className="relative aspect-[4/5] sm:aspect-[1/1] w-full rounded-xl overflow-hidden bg-slate-100 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 shadow-sm group">
         {isVideoActive && video?.url ? (
           <div className="w-full h-full flex items-center justify-center bg-black">
             <video
@@ -69,24 +69,24 @@ export const ProductGallery: React.FC<ProductGalleryProps> = ({
               sizes="(max-width: 1024px) 100vw, 50vw"
               className="object-cover object-center transition-transform duration-500 group-hover:scale-105"
             />
-            <div className="absolute inset-0 bg-gradient-to-t from-luxury-950/40 via-transparent to-transparent opacity-50" />
+            <div className="absolute inset-0 bg-gradient-to-t from-slate-950/40 via-transparent to-transparent opacity-40" />
           </div>
         )}
 
-        {/* Action Overlay Controls */}
+        {/* Fullscreen Button */}
         <div className="absolute top-4 right-4 flex items-center gap-2 z-10">
           {!isVideoActive && (
             <button
               onClick={() => setIsLightboxOpen(true)}
-              className="p-2.5 rounded-full bg-luxury-900/80 text-luxury-200 hover:text-gold border border-luxury-700 backdrop-blur-sm transition-all shadow-md"
-              aria-label="Expand image to fullscreen"
+              className="p-2.5 rounded-full bg-white/80 dark:bg-slate-900/80 text-slate-700 dark:text-slate-200 hover:text-amber-500 border border-slate-200 dark:border-slate-700 backdrop-blur-sm transition-all shadow-md"
+              aria-label="Expand image"
             >
               <Maximize2 className="w-4 h-4" />
             </button>
           )}
         </div>
 
-        {/* Gallery Navigation Arrows (if multiple photos) */}
+        {/* Gallery Navigation Arrows */}
         {displayImages.length > 1 && !isVideoActive && (
           <>
             <button
@@ -94,7 +94,7 @@ export const ProductGallery: React.FC<ProductGalleryProps> = ({
                 e.stopPropagation();
                 handlePrev();
               }}
-              className="absolute left-3 top-1/2 -translate-y-1/2 p-2.5 rounded-full bg-luxury-900/80 text-luxury-200 hover:text-gold border border-luxury-700 backdrop-blur-sm transition-all opacity-0 group-hover:opacity-100 shadow-md"
+              className="absolute left-3 top-1/2 -translate-y-1/2 p-2.5 rounded-full bg-white/80 dark:bg-slate-900/80 text-slate-700 dark:text-slate-200 hover:text-amber-500 border border-slate-200 dark:border-slate-700 backdrop-blur-sm transition-all opacity-0 group-hover:opacity-100 shadow-md"
               aria-label="Previous photo"
             >
               <ChevronLeft className="w-4 h-4" />
@@ -105,7 +105,7 @@ export const ProductGallery: React.FC<ProductGalleryProps> = ({
                 e.stopPropagation();
                 handleNext();
               }}
-              className="absolute right-3 top-1/2 -translate-y-1/2 p-2.5 rounded-full bg-luxury-900/80 text-luxury-200 hover:text-gold border border-luxury-700 backdrop-blur-sm transition-all opacity-0 group-hover:opacity-100 shadow-md"
+              className="absolute right-3 top-1/2 -translate-y-1/2 p-2.5 rounded-full bg-white/80 dark:bg-slate-900/80 text-slate-700 dark:text-slate-200 hover:text-amber-500 border border-slate-200 dark:border-slate-700 backdrop-blur-sm transition-all opacity-0 group-hover:opacity-100 shadow-md"
               aria-label="Next photo"
             >
               <ChevronRight className="w-4 h-4" />
@@ -114,7 +114,7 @@ export const ProductGallery: React.FC<ProductGalleryProps> = ({
         )}
 
         {/* Photo Counter Pill */}
-        <div className="absolute bottom-3 left-3 bg-luxury-950/80 backdrop-blur-md px-3 py-1 rounded-full border border-luxury-800 text-[10px] uppercase tracking-widest text-luxury-300 font-medium z-10">
+        <div className="absolute bottom-3 left-3 bg-white/80 dark:bg-slate-950/80 backdrop-blur-md px-3 py-1 rounded-full border border-slate-200 dark:border-slate-800 text-[10px] uppercase tracking-wider text-slate-700 dark:text-slate-300 font-bold z-10">
           {isVideoActive
             ? 'Product Video'
             : `Photo ${selectedIndex + 1} of ${displayImages.length}`}
@@ -133,10 +133,10 @@ export const ProductGallery: React.FC<ProductGalleryProps> = ({
                   setIsVideoActive(false);
                   setSelectedIndex(idx);
                 }}
-                className={`relative w-20 h-20 sm:w-24 sm:h-24 rounded-lg overflow-hidden shrink-0 border-2 transition-all bg-luxury-950 ${
+                className={`relative w-20 h-20 sm:w-24 sm:h-24 rounded-lg overflow-hidden shrink-0 border-2 transition-all bg-slate-100 dark:bg-slate-950 ${
                   isSelected
-                    ? 'border-gold shadow-luxury-glow scale-[1.02]'
-                    : 'border-luxury-800 opacity-60 hover:opacity-100 hover:border-luxury-600'
+                    ? 'border-amber-500 scale-[1.02]'
+                    : 'border-slate-200 dark:border-slate-800 opacity-70 hover:opacity-100'
                 }`}
               >
                 <Image
@@ -150,18 +150,17 @@ export const ProductGallery: React.FC<ProductGalleryProps> = ({
             );
           })}
 
-          {/* Optional Video Thumbnail */}
           {video?.url && (
             <button
               onClick={() => setIsVideoActive(true)}
-              className={`relative w-20 h-20 sm:w-24 sm:h-24 rounded-lg overflow-hidden shrink-0 border-2 transition-all bg-luxury-900 flex flex-col items-center justify-center text-luxury-300 ${
+              className={`relative w-20 h-20 sm:w-24 sm:h-24 rounded-lg overflow-hidden shrink-0 border-2 transition-all bg-slate-100 dark:bg-slate-900 flex flex-col items-center justify-center text-slate-700 dark:text-slate-300 ${
                 isVideoActive
-                  ? 'border-gold shadow-luxury-glow scale-[1.02] text-gold'
-                  : 'border-luxury-800 opacity-60 hover:opacity-100 hover:border-luxury-600'
+                  ? 'border-amber-500 scale-[1.02] text-amber-500'
+                  : 'border-slate-200 dark:border-slate-800 opacity-70 hover:opacity-100'
               }`}
             >
-              <Film className="w-6 h-6 mb-1 text-gold" />
-              <span className="text-[9px] uppercase tracking-widest font-semibold">
+              <Film className="w-6 h-6 mb-1 text-amber-500" />
+              <span className="text-[9px] uppercase tracking-wider font-bold">
                 Video
               </span>
             </button>
@@ -169,13 +168,13 @@ export const ProductGallery: React.FC<ProductGalleryProps> = ({
         </div>
       )}
 
-      {/* Fullscreen Lightbox Modal */}
+      {/* Fullscreen Lightbox */}
       {isLightboxOpen && (
         <div className="fixed inset-0 z-50 bg-black/95 backdrop-blur-md flex items-center justify-center p-4">
           <button
             onClick={() => setIsLightboxOpen(false)}
-            className="absolute top-6 right-6 p-3 rounded-full bg-luxury-900 text-luxury-300 hover:text-white border border-luxury-700 z-50"
-            aria-label="Close fullscreen view"
+            className="absolute top-6 right-6 p-3 rounded-full bg-slate-900 text-slate-300 hover:text-white border border-slate-700 z-50"
+            aria-label="Close"
           >
             <X className="w-6 h-6" />
           </button>
@@ -194,13 +193,13 @@ export const ProductGallery: React.FC<ProductGalleryProps> = ({
             <>
               <button
                 onClick={handlePrev}
-                className="absolute left-6 top-1/2 -translate-y-1/2 p-3 rounded-full bg-luxury-900/80 text-luxury-200 hover:text-gold border border-luxury-700"
+                className="absolute left-6 top-1/2 -translate-y-1/2 p-3 rounded-full bg-slate-900/80 text-slate-200 hover:text-amber-400 border border-slate-700"
               >
                 <ChevronLeft className="w-6 h-6" />
               </button>
               <button
                 onClick={handleNext}
-                className="absolute right-6 top-1/2 -translate-y-1/2 p-3 rounded-full bg-luxury-900/80 text-luxury-200 hover:text-gold border border-luxury-700"
+                className="absolute right-6 top-1/2 -translate-y-1/2 p-3 rounded-full bg-slate-900/80 text-slate-200 hover:text-amber-400 border border-slate-700"
               >
                 <ChevronRight className="w-6 h-6" />
               </button>

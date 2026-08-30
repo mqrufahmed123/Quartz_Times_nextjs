@@ -33,22 +33,22 @@ export async function generateMetadata({
   if (category && category !== 'all') {
     const formatted = category.charAt(0).toUpperCase() + category.slice(1);
     return {
-      title: `${formatted} Timepieces | Quartz Times Catalogue`,
-      description: `Explore our curated selection of fine ${formatted} watches with certified authenticity and direct WhatsApp concierge.`,
+      title: `${formatted} Watches | Quartz Times`,
+      description: `Explore our collection of authentic ${formatted} watches with free shipping and direct WhatsApp assistance.`,
     };
   }
 
   if (search) {
     return {
-      title: `Search: "${search}" | Quartz Times Vault`,
-      description: `Search results for "${search}" in our luxury horology catalogue.`,
+      title: `Search: "${search}" | Quartz Times`,
+      description: `Search results for "${search}" in our watch collection.`,
     };
   }
 
   return {
-    title: 'Horological Collection & Watch Vault | Quartz Times',
+    title: 'Watch Collection | Quartz Times',
     description:
-      'Browse our complete vault of certified authentic luxury timepieces. Rolex, Audemars Piguet, Patek Philippe, Omega, and Grand Seiko.',
+      'Browse our complete collection of 100% authentic luxury and performance watches. Rolex, Omega, Audemars Piguet, Patek Philippe, Seiko, and more.',
   };
 }
 
@@ -72,7 +72,7 @@ export default async function WatchesPage({ searchParams }: WatchesPageProps) {
   ]);
 
   return (
-    <div className="py-10 sm:py-16 bg-luxury-950 min-h-screen">
+    <div className="py-10 sm:py-16 bg-slate-50 dark:bg-[#0A0A0B] min-h-screen text-slate-900 dark:text-slate-100 transition-colors">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <CatalogueHeader total={productsData.total} />
 
@@ -84,12 +84,12 @@ export default async function WatchesPage({ searchParams }: WatchesPageProps) {
             movements={movements}
           />
 
-          {/* Timepiece Grid */}
+          {/* Product Grid */}
           <div className="flex-1 w-full">
             <ProductGrid
               products={productsData.items}
-              emptyTitle="No Timepieces Found in Vault"
-              emptyDescription="No watches match your active filter combinations. Try resetting filters or expanding your search."
+              emptyTitle="No Watches Found"
+              emptyDescription="No watches match your selected filters. Try resetting filters or searching for another model."
               resetUrl="/watches"
             />
           </div>

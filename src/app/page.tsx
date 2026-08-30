@@ -19,35 +19,35 @@ export default async function HomePage() {
 
   return (
     <div className="space-y-0">
-      {/* 1. Photography-First Editorial Hero */}
+      {/* 1. Hero Section */}
       <HeroSection />
 
-      {/* 2. Curated Private Vault (Featured Watches) */}
+      {/* 2. Featured Watches */}
       <CuratedCollection
         products={featuredProducts}
-        title="Curated Private Vault"
-        subtitle="Masterpieces inspected by certified horologists, available for immediate acquisition"
+        title="Featured Watches"
+        subtitle="Handpicked luxury and automatic timepieces in stock for fast delivery"
       />
 
-      {/* 3. Complication & Classification Bento Discovery */}
+      {/* 3. Shop by Category */}
       <CategoryBento categories={categories} />
 
-      {/* 4. New Horological Additions */}
+      {/* 4. New Arrivals */}
       {newArrivals.length > 0 && (
         <CuratedCollection
           products={newArrivals}
-          title="Recent Additions"
-          subtitle="The latest horological acquisitions to enter the Quartz Times atelier"
+          title="New Arrivals"
+          subtitle="Explore the latest additions to our watch collection"
         />
       )}
 
-      {/* 5. Brand Story & Horological Ethos */}
+      {/* 5. About Us */}
       <BrandStory />
 
-      {/* 6. The 32-Point Master Inspection & Craftsmanship */}
+      {/* 6. 4-Step Quality Inspection */}
       <CraftsmanshipSection />
 
-      {/* 7. WhatsApp Concierge Direct Conversion Banner */}
+      {/* 7. WhatsApp Customer Support */}
       <WhatsAppBanner />
     </div>
   );

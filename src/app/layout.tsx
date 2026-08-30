@@ -1,6 +1,7 @@
 import type { Metadata } from 'next';
 import { Inter, Playfair_Display } from 'next/font/google';
 import './globals.css';
+import { ThemeProvider } from '@/components/common/ThemeProvider';
 import { AnnouncementBar } from '@/components/common/AnnouncementBar';
 import { Navbar } from '@/components/common/Navbar';
 import { Footer } from '@/components/common/Footer';
@@ -20,29 +21,28 @@ const playfair = Playfair_Display({
 
 export const metadata: Metadata = {
   title: {
-    default: 'Quartz Times | Haute Horology & Fine Timepieces',
-    template: '%s | Quartz Times Horology',
+    default: 'Quartz Times | Premium & Luxury Watches',
+    template: '%s | Quartz Times',
   },
   description:
-    'Quartz Times is an independent luxury watch boutique specializing in certified authentic Swiss and Japanese timepieces. Curated acquisitions with direct WhatsApp concierge.',
+    'Quartz Times is a luxury watch boutique offering 100% authentic Swiss & Japanese watches with insured nationwide shipping and instant WhatsApp support.',
   keywords: [
     'luxury watches',
-    'Audemars Piguet',
     'Rolex',
-    'Patek Philippe',
     'Omega',
+    'Audemars Piguet',
+    'Patek Philippe',
     'Grand Seiko',
     'Cartier',
-    'fine timepieces India',
-    'authentic watch boutique',
-    'haute horology',
+    'authentic watches',
+    'buy watches online',
   ],
-  authors: [{ name: 'Quartz Times Horology' }],
+  authors: [{ name: 'Quartz Times' }],
   metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3000'),
   openGraph: {
-    title: 'Quartz Times | Haute Horology & Fine Timepieces',
+    title: 'Quartz Times | Premium & Luxury Watches',
     description:
-      'Curated fine timepieces for collectors who appreciate micro-mechanical mastery. Certified authentic with direct concierge.',
+      'Shop 100% authentic luxury timepieces with insured delivery and direct WhatsApp assistance.',
     type: 'website',
     locale: 'en_IN',
     siteName: 'Quartz Times',
@@ -59,13 +59,34 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="en" className={`${inter.variable} ${playfair.variable} dark scroll-smooth`}>
-      <body className="bg-luxury-950 text-luxury-100 min-h-screen flex flex-col antialiased">
-        <AnnouncementBar />
-        <Navbar />
-        <main className="flex-1">{children}</main>
-        <Footer />
-        <WhatsAppFloatingButton />
+    <html lang="en" className={`${inter.variable} ${playfair.variable} scroll-smooth`} suppressHydrationWarning>
+      <head>
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `
+              (function() {
+                try {
+                  var saved = localStorage.getItem('theme');
+                  var prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+                  if (saved === 'dark' || (!saved && prefersDark)) {
+                    document.documentElement.classList.add('dark');
+                  } else {
+                    document.documentElement.classList.remove('dark');
+                  }
+                } catch (e) {}
+              })();
+            `,
+          }}
+        />
+      </head>
+      <body className="bg-slate-50 dark:bg-[#0A0A0B] text-slate-900 dark:text-[#F0EFF4] min-h-screen flex flex-col antialiased transition-colors duration-200">
+        <ThemeProvider>
+          <AnnouncementBar />
+          <Navbar />
+          <main className="flex-1">{children}</main>
+          <Footer />
+          <WhatsAppFloatingButton />
+        </ThemeProvider>
       </body>
     </html>
   );

@@ -12,32 +12,32 @@ export interface CuratedCollectionProps {
 
 export const CuratedCollection: React.FC<CuratedCollectionProps> = ({
   products,
-  title = 'Curated Highlights',
-  subtitle = 'Acquisitions handpicked for aesthetic provenance and mechanical integrity',
+  title = 'Featured Watches',
+  subtitle = 'Handpicked luxury and automatic timepieces ready for fast delivery',
 }) => {
   return (
-    <section className="py-16 sm:py-24 bg-luxury-950">
+    <section className="py-14 sm:py-20 bg-slate-50 dark:bg-[#0A0A0B] transition-colors">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Section Header */}
-        <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-12 border-b border-luxury-900 pb-6">
+        <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-10 border-b border-slate-200 dark:border-slate-800/80 pb-6">
           <div className="space-y-2">
-            <span className="text-[11px] uppercase tracking-ultra text-gold font-semibold flex items-center gap-1.5">
+            <span className="text-xs uppercase tracking-wider text-amber-600 dark:text-amber-400 font-bold flex items-center gap-1.5">
               <Sparkles className="w-3.5 h-3.5" />
-              The Private Vault
+              Handpicked Selection
             </span>
-            <h2 className="font-serif text-3xl sm:text-4xl text-luxury-100 font-normal">
+            <h2 className="font-serif text-3xl sm:text-4xl text-slate-900 dark:text-slate-100 font-bold">
               {title}
             </h2>
-            <p className="text-xs sm:text-sm text-luxury-400 max-w-xl font-light">
+            <p className="text-sm text-slate-600 dark:text-slate-400 max-w-xl font-normal">
               {subtitle}
             </p>
           </div>
 
           <Link
             href="/watches"
-            className="inline-flex items-center gap-2 text-xs uppercase tracking-widest text-gold hover:text-gold-hover font-semibold transition-colors group self-start md:self-auto"
+            className="inline-flex items-center gap-2 text-xs uppercase tracking-wider text-amber-600 dark:text-amber-400 hover:text-amber-700 dark:hover:text-amber-300 font-bold transition-colors group self-start md:self-auto"
           >
-            <span>View Complete Catalogue</span>
+            <span>View All Watches</span>
             <ArrowRight className="w-4 h-4 transition-transform group-hover:translate-x-1" />
           </Link>
         </div>

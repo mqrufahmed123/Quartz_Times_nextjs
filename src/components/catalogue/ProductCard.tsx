@@ -3,7 +3,7 @@
 import React from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
-import { MessageCircle, ShieldCheck, ArrowUpRight } from 'lucide-react';
+import { MessageCircle, ArrowUpRight } from 'lucide-react';
 import { IProduct } from '@/types';
 import { formatPrice } from '@/lib/utils';
 import { getProductWhatsAppUrl } from '@/lib/whatsapp';
@@ -15,7 +15,6 @@ export interface ProductCardProps {
 }
 
 export const ProductCard: React.FC<ProductCardProps> = ({ product, priority = false }) => {
-  // Find primary image or first available image
   const primaryImage =
     product.images?.find((img) => img.isPrimary) ||
     product.images?.[0] || {
@@ -34,18 +33,18 @@ export const ProductCard: React.FC<ProductCardProps> = ({ product, priority = fa
   const availabilityLabels = {
     in_stock: { label: 'In Stock', variant: 'gold' as const },
     reserved: { label: 'Reserved', variant: 'warning' as const },
-    sold_out: { label: 'Acquired', variant: 'danger' as const },
-    made_to_order: { label: 'Sourcing', variant: 'neutral' as const },
+    sold_out: { label: 'Out of Stock', variant: 'danger' as const },
+    made_to_order: { label: 'Pre-Order', variant: 'neutral' as const },
   };
 
   const avail = availabilityLabels[product.availability] || availabilityLabels.in_stock;
 
   return (
-    <div className="group flex flex-col bg-luxury-900/40 border border-luxury-800/80 hover:border-gold/50 rounded-lg overflow-hidden transition-all duration-500 hover:shadow-luxury hover:-translate-y-1">
-      {/* Real Watch Photograph Container - Dominant Visual Area */}
+    <div className="group flex flex-col bg-white dark:bg-slate-900/60 border border-slate-200 dark:border-slate-800 hover:border-amber-500 dark:hover:border-amber-500 rounded-xl overflow-hidden transition-all duration-300 shadow-sm hover:shadow-md hover:-translate-y-1">
+      {/* Product Image Stage */}
       <Link
         href={`/watches/${product.slug}`}
-        className="relative aspect-[4/5] sm:aspect-[1/1] w-full overflow-hidden bg-luxury-950 block"
+        className="relative aspect-[4/5] sm:aspect-[1/1] w-full overflow-hidden bg-slate-100 dark:bg-slate-950 block"
       >
         <Image
           src={primaryImage.url}
@@ -53,13 +52,12 @@ export const ProductCard: React.FC<ProductCardProps> = ({ product, priority = fa
           fill
           priority={priority}
           sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
-          className="object-cover object-center transition-transform duration-700 ease-out group-hover:scale-105"
+          className="object-cover object-center transition-transform duration-500 ease-out group-hover:scale-105"
         />
 
-        {/* Subtle Gradient Shadow on Photo Base */}
-        <div className="absolute inset-0 bg-gradient-to-t from-luxury-950/80 via-transparent to-transparent opacity-60 group-hover:opacity-40 transition-opacity" />
+        <div className="absolute inset-0 bg-gradient-to-t from-slate-950/60 via-transparent to-transparent opacity-40 group-hover:opacity-20 transition-opacity" />
 
-        {/* Top Badges */}
+        {/* Top Status Badges */}
         <div className="absolute top-3 left-3 right-3 flex items-center justify-between pointer-events-none z-10">
           <Badge variant={avail.variant} size="sm">
             {avail.label}
@@ -67,70 +65,70 @@ export const ProductCard: React.FC<ProductCardProps> = ({ product, priority = fa
 
           {product.isNewArrival && (
             <Badge variant="dark" size="sm">
-              New Addition
+              New
             </Badge>
           )}
         </div>
 
-        {/* Floating Quick View Icon on Hover */}
+        {/* Quick View Button */}
         <div className="absolute bottom-3 right-3 opacity-0 group-hover:opacity-100 transition-all duration-300 z-10">
-          <span className="w-8 h-8 rounded-full bg-luxury-900/90 text-gold border border-gold/40 flex items-center justify-center shadow-lg">
+          <span className="w-8 h-8 rounded-full bg-white/90 dark:bg-slate-800/90 text-amber-600 dark:text-amber-400 border border-slate-200 dark:border-slate-700 flex items-center justify-center shadow-md">
             <ArrowUpRight className="w-4 h-4" />
           </span>
         </div>
       </Link>
 
-      {/* Product Information */}
+      {/* Product Info */}
       <div className="p-4 sm:p-5 flex flex-col flex-1 justify-between space-y-4">
         <div className="space-y-1.5">
-          {/* Brand & Reference */}
-          <div className="flex items-center justify-between text-[11px] uppercase tracking-ultra text-gold font-medium">
+          {/* Brand & Diameter */}
+          <div className="flex items-center justify-between text-[11px] uppercase tracking-wider text-amber-600 dark:text-amber-400 font-bold">
             <span>{product.brand}</span>
             {product.specifications?.caseDiameter && (
-              <span className="text-luxury-500">{product.specifications.caseDiameter}</span>
+              <span className="text-slate-400 font-normal">{product.specifications.caseDiameter}</span>
             )}
           </div>
 
-          {/* Product Name */}
+          {/* Watch Title */}
           <Link href={`/watches/${product.slug}`} className="block">
-            <h3 className="font-serif text-base sm:text-lg text-luxury-100 group-hover:text-gold transition-colors line-clamp-2 leading-snug">
+            <h3 className="font-serif text-base sm:text-lg font-bold text-slate-900 dark:text-slate-100 group-hover:text-amber-600 dark:group-hover:text-amber-400 transition-colors line-clamp-2 leading-snug">
               {product.name}
             </h3>
           </Link>
 
-          {/* Movement & Key Specification Teaser */}
+          {/* Movement Teaser */}
           {product.specifications?.movement && (
-            <p className="text-xs text-luxury-400 line-clamp-1">
+            <p className="text-xs text-slate-500 dark:text-slate-400 line-clamp-1 font-normal">
               {product.specifications.movement}
             </p>
           )}
         </div>
 
-        {/* Price & Direct WhatsApp Action */}
-        <div className="pt-3 border-t border-luxury-800/80 flex items-center justify-between gap-2">
+        {/* Price & Action */}
+        <div className="pt-3 border-t border-slate-100 dark:border-slate-800 flex items-center justify-between gap-2">
           <div className="flex flex-col">
-            <span className="text-[10px] uppercase tracking-widest text-luxury-500">
-              Listed Price
+            <span className="text-[10px] uppercase tracking-wider text-slate-400 font-medium">
+              Price
             </span>
             <div className="flex items-baseline gap-2">
-              <span className="text-base sm:text-lg font-serif font-bold text-luxury-100">
+              <span className="text-base sm:text-lg font-serif font-bold text-slate-900 dark:text-slate-100">
                 {formatPrice(product.price, product.currency)}
               </span>
               {product.originalPrice && product.originalPrice > product.price && (
-                <span className="text-xs text-luxury-500 line-through">
+                <span className="text-xs text-slate-400 line-through">
                   {formatPrice(product.originalPrice, product.currency)}
                 </span>
               )}
             </div>
           </div>
 
-          {/* WhatsApp Direct Action Button */}
+          {/* WhatsApp Button */}
           <a
             href={whatsappUrl}
             target="_blank"
             rel="noopener noreferrer"
-            title="Enquire on WhatsApp"
-            className="flex items-center justify-center gap-1.5 bg-[#25D366]/15 hover:bg-[#25D366] text-[#25D366] hover:text-luxury-950 border border-[#25D366]/40 hover:border-[#25D366] px-3 py-2 rounded text-xs font-semibold uppercase tracking-wider transition-all duration-300 active:scale-95 shrink-0"
+            title="Chat on WhatsApp"
+            className="flex items-center justify-center gap-1.5 bg-emerald-50 dark:bg-emerald-950/40 hover:bg-emerald-600 dark:hover:bg-emerald-500 text-emerald-700 dark:text-emerald-400 hover:text-white border border-emerald-300 dark:border-emerald-700/60 px-3 py-2 rounded-lg text-xs font-bold uppercase tracking-wider transition-all duration-200 shrink-0"
           >
             <MessageCircle className="w-3.5 h-3.5 fill-current" />
             <span className="hidden xs:inline">WhatsApp</span>

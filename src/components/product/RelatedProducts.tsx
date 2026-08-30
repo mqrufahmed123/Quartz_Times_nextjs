@@ -10,14 +10,14 @@ export const RelatedProducts: React.FC<RelatedProductsProps> = ({ products }) =>
   if (!products || products.length === 0) return null;
 
   return (
-    <section className="space-y-6 pt-12 border-t border-luxury-800">
+    <section className="space-y-6 pt-12 border-t border-slate-200 dark:border-slate-800 transition-colors">
       <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-2">
         <div>
-          <span className="text-[11px] uppercase tracking-ultra text-gold font-medium block">
-            Complementary References
+          <span className="text-xs uppercase tracking-wider text-amber-600 dark:text-amber-400 font-bold block">
+            More Options
           </span>
-          <h2 className="font-serif text-2xl text-luxury-100 font-normal">
-            You May Also Admire
+          <h2 className="font-serif text-2xl text-slate-900 dark:text-slate-100 font-bold">
+            You May Also Like
           </h2>
         </div>
       </div>
