@@ -1,4 +1,5 @@
 import connectToDatabase from '@/lib/mongodb';
+import mongoose from 'mongoose';
 import Inquiry, { IInquiryDocument } from '@/models/Inquiry';
 import { IInquiry } from '@/types';
 import { sampleInquiries } from '@/lib/mockData';
@@ -28,6 +29,11 @@ export async function createInquiry(data: Partial<IInquiry>): Promise<IInquiry> 
     }
   } catch (err) {
     console.error('Error creating inquiry in DB:', err);
+    if (process.env.MONGODB_URI) throw err;
+  }
+
+  if (process.env.MONGODB_URI) {
+    throw new Error('Database is unavailable. Your inquiry was not submitted.');
   }
 
   const newInq: IInquiry = {
@@ -108,7 +114,7 @@ export async function updateInquiryStatus(
 ): Promise<IInquiry | null> {
   try {
     const conn = await connectToDatabase();
-    if (conn) {
+    if (conn && mongoose.isValidObjectId(id)) {
       const updateData: any = { status };
       if (notes !== undefined) updateData.notes = notes;
       const doc = await Inquiry.findByIdAndUpdate(id, updateData, { new: true });
@@ -117,9 +123,15 @@ export async function updateInquiryStatus(
         inMemoryInquiries = inMemoryInquiries.map((i) => (i.id === id || i._id === id ? updated : i));
         return updated;
       }
+      return null;
     }
   } catch (err) {
     console.error('Error updating inquiry status:', err);
+    if (process.env.MONGODB_URI) throw err;
+  }
+
+  if (process.env.MONGODB_URI && mongoose.isValidObjectId(id)) {
+    throw new Error('Database is unavailable. The inquiry was not updated.');
   }
 
   const idx = inMemoryInquiries.findIndex((i) => i.id === id || i._id === id);

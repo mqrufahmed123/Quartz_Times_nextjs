@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useRouter, useSearchParams, usePathname } from 'next/navigation';
 import { Filter, X, RotateCcw, Check } from 'lucide-react';
 import { ICategory } from '@/types';
@@ -28,6 +28,13 @@ export const ProductFilters: React.FC<ProductFiltersProps> = ({
   const currentAvailability = searchParams.get('availability') || 'all';
   const currentMinPrice = searchParams.get('minPrice') || '';
   const currentMaxPrice = searchParams.get('maxPrice') || '';
+  const [minPrice, setMinPrice] = useState(currentMinPrice);
+  const [maxPrice, setMaxPrice] = useState(currentMaxPrice);
+
+  useEffect(() => {
+    setMinPrice(currentMinPrice);
+    setMaxPrice(currentMaxPrice);
+  }, [currentMinPrice, currentMaxPrice]);
 
   const updateParam = (key: string, value: string) => {
     const params = new URLSearchParams(searchParams.toString());
@@ -43,6 +50,14 @@ export const ProductFilters: React.FC<ProductFiltersProps> = ({
   const clearAllFilters = () => {
     router.push(pathname);
     setIsOpenMobile(false);
+  };
+
+  const applyPriceRange = () => {
+    const params = new URLSearchParams(searchParams.toString());
+    if (minPrice) params.set('minPrice', minPrice); else params.delete('minPrice');
+    if (maxPrice) params.set('maxPrice', maxPrice); else params.delete('maxPrice');
+    params.delete('page');
+    router.push(`${pathname}?${params.toString()}`);
   };
 
   const hasActiveFilters =
@@ -189,18 +204,26 @@ export const ProductFilters: React.FC<ProductFiltersProps> = ({
           <input
             type="number"
             placeholder="Min ₹"
-            value={currentMinPrice}
-            onChange={(e) => updateParam('minPrice', e.target.value)}
+            value={minPrice}
+            onChange={(e) => setMinPrice(e.target.value)}
             className="w-full bg-white dark:bg-slate-900 border border-slate-300 dark:border-slate-700 text-slate-800 dark:text-slate-200 text-xs rounded-lg px-2.5 py-2 focus:outline-none focus:border-amber-500 font-medium"
           />
           <input
             type="number"
             placeholder="Max ₹"
-            value={currentMaxPrice}
-            onChange={(e) => updateParam('maxPrice', e.target.value)}
+            value={maxPrice}
+            onChange={(e) => setMaxPrice(e.target.value)}
             className="w-full bg-white dark:bg-slate-900 border border-slate-300 dark:border-slate-700 text-slate-800 dark:text-slate-200 text-xs rounded-lg px-2.5 py-2 focus:outline-none focus:border-amber-500 font-medium"
           />
         </div>
+        <button
+          type="button"
+          onClick={applyPriceRange}
+          disabled={minPrice === currentMinPrice && maxPrice === currentMaxPrice}
+          className="w-full rounded-lg border border-slate-300 bg-slate-100 px-3 py-2 text-xs font-semibold text-slate-700 transition-colors hover:border-amber-500 disabled:cursor-default disabled:opacity-50 dark:border-slate-700 dark:bg-slate-800 dark:text-slate-200"
+        >
+          Apply Price Range
+        </button>
       </div>
     </div>
   );

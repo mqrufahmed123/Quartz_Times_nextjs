@@ -1,4 +1,5 @@
 import connectToDatabase from '@/lib/mongodb';
+import mongoose from 'mongoose';
 import Category, { ICategoryDocument } from '@/models/Category';
 import { ICategory } from '@/types';
 import { sampleCategories } from '@/lib/mockData';
@@ -25,11 +26,7 @@ export async function getCategories(onlyActive = true): Promise<ICategory[]> {
       const query = onlyActive ? { active: true } : {};
       const docs = await Category.find(query).sort({ name: 1 }).lean();
       if (docs.length > 0) {
-        return docs.map((d: any) => ({
-          ...d,
-          id: d._id.toString(),
-          _id: d._id.toString(),
-        }));
+        return docs.map(documentToCategory);
       }
     }
   } catch (err) {
@@ -45,11 +42,7 @@ export async function getCategoryBySlug(slug: string): Promise<ICategory | null>
     if (conn) {
       const doc = await Category.findOne({ slug }).lean();
       if (doc) {
-        return {
-          ...doc,
-          id: (doc as any)._id.toString(),
-          _id: (doc as any)._id.toString(),
-        } as ICategory;
+        return documentToCategory(doc);
       }
     }
   } catch (err) {
@@ -72,6 +65,11 @@ export async function createCategory(data: Partial<ICategory>): Promise<ICategor
     }
   } catch (err) {
     console.error('Error creating category:', err);
+    if (process.env.MONGODB_URI) throw err;
+  }
+
+  if (process.env.MONGODB_URI) {
+    throw new Error('Database is unavailable. The category was not saved.');
   }
 
   const newCat: ICategory = {
@@ -93,16 +91,22 @@ export async function createCategory(data: Partial<ICategory>): Promise<ICategor
 export async function updateCategory(id: string, data: Partial<ICategory>): Promise<ICategory | null> {
   try {
     const conn = await connectToDatabase();
-    if (conn) {
+    if (conn && mongoose.isValidObjectId(id)) {
       const doc = await Category.findByIdAndUpdate(id, data, { new: true });
       if (doc) {
         const updated = documentToCategory(doc);
         inMemoryCategories = inMemoryCategories.map((c) => (c.id === id || c._id === id ? updated : c));
         return updated;
       }
+      return null;
     }
   } catch (err) {
     console.error('Error updating category:', err);
+    if (process.env.MONGODB_URI) throw err;
+  }
+
+  if (process.env.MONGODB_URI && mongoose.isValidObjectId(id)) {
+    throw new Error('Database is unavailable. The category was not updated.');
   }
 
   const idx = inMemoryCategories.findIndex((c) => c.id === id || c._id === id);
@@ -120,11 +124,17 @@ export async function updateCategory(id: string, data: Partial<ICategory>): Prom
 export async function deleteCategory(id: string): Promise<boolean> {
   try {
     const conn = await connectToDatabase();
-    if (conn) {
-      await Category.findByIdAndDelete(id);
+    if (conn && mongoose.isValidObjectId(id)) {
+      const deleted = await Category.findByIdAndDelete(id);
+      return Boolean(deleted);
     }
   } catch (err) {
     console.error('Error deleting category:', err);
+    if (process.env.MONGODB_URI) throw err;
+  }
+
+  if (process.env.MONGODB_URI && mongoose.isValidObjectId(id)) {
+    throw new Error('Database is unavailable. The category was not deleted.');
   }
 
   inMemoryCategories = inMemoryCategories.filter((c) => c.id !== id && c._id !== id);

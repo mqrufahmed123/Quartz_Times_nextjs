@@ -3,7 +3,7 @@
 import React, { useState } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
-import { MessageCircle, ArrowUpRight, Loader2 } from 'lucide-react';
+import { MessageCircle, ArrowUpRight, Loader2, Watch } from 'lucide-react';
 import { IProduct } from '@/types';
 import { formatPrice } from '@/lib/utils';
 import { getProductWhatsAppUrl } from '@/lib/whatsapp';
@@ -16,6 +16,13 @@ export interface ProductCardProps {
 
 export const ProductCard: React.FC<ProductCardProps> = ({ product, priority = false }) => {
   const [opening, setOpening] = useState(false);
+  const [imageLoaded, setImageLoaded] = useState(false);
+  const [imageFailed, setImageFailed] = useState(false);
+
+  const handleOpen = (event: React.MouseEvent<HTMLAnchorElement>) => {
+    if (event.metaKey || event.ctrlKey || event.shiftKey || event.altKey || event.button !== 0) return;
+    setOpening(true);
+  };
   const primaryImage =
     product.images?.find((img) => img.isPrimary) ||
     product.images?.[0] || {
@@ -25,6 +32,7 @@ export const ProductCard: React.FC<ProductCardProps> = ({ product, priority = fa
 
   const whatsappUrl = getProductWhatsAppUrl({
     name: product.name,
+    slug: product.slug,
     brand: product.brand,
     sku: product.sku,
     price: product.price,
@@ -45,18 +53,35 @@ export const ProductCard: React.FC<ProductCardProps> = ({ product, priority = fa
       {/* Product Image Stage */}
       <Link
         href={`/watches/${product.slug}`}
-        onClick={() => setOpening(true)}
+        onClick={handleOpen}
         aria-label={`View ${product.brand} ${product.name}`}
         className="relative aspect-[4/5] sm:aspect-[1/1] w-full overflow-hidden bg-slate-100 dark:bg-slate-950 block"
       >
-        <Image
-          src={primaryImage.url}
-          alt={primaryImage.alt || product.name}
-          fill
-          priority={priority}
-          sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
-          className="object-cover object-center transition-transform duration-500 ease-out group-hover:scale-105"
-        />
+        {!imageLoaded && !imageFailed && (
+          <div className="absolute inset-0 animate-pulse bg-slate-200 dark:bg-slate-800 motion-reduce:animate-none" aria-hidden="true" />
+        )}
+
+        {imageFailed ? (
+          <div className="absolute inset-0 flex flex-col items-center justify-center gap-2 text-slate-400 dark:text-slate-600">
+            <Watch className="h-9 w-9" />
+            <span className="text-xs font-medium">Photo unavailable</span>
+          </div>
+        ) : (
+          <Image
+            src={primaryImage.url}
+            alt={primaryImage.alt || product.name}
+            fill
+            priority={priority}
+            loading={priority ? 'eager' : 'lazy'}
+            onLoad={() => setImageLoaded(true)}
+            onError={() => {
+              setImageLoaded(true);
+              setImageFailed(true);
+            }}
+            sizes="(max-width: 639px) 100vw, (max-width: 1023px) 50vw, 33vw"
+            className={`object-cover object-center transition-all duration-500 ease-out group-hover:scale-105 ${imageLoaded ? 'opacity-100' : 'opacity-0'}`}
+          />
+        )}
 
         <div className="absolute inset-0 bg-gradient-to-t from-slate-950/60 via-transparent to-transparent opacity-40 group-hover:opacity-20 transition-opacity" />
 
@@ -102,7 +127,7 @@ export const ProductCard: React.FC<ProductCardProps> = ({ product, priority = fa
           </div>
 
           {/* Watch Title */}
-          <Link href={`/watches/${product.slug}`} onClick={() => setOpening(true)} className="block">
+          <Link href={`/watches/${product.slug}`} onClick={handleOpen} className="block">
             <h3 className="font-serif text-base sm:text-lg font-bold text-slate-900 dark:text-slate-100 group-hover:text-amber-600 dark:group-hover:text-amber-400 transition-colors line-clamp-2 leading-snug">
               {product.name}
             </h3>

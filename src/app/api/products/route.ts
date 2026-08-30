@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { getProducts, createProduct } from '@/services/productService';
 import { getAdminSession } from '@/lib/auth';
+import { revalidatePath } from 'next/cache';
 
 export async function GET(req: NextRequest) {
   try {
@@ -57,6 +58,9 @@ export async function POST(req: NextRequest) {
     }
 
     const created = await createProduct(data);
+    revalidatePath('/');
+    revalidatePath('/watches');
+    revalidatePath(`/watches/${created.slug}`);
     return NextResponse.json(created, { status: 201 });
   } catch (err: any) {
     console.error('Products POST error:', err);

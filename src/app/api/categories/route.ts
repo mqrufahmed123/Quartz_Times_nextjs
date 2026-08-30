@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { getCategories, createCategory } from '@/services/categoryService';
 import { getAdminSession } from '@/lib/auth';
+import { revalidatePath, revalidateTag } from 'next/cache';
 
 export async function GET() {
   try {
@@ -27,6 +28,9 @@ export async function POST(req: NextRequest) {
     }
 
     const created = await createCategory(data);
+    revalidateTag('catalogue-filters', 'max');
+    revalidatePath('/');
+    revalidatePath('/watches');
     return NextResponse.json(created, { status: 201 });
   } catch (err: any) {
     return NextResponse.json(

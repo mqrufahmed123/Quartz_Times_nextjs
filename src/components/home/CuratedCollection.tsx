@@ -45,7 +45,7 @@ export const CuratedCollection: React.FC<CuratedCollectionProps> = ({
         {/* Product Cards Grid */}
         <div className="grid grid-cols-1 xs:grid-cols-2 md:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8">
           {products.slice(0, 6).map((product, index) => (
-            <ProductCard key={product.id || product.slug} product={product} priority={index < 3} />
+            <ProductCard key={product.id || product.slug} product={product} priority={index < 2} />
           ))}
         </div>
       </div>

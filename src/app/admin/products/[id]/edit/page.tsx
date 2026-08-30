@@ -8,15 +8,16 @@ import { ProductForm } from '@/components/admin/ProductForm';
 export default async function AdminEditProductPage({
   params,
 }: {
-  params: { id: string };
+  params: Promise<{ id: string }>;
 }) {
   const session = await getAdminSession();
   if (!session) {
     redirect('/admin/login');
   }
 
+  const { id } = await params;
   const [product, categories] = await Promise.all([
-    getProductById(params.id),
+    getProductById(id),
     getCategories(false),
   ]);
 

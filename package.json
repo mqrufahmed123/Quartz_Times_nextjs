@@ -1,12 +1,17 @@
 {
   "name": "quartz-times",
-  "version": "1.0.0",
+  "version": "2.0.0",
   "description": "Quartz Times - Luxury Watch Boutique & Catalogue",
+  "engines": {
+    "node": ">=20.9.0"
+  },
   "scripts": {
     "dev": "next dev",
-    "build": "next build",
+    "build": "npm run check:deploy-env && next build --webpack",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "eslint . --max-warnings=0",
+    "typecheck": "tsc --noEmit",
+    "check:deploy-env": "node scripts/check-deploy-env.mjs"
   },
   "dependencies": {
     "bcryptjs": "^3.0.3",
@@ -15,17 +20,19 @@
     "jose": "^6.2.10",
     "lucide-react": "^1.33.0",
     "mongoose": "^9.9.3",
-    "next": "^14.2.15",
-    "react": "^18.3.1",
-    "react-dom": "^18.3.1",
+    "next": "^16.3.3",
+    "react": "^19.2.8",
+    "react-dom": "^19.2.8",
     "tailwind-merge": "^3.6.0"
   },
   "devDependencies": {
     "@types/bcryptjs": "^2.4.6",
     "@types/node": "^26.2.0",
-    "@types/react": "^18.3.12",
-    "@types/react-dom": "^18.3.1",
+    "@types/react": "^19.2.18",
+    "@types/react-dom": "^19.2.5",
     "autoprefixer": "^10.5.4",
+    "eslint": "^9.39.5",
+    "eslint-config-next": "^16.3.3",
     "postcss": "^8.5.26",
     "tailwindcss": "^3.4.14",
     "typescript": "^5.6.3"

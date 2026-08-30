@@ -26,7 +26,7 @@ export default async function AdminDashboardPage() {
   }
 
   const [productsData, inquiriesData, categories] = await Promise.all([
-    getProducts({ limit: 100 }),
+    getProducts({ limit: 100, includeInactive: true }),
     getInquiries(10, 1),
     getCategories(false),
   ]);
@@ -75,7 +75,7 @@ export default async function AdminDashboardPage() {
             <span className="text-[10px] uppercase tracking-widest text-slate-500 dark:text-slate-400 font-semibold">
               Total Watches
             </span>
-            <div className="p-2 rounded-lg bg-slate-200 dark:bg-slate-800 text-amber-600 dark:text-amber-400">
+            <div className="p-2 rounded-lg bg-amber-100 text-amber-700 border border-amber-200 shadow-sm dark:bg-slate-800 dark:text-amber-400 dark:border-transparent dark:shadow-none">
               <Watch className="w-4 h-4" />
             </div>
           </div>
@@ -90,7 +90,7 @@ export default async function AdminDashboardPage() {
             <span className="text-[10px] uppercase tracking-widest text-slate-500 dark:text-slate-400 font-semibold">
               Featured on Home
             </span>
-            <div className="p-2 rounded-lg bg-amber-50 dark:bg-amber-500/10 text-amber-600 dark:text-amber-400">
+            <div className="p-2 rounded-lg bg-amber-100 text-amber-700 border border-amber-200 shadow-sm dark:bg-amber-500/10 dark:text-amber-400 dark:border-transparent dark:shadow-none">
               <Star className="w-4 h-4" />
             </div>
           </div>
@@ -105,7 +105,7 @@ export default async function AdminDashboardPage() {
             <span className="text-[10px] uppercase tracking-widest text-slate-500 dark:text-slate-400 font-semibold">
               Customer Inquiries
             </span>
-            <div className="p-2 rounded-lg bg-emerald-950/60 text-emerald-400 border border-emerald-800/40">
+            <div className="p-2 rounded-lg bg-emerald-100 text-emerald-700 border border-emerald-200 shadow-sm dark:bg-emerald-950/60 dark:text-emerald-400 dark:border-emerald-800/40 dark:shadow-none">
               <MessageSquare className="w-4 h-4" />
             </div>
           </div>
@@ -126,7 +126,7 @@ export default async function AdminDashboardPage() {
             <span className="text-[10px] uppercase tracking-widest text-slate-500 dark:text-slate-400 font-semibold">
               Out of Stock
             </span>
-            <div className="p-2 rounded-lg bg-slate-200 dark:bg-slate-800 text-slate-600 dark:text-slate-300">
+            <div className="p-2 rounded-lg bg-slate-100 text-slate-700 border border-slate-300 shadow-sm dark:bg-slate-800 dark:text-slate-300 dark:border-transparent dark:shadow-none">
               <CheckCircle className="w-4 h-4" />
             </div>
           </div>

@@ -103,6 +103,8 @@ export interface IProductFilterQuery {
   page?: number;
   limit?: number;
   featured?: boolean;
+  /** Server-side/admin use only. Public catalogue queries must leave this false. */
+  includeInactive?: boolean;
 }
 
 export interface IPaginatedResult<T> {

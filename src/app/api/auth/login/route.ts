@@ -26,6 +26,7 @@ export async function POST(req: NextRequest) {
     // 1. Check default configured admin credentials
     if (verifyDefaultAdminCredentials(email, password)) {
       isValid = true;
+      userRole = 'superadmin';
     } else {
       // 2. Check Database Admin model
       const conn = await connectToDatabase();
@@ -54,7 +55,7 @@ export async function POST(req: NextRequest) {
     });
 
     // Set cookie
-    setAdminCookie(token);
+    await setAdminCookie(token);
 
     return NextResponse.json({
       success: true,

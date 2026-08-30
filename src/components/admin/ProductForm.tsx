@@ -23,6 +23,7 @@ export const ProductForm: React.FC<ProductFormProps> = ({
 
   const [name, setName] = useState(initialData?.name || '');
   const [slug, setSlug] = useState(initialData?.slug || '');
+  const [slugManuallyEdited, setSlugManuallyEdited] = useState(Boolean(initialData?.slug));
   const [brand, setBrand] = useState(initialData?.brand || '');
   const [category, setCategory] = useState(initialData?.category || (categories[0]?.name || 'Automatic'));
   const [description, setDescription] = useState(initialData?.description || '');
@@ -59,7 +60,7 @@ export const ProductForm: React.FC<ProductFormProps> = ({
 
   const handleNameChange = (val: string) => {
     setName(val);
-    if (!isEdit && !slug) {
+    if (!isEdit && !slugManuallyEdited) {
       setSlug(slugify(val));
     }
   };
@@ -243,7 +244,10 @@ export const ProductForm: React.FC<ProductFormProps> = ({
               type="text"
               required
               value={slug}
-              onChange={(e) => setSlug(e.target.value)}
+              onChange={(e) => {
+                setSlug(e.target.value);
+                setSlugManuallyEdited(Boolean(e.target.value));
+              }}
               placeholder="classic-black-dial-watch"
               className="w-full bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 rounded-lg px-4 py-2.5 text-xs text-slate-900 dark:text-slate-100 font-mono focus:border-amber-500 focus:outline-none"
             />

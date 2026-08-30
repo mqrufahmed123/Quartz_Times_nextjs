@@ -18,6 +18,7 @@ export const getFormattedWhatsAppDisplay = (): string => {
  */
 export function getProductWhatsAppUrl(product: {
   name: string;
+  slug: string;
   brand?: string;
   sku?: string;
   price?: number;
@@ -33,11 +34,16 @@ export function getProductWhatsAppUrl(product: {
         maximumFractionDigits: 0,
       }).format(product.price)}`
     : '';
+  const siteUrl = (process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3000').replace(/\/$/, '');
+  const productUrl = `${siteUrl}/watches/${encodeURIComponent(product.slug)}`;
 
   const message = `Hello Quartz Times Horology,
 
 I am interested in inquiring about the following timepiece:
 • Watch: ${brandPart}${product.name}${skuPart}${pricePart}
+
+View watch details and photos:
+${productUrl}
 
 Could you please share more details regarding current availability, high-resolution media, and acquisition process?
 

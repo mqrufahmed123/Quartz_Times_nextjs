@@ -2,6 +2,13 @@ import { NextRequest, NextResponse } from 'next/server';
 import { uploadToCloudinary } from '@/lib/cloudinary';
 import { getAdminSession } from '@/lib/auth';
 
+export const runtime = 'nodejs';
+
+const MAX_IMAGE_SIZE = 15 * 1024 * 1024;
+const MAX_VIDEO_SIZE = 30 * 1024 * 1024;
+const ALLOWED_IMAGE_TYPES = new Set(['image/jpeg', 'image/png', 'image/webp', 'image/avif', 'image/heic', 'image/heif']);
+const ALLOWED_VIDEO_TYPES = new Set(['video/mp4', 'video/quicktime', 'video/webm']);
+
 export async function POST(req: NextRequest) {
   try {
     const session = await getAdminSession();
@@ -17,6 +24,19 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ error: 'No file provided' }, { status: 400 });
     }
 
+    const isVideo = type === 'video';
+    const allowedTypes = isVideo ? ALLOWED_VIDEO_TYPES : ALLOWED_IMAGE_TYPES;
+    const maxSize = isVideo ? MAX_VIDEO_SIZE : MAX_IMAGE_SIZE;
+    if (!allowedTypes.has(file.type)) {
+      return NextResponse.json({ error: `Unsupported ${isVideo ? 'video' : 'image'} format.` }, { status: 415 });
+    }
+    if (file.size <= 0 || file.size > maxSize) {
+      return NextResponse.json(
+        { error: `${isVideo ? 'Video' : 'Image'} must be smaller than ${maxSize / 1024 / 1024} MB.` },
+        { status: 413 }
+      );
+    }
+
     const bytes = await file.arrayBuffer();
     const buffer = Buffer.from(bytes);
 
@@ -28,7 +48,7 @@ export async function POST(req: NextRequest) {
     ) {
       const uploadRes = await uploadToCloudinary(buffer, {
         folder: 'quartz-times/watches',
-        resourceType: type === 'video' ? 'video' : 'image',
+        resourceType: isVideo ? 'video' : 'image',
         filename: file.name,
       });
 
@@ -39,14 +59,14 @@ export async function POST(req: NextRequest) {
         height: uploadRes.height,
         format: uploadRes.format,
         thumbnailUrl:
-          type === 'video'
+          isVideo
             ? (uploadRes.secure_url || uploadRes.url).replace(/\.[^/.]+$/, '.jpg')
             : undefined,
       });
     }
 
     // Fallback: convert to base64 Data URL for instant local demonstration if Cloudinary env is pending
-    const mimeType = file.type || (type === 'video' ? 'video/mp4' : 'image/jpeg');
+    const mimeType = file.type;
     const base64 = `data:${mimeType};base64,${buffer.toString('base64')}`;
 
     return NextResponse.json({

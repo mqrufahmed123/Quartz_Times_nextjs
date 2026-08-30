@@ -6,9 +6,15 @@ import Inquiry from '@/models/Inquiry';
 import Admin from '@/models/Admin';
 import { sampleProducts, sampleCategories, sampleInquiries } from '@/lib/mockData';
 import { hashPassword } from '@/lib/auth';
+import { getAdminSession } from '@/lib/auth';
 
 export async function POST() {
   try {
+    const session = await getAdminSession();
+    if (!session || session.role !== 'superadmin') {
+      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+    }
+
     const conn = await connectToDatabase();
     if (!conn) {
       return NextResponse.json({
@@ -80,8 +86,11 @@ export async function POST() {
     }
 
     // 4. Seed Default Admin if none exists
-    const adminEmail = process.env.ADMIN_EMAIL || 'admin@quartztimes.com';
-    const adminPass = process.env.ADMIN_PASSWORD || 'QuartzLuxury2025!';
+    const adminEmail = process.env.ADMIN_EMAIL;
+    const adminPass = process.env.ADMIN_PASSWORD;
+    if (!adminEmail || !adminPass) {
+      throw new Error('ADMIN_EMAIL and ADMIN_PASSWORD are required before seeding.');
+    }
     const existingAdmin = await Admin.findOne({ email: adminEmail.toLowerCase() });
     if (!existingAdmin) {
       const passwordHash = await hashPassword(adminPass);

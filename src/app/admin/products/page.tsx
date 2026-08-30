@@ -10,7 +10,7 @@ export default async function AdminProductsPage() {
     redirect('/admin/login');
   }
 
-  const productsData = await getProducts({ limit: 100 });
+  const productsData = await getProducts({ limit: 100, includeInactive: true });
 
   return (
     <div className="space-y-6 sm:space-y-8">

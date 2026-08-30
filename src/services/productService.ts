@@ -1,4 +1,5 @@
 import connectToDatabase from '@/lib/mongodb';
+import mongoose from 'mongoose';
 import Product, { IProductDocument } from '@/models/Product';
 import { IProduct, IProductFilterQuery, IPaginatedResult } from '@/types';
 import { sampleProducts } from '@/lib/mockData';
@@ -6,6 +7,10 @@ import { slugify } from '@/lib/utils';
 
 // In-memory runtime store for dev/demonstration when DB is not actively reachable
 let inMemoryProducts: IProduct[] = [...sampleProducts];
+
+function escapeRegExp(value: string): string {
+  return value.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+}
 
 function serializeImages(images: any[]): any[] {
   if (!Array.isArray(images)) return [];
@@ -28,7 +33,16 @@ function documentToProduct(doc: any): IProduct {
     ...obj,
     id: obj._id ? obj._id.toString() : obj.id,
     _id: obj._id ? obj._id.toString() : obj.id,
+    specifications: obj.specifications ? { ...obj.specifications } : {},
     images: serializeImages(obj.images),
+    video: obj.video?.url
+      ? {
+          url: obj.video.url,
+          publicId: obj.video.publicId ?? undefined,
+          thumbnailUrl: obj.video.thumbnailUrl ?? undefined,
+        }
+      : undefined,
+    tags: Array.isArray(obj.tags) ? obj.tags.map(String) : [],
     createdAt: obj.createdAt ? new Date(obj.createdAt).toISOString() : undefined,
     updatedAt: obj.updatedAt ? new Date(obj.updatedAt).toISOString() : undefined,
   };
@@ -45,18 +59,18 @@ export async function getProducts(
     const conn = await connectToDatabase();
     if (conn) {
       // Build MongoDB query
-      const query: any = { status: { $ne: 'archived' } };
+      const query: any = params.includeInactive ? { status: { $ne: 'archived' } } : { status: 'active' };
 
       if (params.category && params.category !== 'all') {
-        query.category = { $regex: new RegExp(`^${params.category}$`, 'i') };
+        query.category = { $regex: new RegExp(`^${escapeRegExp(params.category)}$`, 'i') };
       }
 
       if (params.brand && params.brand !== 'all') {
-        query.brand = { $regex: new RegExp(`^${params.brand}$`, 'i') };
+        query.brand = { $regex: new RegExp(`^${escapeRegExp(params.brand)}$`, 'i') };
       }
 
       if (params.movement && params.movement !== 'all') {
-        query['specifications.movement'] = { $regex: new RegExp(params.movement, 'i') };
+        query['specifications.movement'] = { $regex: new RegExp(escapeRegExp(params.movement), 'i') };
       }
 
       if (params.availability && params.availability !== 'all') {
@@ -74,7 +88,7 @@ export async function getProducts(
       }
 
       if (params.search && params.search.trim()) {
-        const searchRegex = new RegExp(params.search.trim(), 'i');
+        const searchRegex = new RegExp(escapeRegExp(params.search.trim().slice(0, 100)), 'i');
         query.$or = [
           { name: searchRegex },
           { brand: searchRegex },
@@ -102,12 +116,7 @@ export async function getProducts(
         .lean();
 
       if (total > 0) {
-        const items = docs.map((d: any) => ({
-          ...d,
-          id: d._id.toString(),
-          _id: d._id.toString(),
-          images: serializeImages(d.images),
-        }));
+        const items = docs.map(documentToProduct);
         return {
           items,
           total,
@@ -122,7 +131,9 @@ export async function getProducts(
   }
 
   // Graceful fallback to memory/mock data
-  let filtered = [...inMemoryProducts].filter((p) => p.status !== 'archived');
+  let filtered = [...inMemoryProducts].filter((p) =>
+    params.includeInactive ? p.status !== 'archived' : p.status === 'active'
+  );
 
   if (params.category && params.category !== 'all') {
     filtered = filtered.filter(
@@ -200,21 +211,16 @@ export async function getProductBySlug(slug: string): Promise<IProduct | null> {
   try {
     const conn = await connectToDatabase();
     if (conn) {
-      const doc = await Product.findOne({ slug }).lean();
+      const doc = await Product.findOne({ slug, status: 'active' }).lean();
       if (doc) {
-        return {
-          ...doc,
-          id: (doc as any)._id.toString(),
-          _id: (doc as any)._id.toString(),
-          images: serializeImages((doc as any).images),
-        } as IProduct;
+        return documentToProduct(doc);
       }
     }
   } catch (err) {
     console.warn('Error finding product by slug:', err);
   }
 
-  const found = inMemoryProducts.find((p) => p.slug === slug);
+  const found = inMemoryProducts.find((p) => p.slug === slug && p.status === 'active');
   return found || null;
 }
 
@@ -226,12 +232,7 @@ export async function getProductById(id: string): Promise<IProduct | null> {
     if (conn) {
       const doc = await Product.findById(id).lean();
       if (doc) {
-        return {
-          ...doc,
-          id: (doc as any)._id.toString(),
-          _id: (doc as any)._id.toString(),
-          images: serializeImages((doc as any).images),
-        } as IProduct;
+        return documentToProduct(doc);
       }
     }
   } catch (err) {
@@ -302,6 +303,16 @@ export async function createProduct(data: Partial<IProduct>): Promise<IProduct> 
   try {
     const conn = await connectToDatabase();
     if (conn) {
+      const duplicate = await Product.findOne({ $or: [{ slug }, { sku: data.sku?.toUpperCase() }] })
+        .select('slug sku')
+        .lean();
+      if (duplicate) {
+        throw new Error(
+          duplicate.slug === slug
+            ? 'A watch with this URL slug already exists.'
+            : 'A watch with this SKU already exists.'
+        );
+      }
       const doc = await Product.create({
         ...data,
         slug,
@@ -310,8 +321,12 @@ export async function createProduct(data: Partial<IProduct>): Promise<IProduct> 
       inMemoryProducts.unshift(saved);
       return saved;
     }
+    if (process.env.MONGODB_URI) {
+      throw new Error('Database is unavailable. The watch was not saved.');
+    }
   } catch (err) {
     console.error('Error creating product in DB:', err);
+    if (process.env.MONGODB_URI) throw err;
   }
 
   const newProd: IProduct = {
@@ -346,16 +361,22 @@ export async function createProduct(data: Partial<IProduct>): Promise<IProduct> 
 export async function updateProduct(id: string, data: Partial<IProduct>): Promise<IProduct | null> {
   try {
     const conn = await connectToDatabase();
-    if (conn) {
+    if (conn && mongoose.isValidObjectId(id)) {
       const doc = await Product.findByIdAndUpdate(id, data, { new: true });
       if (doc) {
         const updated = documentToProduct(doc);
         inMemoryProducts = inMemoryProducts.map((p) => (p.id === id || p._id === id ? updated : p));
         return updated;
       }
+      return null;
     }
   } catch (err) {
     console.error('Error updating product in DB:', err);
+    if (process.env.MONGODB_URI) throw err;
+  }
+
+  if (process.env.MONGODB_URI && mongoose.isValidObjectId(id)) {
+    throw new Error('Database is unavailable. The watch was not updated.');
   }
 
   const index = inMemoryProducts.findIndex((p) => p.id === id || p._id === id);
@@ -374,11 +395,18 @@ export async function updateProduct(id: string, data: Partial<IProduct>): Promis
 export async function deleteProduct(id: string): Promise<boolean> {
   try {
     const conn = await connectToDatabase();
-    if (conn) {
-      await Product.findByIdAndDelete(id);
+    if (conn && mongoose.isValidObjectId(id)) {
+      const deleted = await Product.findByIdAndDelete(id);
+      if (!deleted) return false;
+      return true;
     }
   } catch (err) {
     console.error('Error deleting product in DB:', err);
+    if (process.env.MONGODB_URI) throw err;
+  }
+
+  if (process.env.MONGODB_URI && mongoose.isValidObjectId(id)) {
+    throw new Error('Database is unavailable. The watch was not deleted.');
   }
 
   inMemoryProducts = inMemoryProducts.filter((p) => p.id !== id && p._id !== id);

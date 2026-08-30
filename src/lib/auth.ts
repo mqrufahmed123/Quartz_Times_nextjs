@@ -2,9 +2,15 @@ import { SignJWT, jwtVerify } from 'jose';
 import bcrypt from 'bcryptjs';
 import { cookies } from 'next/headers';
 
-const JWT_SECRET = process.env.JWT_SECRET || 'super_secret_jwt_key_quartz_times_luxury_horology_2025';
-const secretKey = new TextEncoder().encode(JWT_SECRET);
 const COOKIE_NAME = 'qt_admin_session';
+
+function getSecretKey(): Uint8Array {
+  const secret = process.env.JWT_SECRET;
+  if (!secret && process.env.NODE_ENV === 'production') {
+    throw new Error('JWT_SECRET is required in production.');
+  }
+  return new TextEncoder().encode(secret || 'quartz-times-local-development-secret');
+}
 
 export interface AdminPayload {
   userId: string;
@@ -35,7 +41,7 @@ export async function createSessionToken(payload: AdminPayload): Promise<string>
     .setProtectedHeader({ alg: 'HS256' })
     .setIssuedAt()
     .setExpirationTime('7d')
-    .sign(secretKey);
+    .sign(getSecretKey());
 }
 
 /**
@@ -43,7 +49,7 @@ export async function createSessionToken(payload: AdminPayload): Promise<string>
  */
 export async function verifySessionToken(token: string): Promise<AdminPayload | null> {
   try {
-    const { payload } = await jwtVerify(token, secretKey);
+    const { payload } = await jwtVerify(token, getSecretKey());
     return payload as unknown as AdminPayload;
   } catch (err) {
     return null;
@@ -53,8 +59,8 @@ export async function verifySessionToken(token: string): Promise<AdminPayload | 
 /**
  * Set session cookie
  */
-export function setAdminCookie(token: string) {
-  const cookieStore = cookies();
+export async function setAdminCookie(token: string) {
+  const cookieStore = await cookies();
   cookieStore.set(COOKIE_NAME, token, {
     httpOnly: true,
     secure: process.env.NODE_ENV === 'production',
@@ -67,8 +73,8 @@ export function setAdminCookie(token: string) {
 /**
  * Clear session cookie
  */
-export function removeAdminCookie() {
-  const cookieStore = cookies();
+export async function removeAdminCookie() {
+  const cookieStore = await cookies();
   cookieStore.delete(COOKIE_NAME);
 }
 
@@ -77,7 +83,7 @@ export function removeAdminCookie() {
  */
 export async function getAdminSession(): Promise<AdminPayload | null> {
   try {
-    const cookieStore = cookies();
+    const cookieStore = await cookies();
     const token = cookieStore.get(COOKIE_NAME)?.value;
     if (!token) return null;
     return await verifySessionToken(token);
@@ -90,7 +96,8 @@ export async function getAdminSession(): Promise<AdminPayload | null> {
  * Check if default admin credentials match (for initial setup before DB admin is created)
  */
 export function verifyDefaultAdminCredentials(email: string, pass: string): boolean {
-  const defaultEmail = process.env.ADMIN_EMAIL || 'admin@quartztimes.com';
-  const defaultPass = process.env.ADMIN_PASSWORD || 'QuartzLuxury2025!';
+  const defaultEmail = process.env.ADMIN_EMAIL;
+  const defaultPass = process.env.ADMIN_PASSWORD;
+  if (!defaultEmail || !defaultPass) return false;
   return email.toLowerCase() === defaultEmail.toLowerCase() && pass === defaultPass;
 }

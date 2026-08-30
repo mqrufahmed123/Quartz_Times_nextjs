@@ -76,13 +76,12 @@ CLOUDINARY_API_SECRET=your_api_secret
 
 # WhatsApp Business Communication
 NEXT_PUBLIC_WHATSAPP_NUMBER=919876543210
-NEXT_PUBLIC_SITE_URL=http://localhost:3000
+NEXT_PUBLIC_SITE_URL=https://your-production-domain.example
 
 # Admin Authentication
-ADMIN_EMAIL=admin@quartztimes.com
-ADMIN_PASSWORD=QuartzLuxury2025!
-JWT_SECRET=super_secret_jwt_key_quartz_times_luxury_horology_2025
-AUTH_SECRET=super_secret_auth_secret_session_key_32bytes_long
+ADMIN_EMAIL=your-secure-admin@example.com
+ADMIN_PASSWORD=replace-with-your-existing-unique-admin-password
+JWT_SECRET=replace-with-at-least-32-random-characters
 ```
 
 ---
@@ -101,13 +100,19 @@ npm run build
 npm run start
 ```
 
+Before deploying, validate the production environment values:
+
+```bash
+npm run check:deploy-env
+```
+
 Open [http://localhost:3000](http://localhost:3000) to view the boutique.
 
 ---
 
-## ✦ Admin Credentials (Default)
+## ✦ Admin Access
 
 - **URL**: `/admin/login`
-- **Email**: `admin@quartztimes.com`
-- **Password**: `QuartzLuxury2025!`
+- Configure a unique `ADMIN_EMAIL` and `ADMIN_PASSWORD` in the deployment environment.
+- Never deploy the example values or commit production credentials.
 # Quartz_Times_nextjs

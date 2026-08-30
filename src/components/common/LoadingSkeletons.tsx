@@ -19,6 +19,35 @@ export function ProductCardSkeleton() {
   );
 }
 
+export function CatalogueHeaderSkeleton() {
+  return (
+    <div className="mb-8 flex items-end justify-between gap-4 border-b border-slate-200 pb-4 dark:border-slate-800">
+      <div className="space-y-3">
+        <div className={`${block} h-9 w-56`} />
+        <div className={`${block} h-3 w-28`} />
+      </div>
+      <div className={`${block} h-10 w-36`} />
+    </div>
+  );
+}
+
+export function FilterSkeleton() {
+  return (
+    <div className="hidden w-64 shrink-0 space-y-5 rounded-xl border border-slate-200 bg-white p-6 dark:border-slate-800 dark:bg-slate-900/70 lg:block">
+      <div className={`${block} h-5 w-32`} />
+      {[1, 2, 3, 4, 5, 6].map((item) => <div key={item} className={`${block} h-10 w-full`} />)}
+    </div>
+  );
+}
+
+export function ProductGridSkeleton({ count = 6 }: { count?: number }) {
+  return (
+    <div className="grid flex-1 grid-cols-1 gap-6 xs:grid-cols-2 lg:grid-cols-3" aria-label="Loading watches">
+      {Array.from({ length: count }, (_, index) => <ProductCardSkeleton key={index} />)}
+    </div>
+  );
+}
+
 export function CatalogueSkeleton() {
   return (
     <div className="min-h-screen bg-slate-50 px-4 py-10 dark:bg-[#0A0A0B] sm:px-6 sm:py-16">

@@ -5,14 +5,19 @@ import {
   deleteProduct,
 } from '@/services/productService';
 import { getAdminSession } from '@/lib/auth';
+import { revalidatePath } from 'next/cache';
 
 export async function GET(
   req: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
-    const product = await getProductById(params.id);
+    const { id } = await params;
+    const product = await getProductById(id);
     if (!product) {
+      return NextResponse.json({ error: 'Product not found' }, { status: 404 });
+    }
+    if (product.status !== 'active' && !(await getAdminSession())) {
       return NextResponse.json({ error: 'Product not found' }, { status: 404 });
     }
     return NextResponse.json(product);
@@ -26,9 +31,10 @@ export async function GET(
 
 export async function PUT(
   req: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
+    const { id } = await params;
     const session = await getAdminSession();
     if (!session) {
       return NextResponse.json({ error: 'Unauthorized admin access' }, { status: 401 });
@@ -44,10 +50,14 @@ export async function PUT(
         { status: 400 }
       );
     }
-    const updated = await updateProduct(params.id, data);
+    const updated = await updateProduct(id, data);
     if (!updated) {
       return NextResponse.json({ error: 'Product not found for update' }, { status: 404 });
     }
+
+    revalidatePath('/');
+    revalidatePath('/watches');
+    revalidatePath(`/watches/${updated.slug}`);
 
     return NextResponse.json(updated);
   } catch (err: any) {
@@ -60,15 +70,21 @@ export async function PUT(
 
 export async function DELETE(
   req: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
+    const { id } = await params;
     const session = await getAdminSession();
     if (!session) {
       return NextResponse.json({ error: 'Unauthorized admin access' }, { status: 401 });
     }
 
-    await deleteProduct(params.id);
+    const deleted = await deleteProduct(id);
+    if (!deleted) {
+      return NextResponse.json({ error: 'Product not found' }, { status: 404 });
+    }
+    revalidatePath('/');
+    revalidatePath('/watches');
     return NextResponse.json({ success: true, message: 'Watch deleted' });
   } catch (err: any) {
     return NextResponse.json(

@@ -12,30 +12,50 @@ import { RelatedProducts } from '@/components/product/RelatedProducts';
 import { formatPrice } from '@/lib/utils';
 
 export interface ProductDetailPageProps {
-  params: {
+  params: Promise<{
     slug: string;
-  };
+  }>;
 }
 
 export async function generateMetadata({
   params,
 }: ProductDetailPageProps): Promise<Metadata> {
-  const product = await getProductBySlug(params.slug);
+  const { slug } = await params;
+  const product = await getProductBySlug(slug);
   if (!product) {
     return {
       title: 'Watch Not Found | Quartz Times',
     };
   }
 
-  const primaryImage = product.images?.[0]?.url || '';
+  const primaryImage =
+    product.images?.find((image) => image.isPrimary)?.url ||
+    product.images?.[0]?.url ||
+    '';
+  const canonicalPath = `/watches/${product.slug}`;
+  const title = `${product.brand} ${product.name} | Quartz Times`;
+  const description = `${product.brand} ${product.name} - ${formatPrice(product.price, product.currency)}. 100% Authentic.`;
 
   return {
-    title: `${product.brand} ${product.name} | Quartz Times`,
+    title,
     description: `${product.brand} ${product.name}. ${product.description.substring(0, 150)}... 100% authentic luxury watch with fast WhatsApp support.`,
+    alternates: {
+      canonical: canonicalPath,
+    },
     openGraph: {
-      title: `${product.brand} ${product.name} | Quartz Times`,
-      description: `${product.brand} ${product.name} - ${formatPrice(product.price, product.currency)}. 100% Authentic.`,
-      images: primaryImage ? [{ url: primaryImage, alt: product.name }] : [],
+      title,
+      description,
+      type: 'website',
+      url: canonicalPath,
+      images: primaryImage
+        ? [{ url: primaryImage, alt: `${product.brand} ${product.name}` }]
+        : [],
+    },
+    twitter: {
+      card: 'summary_large_image',
+      title,
+      description,
+      images: primaryImage ? [primaryImage] : [],
     },
   };
 }
@@ -43,7 +63,8 @@ export async function generateMetadata({
 export default async function ProductDetailPage({
   params,
 }: ProductDetailPageProps) {
-  const product = await getProductBySlug(params.slug);
+  const { slug } = await params;
+  const product = await getProductBySlug(slug);
   if (!product) {
     notFound();
   }

@@ -18,6 +18,7 @@ export interface ProductInfoProps {
 export const ProductInfo: React.FC<ProductInfoProps> = ({ product }) => {
   const whatsappUrl = getProductWhatsAppUrl({
     name: product.name,
+    slug: product.slug,
     brand: product.brand,
     sku: product.sku,
     price: product.price,
