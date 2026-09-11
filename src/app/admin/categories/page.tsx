@@ -4,6 +4,9 @@ import { getAdminSession } from '@/lib/auth';
 import { getCategories } from '@/services/categoryService';
 import { CategoryManager } from '@/components/admin/CategoryManager';
 
+export const dynamic = 'force-dynamic';
+export const revalidate = 0;
+
 export default async function AdminCategoriesPage() {
   const session = await getAdminSession();
   if (!session) {

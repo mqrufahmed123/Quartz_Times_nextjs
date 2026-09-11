@@ -16,6 +16,7 @@ import {
   Shield,
   Sun,
   Moon,
+  Sparkles,
 } from 'lucide-react';
 import { useTheme } from '@/components/common/ThemeProvider';
 import { cn } from '@/lib/utils';
@@ -25,6 +26,7 @@ const navLinks = [
   { label: 'All Watches', href: '/admin/products', icon: Watch },
   { label: 'Add Watch', href: '/admin/products/new', icon: PlusCircle },
   { label: 'Categories', href: '/admin/categories', icon: FolderTree },
+  { label: 'Hero Banner', href: '/admin/hero', icon: Sparkles },
   { label: 'Customer Inquiries', href: '/admin/inquiries', icon: MessageSquare },
 ];
 

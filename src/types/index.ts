@@ -114,3 +114,16 @@ export interface IPaginatedResult<T> {
   totalPages: number;
   hasMore: boolean;
 }
+
+export interface IHeroSettings {
+  badgeText?: string;
+  titleLine1?: string;
+  titleHighlight?: string;
+  subtitle?: string;
+  heroImage: string;
+  heroImageAlt?: string;
+  featuredWatchTitle?: string;
+  featuredWatchRef?: string;
+  featuredWatchLink?: string;
+  updatedAt?: string | Date;
+}

@@ -114,7 +114,7 @@ export const ProductTable: React.FC<ProductTableProps> = ({ initialProducts }) =
               {filtered.length > 0 ? (
                 filtered.map((prod) => {
                   const id = prod.id || prod._id || '';
-                  const img = prod.images?.[0]?.url || 'https://images.unsplash.com/photo-1522335789203-aabd1fc54bc9?q=80&w=1200&auto=format&fit=crop';
+                  const img = prod.images?.[0]?.url || 'https://images.unsplash.com/photo-1547996160-71dfabbce5fa?q=80&w=1200&auto=format&fit=crop';
                   return (
                     <tr key={id} className="hover:bg-slate-50 dark:hover:bg-slate-900/60 transition-colors">
                       <td className="py-3.5 px-4">

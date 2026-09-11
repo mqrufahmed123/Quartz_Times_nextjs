@@ -22,6 +22,8 @@ export async function PUT(
     revalidateTag('catalogue-filters', 'max');
     revalidatePath('/');
     revalidatePath('/watches');
+    revalidatePath('/admin/categories');
+    revalidatePath('/categories', 'layout');
     return NextResponse.json(updated);
   } catch (err: any) {
     return NextResponse.json({ error: err.message }, { status: 500 });
@@ -46,6 +48,8 @@ export async function DELETE(
     revalidateTag('catalogue-filters', 'max');
     revalidatePath('/');
     revalidatePath('/watches');
+    revalidatePath('/admin/categories');
+    revalidatePath('/categories', 'layout');
     return NextResponse.json({ success: true });
   } catch (err: any) {
     return NextResponse.json({ error: err.message }, { status: 500 });

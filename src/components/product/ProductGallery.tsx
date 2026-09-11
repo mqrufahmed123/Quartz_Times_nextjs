@@ -24,7 +24,7 @@ export const ProductGallery: React.FC<ProductGalleryProps> = ({
     ? images
     : [
         {
-          url: 'https://images.unsplash.com/photo-1522335789203-aabd1fc54bc9?q=80&w=1200&auto=format&fit=crop',
+          url: 'https://images.unsplash.com/photo-1547996160-71dfabbce5fa?q=80&w=1200&auto=format&fit=crop',
           alt: productName,
           isPrimary: true,
         },

@@ -26,7 +26,7 @@ export const ProductCard: React.FC<ProductCardProps> = ({ product, priority = fa
   const primaryImage =
     product.images?.find((img) => img.isPrimary) ||
     product.images?.[0] || {
-      url: 'https://images.unsplash.com/photo-1522335789203-aabd1fc54bc9?q=80&w=1200&auto=format&fit=crop',
+      url: 'https://images.unsplash.com/photo-1547996160-71dfabbce5fa?q=80&w=1200&auto=format&fit=crop',
       alt: product.name,
     };
 

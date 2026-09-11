@@ -3,8 +3,28 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { MessageCircle, ArrowRight, ShieldCheck, Sparkles } from 'lucide-react';
 import { getGeneralWhatsAppUrl } from '@/lib/whatsapp';
+import { IHeroSettings } from '@/types';
 
-export const HeroSection: React.FC = () => {
+export interface HeroSectionProps {
+  settings?: IHeroSettings;
+}
+
+export const HeroSection: React.FC<HeroSectionProps> = ({ settings }) => {
+  const badgeText = settings?.badgeText || 'Authentic Watch Boutique';
+  const titleLine1 = settings?.titleLine1 || 'TIMECRAFTED';
+  const titleHighlight = settings?.titleHighlight || 'PRECISION';
+  const subtitle =
+    settings?.subtitle ||
+    'Discover our handpicked collection of luxury and premium watches. 100% authentic Swiss and Japanese models with fast insured delivery across India.';
+  const heroImage =
+    settings?.heroImage ||
+    'https://images.unsplash.com/photo-1547996160-71dfabbce5fa?q=80&w=1200&auto=format&fit=crop';
+  const heroImageAlt = settings?.heroImageAlt || 'Featured Luxury Watch';
+  const featuredWatchTitle = settings?.featuredWatchTitle || 'Royal Oak Selfwinding';
+  const featuredWatchRef = settings?.featuredWatchRef || 'Ref. 15202ST';
+  const featuredWatchLink =
+    settings?.featuredWatchLink || '/watches/royal-oak-selfwinding-jumbo-ultra-thin';
+
   return (
     <section className="relative min-h-[85vh] flex items-center justify-center overflow-hidden bg-white dark:bg-[#0A0A0B] pt-6 pb-16 lg:py-20 border-b border-slate-200 dark:border-slate-800/80 transition-colors">
       {/* Background Accent Blur */}
@@ -17,17 +37,17 @@ export const HeroSection: React.FC = () => {
             {/* Top Tag */}
             <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-slate-100 dark:bg-slate-900 border border-slate-200 dark:border-amber-500/30 text-amber-700 dark:text-amber-400 text-xs font-semibold uppercase tracking-wider shadow-sm mx-auto lg:mx-0">
               <Sparkles className="w-3.5 h-3.5" />
-              <span>Authentic Watch Boutique</span>
+              <span>{badgeText}</span>
             </div>
 
             {/* Headline */}
             <div className="space-y-3">
               <h1 className="font-serif text-4xl sm:text-5xl lg:text-6xl font-bold text-slate-900 dark:text-slate-100 tracking-tight leading-[1.1]">
-                TIMECRAFTED <br className="hidden sm:inline" />
-                <span className="text-amber-600 dark:text-amber-400">PRECISION</span>
+                {titleLine1} <br className="hidden sm:inline" />
+                <span className="text-amber-600 dark:text-amber-400">{titleHighlight}</span>
               </h1>
               <p className="text-base sm:text-lg text-slate-600 dark:text-slate-300 max-w-xl mx-auto lg:mx-0 font-normal leading-relaxed">
-                Discover our handpicked collection of luxury and premium watches. 100% authentic Swiss and Japanese models with fast insured delivery across India.
+                {subtitle}
               </p>
             </div>
 
@@ -85,12 +105,13 @@ export const HeroSection: React.FC = () => {
           <div className="lg:col-span-5 relative">
             <div className="relative aspect-[4/5] w-full max-w-md mx-auto rounded-2xl overflow-hidden bg-slate-100 dark:bg-slate-900 border border-slate-200 dark:border-slate-800 shadow-xl group">
               <Image
-                src="https://images.unsplash.com/photo-1522335789203-aabd1fc54bc9?q=80&w=1200&auto=format&fit=crop"
-                alt="Featured Luxury Watch"
+                src={heroImage}
+                alt={heroImageAlt}
                 fill
                 priority
                 className="object-cover object-center transition-transform duration-700 group-hover:scale-105"
                 sizes="(max-width: 768px) 90vw, 450px"
+                unoptimized={heroImage.startsWith('data:')}
               />
 
               <div className="absolute inset-0 bg-gradient-to-t from-slate-950/80 via-transparent to-transparent opacity-60" />
@@ -99,14 +120,14 @@ export const HeroSection: React.FC = () => {
               <div className="absolute bottom-5 left-5 right-5 p-4 rounded-xl bg-white/90 dark:bg-slate-900/90 backdrop-blur-md border border-slate-200 dark:border-slate-700 shadow-lg space-y-2 text-slate-900 dark:text-slate-100">
                 <div className="flex items-center justify-between text-[10px] uppercase tracking-wider text-amber-600 dark:text-amber-400 font-bold">
                   <span>Featured Watch</span>
-                  <span className="text-slate-500 dark:text-slate-400">Ref. 15202ST</span>
+                  <span className="text-slate-500 dark:text-slate-400">{featuredWatchRef}</span>
                 </div>
                 <div className="flex items-center justify-between">
                   <h3 className="font-serif text-sm font-bold text-slate-900 dark:text-slate-100">
-                    Royal Oak Selfwinding
+                    {featuredWatchTitle}
                   </h3>
                   <Link
-                    href="/watches/royal-oak-selfwinding-jumbo-ultra-thin"
+                    href={featuredWatchLink}
                     className="text-xs text-amber-600 dark:text-amber-400 hover:underline flex items-center gap-1 font-semibold"
                   >
                     View

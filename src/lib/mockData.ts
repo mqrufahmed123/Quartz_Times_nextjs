@@ -6,7 +6,7 @@ export const sampleCategories: ICategory[] = [
     name: 'Automatic',
     slug: 'automatic',
     description: 'Mechanical masterworks wound by the kinetic motion of the wearer.',
-    image: 'https://images.unsplash.com/photo-1522335789203-aabd1fc54bc9?q=80&w=1200&auto=format&fit=crop',
+    image: 'https://images.unsplash.com/photo-1547996160-71dfabbce5fa?q=80&w=1200&auto=format&fit=crop',
     active: true,
     itemCount: 8,
   },
@@ -90,7 +90,7 @@ export const sampleProducts: IProduct[] = [
     },
     images: [
       {
-        url: 'https://images.unsplash.com/photo-1522335789203-aabd1fc54bc9?q=80&w=1200&auto=format&fit=crop',
+        url: 'https://images.unsplash.com/photo-1547996160-71dfabbce5fa?q=80&w=1200&auto=format&fit=crop',
         alt: 'Audemars Piguet Royal Oak photographed on black velvet surface',
         isPrimary: true,
       },
@@ -185,7 +185,7 @@ export const sampleProducts: IProduct[] = [
         isPrimary: true,
       },
       {
-        url: 'https://images.unsplash.com/photo-1522335789203-aabd1fc54bc9?q=80&w=1200&auto=format&fit=crop',
+        url: 'https://images.unsplash.com/photo-1539185441755-769473a23570?q=80&w=1200&auto=format&fit=crop',
         alt: 'Luminescent dial reflection showcasing horizontal ridges',
       },
     ],
@@ -268,7 +268,7 @@ export const sampleProducts: IProduct[] = [
         isPrimary: true,
       },
       {
-        url: 'https://images.unsplash.com/photo-1522335789203-aabd1fc54bc9?q=80&w=1200&auto=format&fit=crop',
+        url: 'https://images.unsplash.com/photo-1542496658-e33a6d0d50f6?q=80&w=1200&auto=format&fit=crop',
         alt: 'Side bevels displaying Zaratsu blade polishing',
       },
     ],
@@ -346,7 +346,7 @@ export const sampleProducts: IProduct[] = [
     },
     images: [
       {
-        url: 'https://images.unsplash.com/photo-1522335789203-aabd1fc54bc9?q=80&w=1200&auto=format&fit=crop',
+        url: 'https://images.unsplash.com/photo-1526045478516-99145907023c?q=80&w=1200&auto=format&fit=crop',
         alt: 'Omega Seamaster 300M blue dial photographed in gloved hand',
         isPrimary: true,
       },
@@ -569,7 +569,7 @@ export const sampleProducts: IProduct[] = [
     },
     images: [
       {
-        url: 'https://images.unsplash.com/photo-1522335789203-aabd1fc54bc9?q=80&w=1200&auto=format&fit=crop',
+        url: 'https://images.unsplash.com/photo-1587836374828-4dbafa94cf0e?q=80&w=1200&auto=format&fit=crop',
         alt: 'Breitling Premier B01 Chronograph macro details',
         isPrimary: true,
       },

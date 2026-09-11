@@ -6,6 +6,7 @@ import { sampleCategories } from '@/lib/mockData';
 import { slugify } from '@/lib/utils';
 
 let inMemoryCategories: ICategory[] = [...sampleCategories];
+let hasCheckedInitialSeed = false;
 
 function documentToCategory(doc: any): ICategory {
   if (!doc) return doc;
@@ -23,14 +24,32 @@ export async function getCategories(onlyActive = true): Promise<ICategory[]> {
   try {
     const conn = await connectToDatabase();
     if (conn) {
+      if (!hasCheckedInitialSeed) {
+        hasCheckedInitialSeed = true;
+        try {
+          const count = await Category.estimatedDocumentCount();
+          if (count === 0) {
+            await Category.insertMany(
+              sampleCategories.map((c) => ({
+                name: c.name,
+                slug: c.slug,
+                description: c.description,
+                image: c.image,
+                active: c.active,
+              }))
+            );
+          }
+        } catch (seedErr) {
+          console.warn('Initial category seed error:', seedErr);
+        }
+      }
+
       const query = onlyActive ? { active: true } : {};
       const docs = await Category.find(query).sort({ name: 1 }).lean();
-      if (docs.length > 0) {
-        return docs.map(documentToCategory);
-      }
+      return docs.map(documentToCategory);
     }
   } catch (err) {
-    console.warn('Category query error, falling back:', err);
+    console.warn('Category query error, falling back to memory:', err);
   }
 
   return onlyActive ? inMemoryCategories.filter((c) => c.active) : inMemoryCategories;
@@ -91,8 +110,15 @@ export async function createCategory(data: Partial<ICategory>): Promise<ICategor
 export async function updateCategory(id: string, data: Partial<ICategory>): Promise<ICategory | null> {
   try {
     const conn = await connectToDatabase();
-    if (conn && mongoose.isValidObjectId(id)) {
-      const doc = await Category.findByIdAndUpdate(id, data, { new: true });
+    if (conn) {
+      let doc = null;
+      if (mongoose.isValidObjectId(id)) {
+        doc = await Category.findByIdAndUpdate(id, data, { new: true });
+      } else {
+        const mockMatch = sampleCategories.find((c) => c.id === id);
+        const slug = mockMatch ? mockMatch.slug : id;
+        doc = await Category.findOneAndUpdate({ slug }, data, { new: true });
+      }
       if (doc) {
         const updated = documentToCategory(doc);
         inMemoryCategories = inMemoryCategories.map((c) => (c.id === id || c._id === id ? updated : c));
@@ -124,8 +150,16 @@ export async function updateCategory(id: string, data: Partial<ICategory>): Prom
 export async function deleteCategory(id: string): Promise<boolean> {
   try {
     const conn = await connectToDatabase();
-    if (conn && mongoose.isValidObjectId(id)) {
-      const deleted = await Category.findByIdAndDelete(id);
+    if (conn) {
+      let deleted = null;
+      if (mongoose.isValidObjectId(id)) {
+        deleted = await Category.findByIdAndDelete(id);
+      } else {
+        const mockMatch = sampleCategories.find((c) => c.id === id);
+        const slug = mockMatch ? mockMatch.slug : id;
+        deleted = await Category.findOneAndDelete({ slug });
+      }
+      inMemoryCategories = inMemoryCategories.filter((c) => c.id !== id && c._id !== id);
       return Boolean(deleted);
     }
   } catch (err) {
