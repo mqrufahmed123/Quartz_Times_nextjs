@@ -7,17 +7,21 @@ import {
 import connectToDatabase from '@/lib/mongodb';
 import Admin from '@/models/Admin';
 import bcrypt from 'bcryptjs';
+import { readJson, requestErrorResponse, requireSameOrigin } from '@/lib/requestSecurity';
+import { limitLogin } from '@/lib/rateLimit';
 
 export async function POST(req: NextRequest) {
   try {
-    const { email, password } = await req.json();
+    requireSameOrigin(req);
+    const { email, password } = await readJson(req);
 
-    if (!email || !password) {
+    if (typeof email !== 'string' || !email.trim() || email.length > 254 || typeof password !== 'string' || !password || Buffer.byteLength(password, 'utf8') > 72) {
       return NextResponse.json(
         { error: 'Email and password are required.' },
         { status: 400 }
       );
     }
+    await limitLogin('admin-login', email);
 
     let isValid = false;
     let userId = 'admin-root';
@@ -62,10 +66,6 @@ export async function POST(req: NextRequest) {
       user: { email: email.toLowerCase(), role: userRole },
     });
   } catch (err: any) {
-    console.error('Login error:', err);
-    return NextResponse.json(
-      { error: err.message || 'Internal server error during authentication.' },
-      { status: 500 }
-    );
+    return requestErrorResponse(err, 'Authentication is temporarily unavailable.');
   }
 }

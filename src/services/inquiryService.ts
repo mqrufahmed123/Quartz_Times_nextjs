@@ -3,6 +3,7 @@ import mongoose from 'mongoose';
 import Inquiry, { IInquiryDocument } from '@/models/Inquiry';
 import { IInquiry } from '@/types';
 import { sampleInquiries } from '@/lib/mockData';
+import { inquiryInput } from '@/lib/inquiryValidation';
 
 let inMemoryInquiries: IInquiry[] = [...sampleInquiries];
 
@@ -19,12 +20,12 @@ function documentToInquiry(doc: any): IInquiry {
 }
 
 export async function createInquiry(data: Partial<IInquiry>): Promise<IInquiry> {
+  data = inquiryInput(data);
   try {
     const conn = await connectToDatabase();
     if (conn) {
       const doc = await Inquiry.create(data);
       const saved = documentToInquiry(doc);
-      inMemoryInquiries.unshift(saved);
       return saved;
     }
   } catch (err) {
@@ -52,6 +53,7 @@ export async function createInquiry(data: Partial<IInquiry>): Promise<IInquiry> 
   };
 
   inMemoryInquiries.unshift(newInq);
+  inMemoryInquiries = inMemoryInquiries.slice(0, 100);
   return newInq;
 }
 

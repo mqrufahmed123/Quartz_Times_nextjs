@@ -15,6 +15,10 @@ const required = [
   'ADMIN_EMAIL',
   'ADMIN_PASSWORD',
   'JWT_SECRET',
+  'RAZORPAY_KEY_ID',
+  'RAZORPAY_KEY_SECRET',
+  'NEXT_PUBLIC_RAZORPAY_KEY_ID',
+  'RAZORPAY_WEBHOOK_SECRET',
 ];
 
 for (const name of required) {
@@ -22,6 +26,7 @@ for (const name of required) {
 }
 
 const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || '';
+if (process.env.RAZORPAY_KEY_ID !== process.env.NEXT_PUBLIC_RAZORPAY_KEY_ID) errors.push('Razorpay public and server key IDs must match.');
 if (siteUrl && (!siteUrl.startsWith('https://') || /localhost|127\.0\.0\.1/i.test(siteUrl))) {
   errors.push('NEXT_PUBLIC_SITE_URL must be the deployed HTTPS origin, not localhost.');
 }

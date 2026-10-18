@@ -12,6 +12,7 @@ export interface IProductDocument extends Document {
   currency: string;
   sku: string;
   stock: number;
+  reservedStock: number;
   availability: 'in_stock' | 'reserved' | 'sold_out' | 'made_to_order';
   featured: boolean;
   isNewArrival?: boolean;
@@ -60,6 +61,7 @@ const ProductSchema = new Schema<IProductDocument>(
     currency: { type: String, default: 'INR' },
     sku: { type: String, required: true, unique: true, index: true, uppercase: true, trim: true },
     stock: { type: Number, default: 1, min: 0 },
+    reservedStock: { type: Number, default: 0, min: 0 },
     availability: {
       type: String,
       enum: ['in_stock', 'reserved', 'sold_out', 'made_to_order'],

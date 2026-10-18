@@ -1,6 +1,8 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { createInquiry, getInquiries } from '@/services/inquiryService';
 import { getAdminSession } from '@/lib/auth';
+import { readJson, requestErrorResponse, requireSameOrigin } from '@/lib/requestSecurity';
+import { enforceRateLimit } from '@/lib/rateLimit';
 
 export async function GET(req: NextRequest) {
   try {
@@ -23,7 +25,9 @@ export async function GET(req: NextRequest) {
 
 export async function POST(req: NextRequest) {
   try {
-    const body = await req.json();
+    requireSameOrigin(req);
+    await enforceRateLimit('inquiry-global', 'all', 60, 60_000);
+    const body = await readJson(req);
     if (!body.name || !body.phone || !body.message) {
       return NextResponse.json(
         { error: 'Name, phone, and message are required.' },
@@ -34,6 +38,6 @@ export async function POST(req: NextRequest) {
     const inquiry = await createInquiry(body);
     return NextResponse.json(inquiry, { status: 201 });
   } catch (err: any) {
-    return NextResponse.json({ error: err.message }, { status: 500 });
+    return requestErrorResponse(err);
   }
 }

@@ -298,6 +298,8 @@ export async function getDistinctMovements(): Promise<string[]> {
 }
 
 export async function createProduct(data: Partial<IProduct>): Promise<IProduct> {
+  data = { ...data };
+  delete (data as Partial<IProduct> & { reservedStock?: number }).reservedStock;
   const slug = data.slug || slugify(data.name || 'timepiece');
 
   try {
@@ -359,6 +361,8 @@ export async function createProduct(data: Partial<IProduct>): Promise<IProduct> 
 }
 
 export async function updateProduct(id: string, data: Partial<IProduct>): Promise<IProduct | null> {
+  data = { ...data };
+  delete (data as Partial<IProduct> & { reservedStock?: number }).reservedStock;
   try {
     const conn = await connectToDatabase();
     if (conn && mongoose.isValidObjectId(id)) {

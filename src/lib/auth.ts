@@ -49,7 +49,8 @@ export async function createSessionToken(payload: AdminPayload): Promise<string>
  */
 export async function verifySessionToken(token: string): Promise<AdminPayload | null> {
   try {
-    const { payload } = await jwtVerify(token, getSecretKey());
+    const { payload } = await jwtVerify(token, getSecretKey(), { algorithms: ['HS256'] });
+    if (!['admin', 'superadmin'].includes(String(payload.role)) || typeof payload.userId !== 'string' || typeof payload.email !== 'string' || payload.aud === 'qt-customer') return null;
     return payload as unknown as AdminPayload;
   } catch (err) {
     return null;

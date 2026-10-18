@@ -9,6 +9,8 @@ import {
   FolderTree,
   MessageSquare,
   PlusCircle,
+  Image,
+  ShoppingBag,
   X,
   Menu,
 } from 'lucide-react';
@@ -38,7 +40,9 @@ export const AdminSidebar: React.FC = () => {
     { label: 'All Watches', href: '/admin/products', icon: Watch },
     { label: 'Add Timepiece', href: '/admin/products/new', icon: PlusCircle },
     { label: 'Categories', href: '/admin/categories', icon: FolderTree },
+    { label: 'Hero Banner', href: '/admin/hero', icon: Image },
     { label: 'Client Inquiries', href: '/admin/inquiries', icon: MessageSquare },
+    { label: 'Customer Orders', href: '/admin/orders', icon: ShoppingBag },
   ];
 
   const SidebarContent = () => (

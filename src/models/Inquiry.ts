@@ -18,7 +18,7 @@ const InquirySchema = new Schema<IInquiryDocument>(
   {
     name: { type: String, required: true, trim: true },
     phone: { type: String, required: true, trim: true },
-    email: { type: String, required: true, trim: true, lowercase: true },
+    email: { type: String, default: '', maxlength: 254, trim: true, lowercase: true },
     product: { type: String, default: '' },
     productId: { type: String, default: '' },
     productSku: { type: String, default: '' },

@@ -11,6 +11,7 @@ import {
   Database,
   Cloud,
   ExternalLink,
+  Image as ImageIcon,
 } from 'lucide-react';
 import { getAdminSession } from '@/lib/auth';
 import { getProducts } from '@/services/productService';
@@ -177,6 +178,45 @@ export default async function AdminDashboardPage() {
             </Badge>
           </div>
         </div>
+      </div>
+
+      {/* Quick Actions Row */}
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+        <Link
+          href="/admin/hero"
+          className="group p-5 rounded-xl bg-amber-50 dark:bg-amber-950/20 border border-amber-200 dark:border-amber-800/40 hover:border-amber-400 dark:hover:border-amber-500/60 transition-all flex items-center gap-4"
+        >
+          <div className="p-3 rounded-lg bg-amber-100 dark:bg-amber-900/40 text-amber-700 dark:text-amber-400 group-hover:scale-110 transition-transform">
+            <ImageIcon className="w-5 h-5" />
+          </div>
+          <div>
+            <p className="text-xs font-bold uppercase tracking-wider text-slate-900 dark:text-slate-100">
+              Customise Hero Banner
+            </p>
+            <p className="text-[11px] text-slate-500 dark:text-slate-400 mt-0.5">
+              Upload photo, edit headlines &amp; featured watch
+            </p>
+          </div>
+          <ExternalLink className="w-4 h-4 text-slate-400 dark:text-slate-500 ml-auto shrink-0" />
+        </Link>
+
+        <Link
+          href="/admin/products/new"
+          className="group p-5 rounded-xl bg-slate-50 dark:bg-slate-900/40 border border-slate-200 dark:border-slate-800 hover:border-amber-400 dark:hover:border-amber-500/60 transition-all flex items-center gap-4"
+        >
+          <div className="p-3 rounded-lg bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 group-hover:scale-110 transition-transform">
+            <PlusCircle className="w-5 h-5" />
+          </div>
+          <div>
+            <p className="text-xs font-bold uppercase tracking-wider text-slate-900 dark:text-slate-100">
+              List a New Timepiece
+            </p>
+            <p className="text-[11px] text-slate-500 dark:text-slate-400 mt-0.5">
+              Add watch details, specs &amp; high-res photos
+            </p>
+          </div>
+          <ExternalLink className="w-4 h-4 text-slate-400 dark:text-slate-500 ml-auto shrink-0" />
+        </Link>
       </div>
 
       {/* Recent Client Inquiries Section */}

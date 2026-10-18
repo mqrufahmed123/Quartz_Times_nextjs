@@ -6,9 +6,9 @@ This file is the canonical handoff for AI coding agents working in this reposito
 
 Quartz Times is a responsive, photography-first watch catalogue for an Indian luxury/premium watch seller. The public site supports product discovery, server-side filtering, product detail pages, WhatsApp conversion, and inquiry capture. A protected admin area manages watches, categories, media, and inquiry statuses.
 
-This is currently a catalogue plus lead-generation application, not a complete e-commerce system. There is no cart, checkout, customer account, address, order, shipment, inventory reservation, refund, or payment implementation. Product pages currently convert through WhatsApp and an inquiry form.
+The application now includes customer accounts and single-watch Buy Now checkout through Razorpay, alongside WhatsApp and inquiries. There is no cart, automated shipment integration, or in-app refund processing.
 
-The next requested product direction is payment integration. Do not add a payment button that trusts a browser-supplied amount. A safe implementation first needs a server-owned order/payment model and must derive amount, currency, product identity, availability, and stock from the database on the server. Provider choice and desired purchase flow (single-watch checkout versus cart; full payment versus deposit/payment link) should be confirmed before committing to a provider-specific design.
+The selected payment flow is full-payment single-watch checkout in INR using Razorpay. Prices and stock come directly from persisted products, with no mock fallback for checkout. Verified webhooks, not browser callbacks, authorize fulfillment.
 
 ## Technology baseline
 
@@ -20,7 +20,7 @@ The next requested product direction is payment integration. Do not add a paymen
 - Authentication: signed HS256 JWTs with `jose`, stored in an HTTP-only admin cookie; bcrypt for persisted admin passwords.
 - Media: Cloudinary server SDK; Next Image accepts Cloudinary and Unsplash.
 - Icons: Lucide React.
-- There is no test framework or automated test suite at present.
+- Commerce regression checks run with `npm run test:commerce`. `node scripts/test-commerce.cjs --integration` also exercises transactions against an isolated random test database on the configured MongoDB server, then drops only that test database. MongoDB must support transactions (Atlas or replica set).
 
 Use these commands from the repository root:
 
@@ -86,7 +86,7 @@ The session cookie is `qt_admin_session`, HTTP-only, SameSite=Lax, secure in pro
 
 - Identity/catalogue: `name`, unique `slug`, `brand`, `category`, unique uppercase `sku`.
 - Content: `description`, optional `story`, optional `tags`.
-- Commerce-like fields: numeric `price`, optional `originalPrice`, `currency` (normally `INR`), integer-ish `stock`, and `availability` (`in_stock`, `reserved`, `sold_out`, `made_to_order`). These fields currently drive display/filtering only; they do not enforce checkout inventory.
+- Commerce fields: numeric `price`, optional `originalPrice`, `currency` (normally `INR`), integer-ish `stock`, and `availability` (`in_stock`, `reserved`, `sold_out`, `made_to_order`). Checkout enforces persisted INR prices and integer stock through transactional reservations.
 - Merchandising: `featured`, optional `isNewArrival`, and publication `status` (`active`, `draft`, `archived`). Public queries only expose active products.
 - Specifications: movement, case/strap material, dial color, water resistance, case diameter, crystal, power reserve, warranty, reference number, and condition.
 - Media: image array with URL/public ID/alt/dimensions/primary flag and optional video URL/public ID/thumbnail.
@@ -98,13 +98,26 @@ The session cookie is `qt_admin_session`, HTTP-only, SameSite=Lax, secure in pro
 
 ### Inquiry
 
-`name`, `phone`, `email`, optional product name/ID/SKU, `message`, pipeline `status` (`new`, `contacted`, `converted`, `closed`), optional notes, and timestamps. Public POST validation requires name, phone, and message even though the TypeScript/Mongoose contracts currently declare email required; generic forms allow email to be blank, so this contract is inconsistent and should be resolved when working in this area.
+`name`, `phone`, `email`, optional product name/ID/SKU, `message`, pipeline `status` (`new`, `contacted`, `converted`, `closed`), optional notes, and timestamps. Public POST validation requires name, phone, and message. Email may be blank; the persistence schema supports this. Public submissions cannot set internal status or notes.
 
 ### Admin
 
 `email`, `passwordHash`, `name`, role (`admin` or `superadmin`), and timestamps.
 
-No Order, Payment, Customer, Cart, Address, Shipment, WebhookEvent, or idempotency record exists yet.
+`User` stores customers with bcrypt password hashes. `Order` stores a customer/address snapshot, immutable INR line/total snapshots, provider order/payment IDs, payment status, fulfillment status, reservation expiry and optional reconciliation issue. Unique indexes cover provider IDs and `(userId, requestId)` checkout retries. No separate Cart, Shipment or refund model exists.
+
+### Customer checkout and reservations
+
+- Customer routes: `/register`, `/login`, `/account/orders`, and owner-protected `/orders/[id]`. Authentication APIs are `/api/auth/register`, `/api/auth/user-login`, `/api/auth/user-logout`, `/api/auth/user-me`.
+- Customer cookie `qt_user_session` lasts seven days, uses HTTP-only/SameSite=Lax and Secure in production. Customer JWT audience is `qt-customer`; admin token validation rejects customer tokens. Existing customer sessions from the earlier implementation must log in again.
+- `/api/checkout/create-order` requires a customer and same-origin request; quantity is exactly one. It derives price, INR currency, active/in-stock state and available stock from MongoDB.
+- `Product.reservedStock` defaults to zero for existing documents. A transaction increments it and creates a 15-minute pending order. Expired holds are released transactionally on the next checkout for that watch; no TTL deletion removes financial records. The storefront may still show a held watch, but the server prevents another purchase of its reserved unit.
+- Checkout request UUIDs reuse a local order. Provider creation is claimed once; an ambiguous network failure does not blindly create another provider order. Such orders require provider reconciliation or expiry before a fresh checkout.
+- `/api/checkout/verify-payment` checks customer ownership and HMAC against the stored provider order ID. It acknowledges the callback but does not set captured status.
+- `/api/checkout/webhook` verifies the raw-body signature using a separate webhook secret. `payment.captured` and `order.paid` validate the stored order ID, amount, INR currency and captured status before a transaction records payment and decrements stock. Duplicate delivery is idempotent even after shipping.
+- A late capture that cannot obtain stock records captured payment plus a fulfillment issue and requires admin reconciliation/refund through Razorpay. It does not decrement stock below zero or claim fulfillment success.
+- `/admin/orders` shows payment/customer/shipping details and issues. Only paid → processing → shipped → delivered transitions are allowed. Manual paid status and in-app cancellations/refunds are not supported.
+- Before deploying over an older prototype database, inspect duplicate provider IDs and rebuild the previous non-unique provider-ID indexes as unique sparse indexes. Do not remove or rewrite existing orders automatically.
 
 ## API surface
 
@@ -150,6 +163,8 @@ Required by the current deployment check:
 - `ADMIN_EMAIL`
 - `ADMIN_PASSWORD`
 - `JWT_SECRET` (at least 32 characters)
+- `RAZORPAY_KEY_ID`, `RAZORPAY_KEY_SECRET`, `NEXT_PUBLIC_RAZORPAY_KEY_ID` (key IDs must match)
+- `RAZORPAY_WEBHOOK_SECRET` (separate secret configured in Razorpay webhook settings)
 
 `JWT_SECRET` has a local-development fallback but is mandatory in production. WhatsApp helpers also have a demo-number fallback. New payment secrets must be server-only; only explicitly publishable provider keys may use `NEXT_PUBLIC_`.
 
@@ -168,10 +183,10 @@ Required by the current deployment check:
 
 - Do not weaken server-side admin checks because a page appears protected.
 - API input validation is currently hand-written and minimal; validate and normalize all new payment/order inputs server-side.
-- Login has no rate limiting, lockout, or CSRF token. SameSite=Lax provides partial CSRF protection, but sensitive new flows should receive an explicit threat review.
-- Public inquiry submission has no rate limiting, CAPTCHA, or abuse control.
+- Login uses MongoDB-backed fixed-window budgets: 10 attempts per normalized account per 15 minutes and 100 per minute per login route globally. Registration permits 30 attempts/hour globally; checkout permits 20 attempts/customer/15 minutes. Production fails closed if the shared budget store is unavailable. Do not trust arbitrary forwarding headers as client identities; deployment-level bot/IP protection is still needed.
+- Public inquiries require same-origin JSON, a 16 KiB streamed body limit, normalized bounded fields, and a shared 60/minute global budget. Status and notes are server-controlled; email is optional. MongoDB submissions are not mirrored to process memory, and the development fallback retains at most 100 inquiries.
 - Product create/update checks use truthiness for price, so zero is rejected at the route even though the schema permits zero.
-- There is no transaction around stock changes and no inventory reservation strategy.
+- Checkout reserves stock and fulfills in MongoDB transactions. Customer `checkoutVersion` writes serialize attempts across products, allowing one active hold/customer and at most three unpaid holds/hour. Eligible same-product holds are reused across request IDs; changed delivery details are rejected, not silently ignored. Admin inventory edits can still make a reserved item unavailable; a later payment is flagged for reconciliation in that case.
 - Cloudinary deletion is not performed when product media or products are removed, so remote assets may remain orphaned.
 - JSON-LD maps every non-`in_stock` state to PreOrder and always emits UsedCondition; revisit this if condition/availability accuracy matters.
 - The README says Next.js 14 and “V1,” while `package.json` is version 2.0.0 on Next.js 16. Source and package metadata are authoritative.
@@ -202,4 +217,3 @@ Before completing a change:
 - For schema changes, consider existing MongoDB documents, fallback mock data, serialization, indexes, and seed behavior.
 - For catalogue mutations, preserve relevant `revalidatePath`/`revalidateTag` behavior.
 - Update `.env.example`, README, and this file when configuration or architecture changes.
-

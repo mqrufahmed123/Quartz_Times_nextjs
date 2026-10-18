@@ -10,6 +10,7 @@ import { ProductSpecs } from '@/components/product/ProductSpecs';
 import { DirectInquiryForm } from '@/components/product/DirectInquiryForm';
 import { RelatedProducts } from '@/components/product/RelatedProducts';
 import { formatPrice } from '@/lib/utils';
+import { serializeJsonLd } from '@/lib/jsonLd';
 
 export interface ProductDetailPageProps {
   params: Promise<{
@@ -103,7 +104,7 @@ export default async function ProductDetailPage({
     <div className="py-8 sm:py-12 bg-slate-50 dark:bg-[#0A0A0B] min-h-screen text-slate-900 dark:text-slate-100 transition-colors">
       <script
         type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+        dangerouslySetInnerHTML={{ __html: serializeJsonLd(jsonLd) }}
       />
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-10">

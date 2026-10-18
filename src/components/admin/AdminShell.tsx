@@ -17,12 +17,14 @@ import {
   Sun,
   Moon,
   Sparkles,
+  ShoppingBag,
 } from 'lucide-react';
 import { useTheme } from '@/components/common/ThemeProvider';
 import { cn } from '@/lib/utils';
 
 const navLinks = [
   { label: 'Dashboard', href: '/admin', icon: LayoutDashboard, exact: true },
+  { label: 'Customer Orders', href: '/admin/orders', icon: ShoppingBag },
   { label: 'All Watches', href: '/admin/products', icon: Watch },
   { label: 'Add Watch', href: '/admin/products/new', icon: PlusCircle },
   { label: 'Categories', href: '/admin/categories', icon: FolderTree },

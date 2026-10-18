@@ -1,21 +1,28 @@
-import React from 'react';
+'use client';
+
+import React, { useState } from 'react';
 import {
   MessageCircle,
   ShieldCheck,
   Award,
   Truck,
   CheckCircle2,
+  Lock,
+  CreditCard,
 } from 'lucide-react';
 import { IProduct } from '@/types';
 import { formatPrice } from '@/lib/utils';
 import { getProductWhatsAppUrl, getFormattedWhatsAppDisplay } from '@/lib/whatsapp';
 import { Badge } from '@/components/common/Badge';
+import { CheckoutModal } from '@/components/product/CheckoutModal';
 
 export interface ProductInfoProps {
   product: IProduct;
 }
 
 export const ProductInfo: React.FC<ProductInfoProps> = ({ product }) => {
+  const [isCheckoutOpen, setIsCheckoutOpen] = useState(false);
+
   const whatsappUrl = getProductWhatsAppUrl({
     name: product.name,
     slug: product.slug,
@@ -33,6 +40,7 @@ export const ProductInfo: React.FC<ProductInfoProps> = ({ product }) => {
   };
 
   const avail = availabilityLabels[product.availability] || availabilityLabels.in_stock;
+  const isAvailableToBuy = product.availability === 'in_stock' && product.stock > 0 && product.currency === 'INR' && /^[a-f0-9]{24}$/i.test(product.id || product._id || '');
 
   return (
     <div className="space-y-6">
@@ -77,7 +85,7 @@ export const ProductInfo: React.FC<ProductInfoProps> = ({ product }) => {
       {/* Pricing Card */}
       <div className="p-4 rounded-xl bg-slate-100 dark:bg-slate-900/60 border border-slate-200 dark:border-slate-800 space-y-1">
         <span className="text-[11px] uppercase tracking-wider text-slate-500 dark:text-slate-400 font-medium">
-          Price (Taxes Included)
+          Price (Taxes & Express Insurance Included)
         </span>
         <div className="flex items-baseline gap-3">
           <span className="text-2xl sm:text-3xl font-serif font-bold text-slate-900 dark:text-slate-100">
@@ -91,22 +99,41 @@ export const ProductInfo: React.FC<ProductInfoProps> = ({ product }) => {
         </div>
       </div>
 
-      {/* Primary Action Button */}
+      {/* Primary Action Buttons */}
       <div className="space-y-3 pt-1">
+        {/* Instant Checkout / Pay via Razorpay */}
+        <button
+          type="button"
+          disabled={!isAvailableToBuy}
+          onClick={() => setIsCheckoutOpen(true)}
+          className="w-full flex items-center justify-center gap-3 bg-amber-500 hover:bg-amber-600 text-slate-950 font-bold text-sm uppercase tracking-wider py-4 px-6 rounded-lg shadow-lg transition-all duration-200 active:scale-[0.99] disabled:opacity-50 disabled:cursor-not-allowed"
+        >
+          <CreditCard className="w-5 h-5" />
+          <span>{isAvailableToBuy ? 'Purchase Watch • Instant Checkout' : 'Sold Out / Unavailable'}</span>
+        </button>
+
+        {/* WhatsApp Inquiry */}
         <a
           href={whatsappUrl}
           target="_blank"
           rel="noopener noreferrer"
-          className="w-full flex items-center justify-center gap-3 bg-[#25D366] hover:bg-[#20bd5a] text-white font-bold text-sm uppercase tracking-wider py-4 px-6 rounded-lg shadow-md transition-all duration-200 active:scale-[0.99]"
+          className="w-full flex items-center justify-center gap-3 bg-[#25D366] hover:bg-[#20bd5a] text-white font-bold text-sm uppercase tracking-wider py-3.5 px-6 rounded-lg shadow-md transition-all duration-200 active:scale-[0.99]"
         >
           <MessageCircle className="w-5 h-5 fill-current" />
-          <span>Chat on WhatsApp ({getFormattedWhatsAppDisplay()})</span>
+          <span>Inquire via WhatsApp ({getFormattedWhatsAppDisplay()})</span>
         </a>
 
         <p className="text-xs text-center text-slate-500 dark:text-slate-400 font-medium">
-          ⚡ Connect directly for live watch photos, videos, and fast delivery details.
+          ⚡ 100% Insured Courier Delivery Across India with 32-Point Horological Inspection.
         </p>
       </div>
+
+      {/* Checkout Modal */}
+      <CheckoutModal
+        product={product}
+        isOpen={isCheckoutOpen}
+        onClose={() => setIsCheckoutOpen(false)}
+      />
 
       {/* Description */}
       <div className="space-y-3 pt-4 border-t border-slate-200 dark:border-slate-800">

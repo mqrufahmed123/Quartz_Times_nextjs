@@ -12,6 +12,7 @@ import {
   Lock,
   Sun,
   Moon,
+  User,
 } from 'lucide-react';
 import { getGeneralWhatsAppUrl } from '@/lib/whatsapp';
 import { useTheme } from '@/components/common/ThemeProvider';
@@ -25,6 +26,20 @@ export const Navbar: React.FC = () => {
   const pathname = usePathname();
   const router = useRouter();
   const { theme, toggleTheme } = useTheme();
+  const [currentUser, setCurrentUser] = useState<{ name: string; email: string } | null>(null);
+
+  useEffect(() => {
+    fetch('/api/auth/user-me')
+      .then((res) => res.json())
+      .then((data) => {
+        if (data.authenticated && data.user) {
+          setCurrentUser(data.user);
+        } else {
+          setCurrentUser(null);
+        }
+      })
+      .catch(() => setCurrentUser(null));
+  }, [pathname]);
 
   useEffect(() => {
     const handleScroll = () => {
@@ -158,6 +173,15 @@ export const Navbar: React.FC = () => {
               <span>WhatsApp</span>
             </a>
 
+            {/* Customer Account / Orders */}
+            <Link
+              href={currentUser ? '/account/orders' : '/login'}
+              className="p-2 text-slate-600 dark:text-slate-300 hover:text-amber-600 dark:hover:text-amber-400 transition-colors rounded-full hover:bg-slate-100 dark:hover:bg-slate-800"
+              title={currentUser ? `Account: ${currentUser.name}` : 'Sign In / Orders'}
+            >
+              <User className="w-4 h-4" />
+            </Link>
+
             {/* Admin Entrance */}
             <Link
               href="/admin"
@@ -277,6 +301,15 @@ export const Navbar: React.FC = () => {
                     <ChevronRight className="w-4 h-4 text-slate-400" />
                   </Link>
                 ))}
+
+                <Link
+                  href={currentUser ? '/account/orders' : '/login'}
+                  onClick={() => setIsMobileMenuOpen(false)}
+                  className="flex items-center justify-between py-3 px-3 text-sm text-amber-600 dark:text-amber-400 hover:bg-slate-100 dark:hover:bg-slate-800 rounded-lg transition-colors font-semibold border-t border-slate-100 dark:border-slate-800/80 pt-3"
+                >
+                  <span>{currentUser ? `My Orders (${currentUser.name})` : 'Client Sign In / Register'}</span>
+                  <ChevronRight className="w-4 h-4 text-amber-500" />
+                </Link>
               </div>
 
               {/* Theme switch in mobile menu */}
