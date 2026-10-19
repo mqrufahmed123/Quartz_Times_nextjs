@@ -69,6 +69,7 @@ Catalogue filter options are wrapped in `unstable_cache` for 300 seconds under t
 ## Admin application flow
 
 - `/admin/login`: client login form.
+- The signed-in admin header keeps the storefront link visible on phones as Website and on larger screens as View Website. It opens `/` in a new tab, retaining the admin session for storefront editing; phone visitors follow the existing catalogue redirect.
 - `/admin`: dashboard counts, configuration status, and recent inquiries.
 - `/admin/products`: list, delete, publish/status updates, and links to edit.
 - `/admin/products/new` and `/admin/products/[id]/edit`: full product form and media manager.

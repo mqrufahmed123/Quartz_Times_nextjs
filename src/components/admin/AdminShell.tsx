@@ -98,19 +98,19 @@ export const AdminShell: React.FC<{ children: React.ReactNode }> = ({ children }
   return (
     <div className="min-h-screen bg-slate-50 dark:bg-[#0A0A0B] text-slate-900 dark:text-slate-100 flex flex-col transition-colors">
       {/* Navbar */}
-      <header className="bg-white dark:bg-[#0A0A0B] border-b border-slate-200 dark:border-slate-800 py-3 px-4 sm:px-6 sticky top-0 z-30 flex items-center justify-between shadow-sm">
-        <div className="flex items-center gap-3">
+      <header className="bg-white dark:bg-[#0A0A0B] border-b border-slate-200 dark:border-slate-800 py-3 px-3 sm:px-6 sticky top-0 z-30 flex items-center justify-between shadow-sm">
+        <div className="min-w-0 flex flex-1 items-center gap-1 sm:gap-3">
           <button
             onClick={() => setSidebarOpen(true)}
-            className="lg:hidden p-2 -ml-1 text-slate-700 dark:text-slate-300 hover:text-amber-500 transition-colors"
+            className="lg:hidden flex min-h-10 min-w-10 shrink-0 items-center justify-center p-2 -ml-1 text-slate-700 dark:text-slate-300 hover:text-amber-500 transition-colors"
             aria-label="Open menu"
           >
             <Menu className="w-5 h-5" />
           </button>
 
-          <Link href="/admin" className="flex items-center gap-2">
+          <Link href="/admin" className="flex min-w-0 items-center gap-2" title="Quartz Times Admin">
             <Shield className="w-5 h-5 text-amber-500 hidden sm:block" />
-            <span className="font-serif text-base sm:text-lg font-bold tracking-wider text-slate-900 dark:text-slate-100">
+            <span className="truncate whitespace-nowrap font-serif text-sm sm:text-lg font-bold sm:tracking-wider text-slate-900 dark:text-slate-100">
               QUARTZ TIMES
             </span>
             <span className="text-[10px] uppercase tracking-wider text-amber-600 dark:text-amber-400 bg-amber-500/15 px-2 py-0.5 rounded border border-amber-500/30 hidden xs:inline font-bold">
@@ -119,10 +119,10 @@ export const AdminShell: React.FC<{ children: React.ReactNode }> = ({ children }
           </Link>
         </div>
 
-        <div className="flex items-center gap-2 sm:gap-4">
+        <div className="flex shrink-0 items-center gap-1 pl-1 sm:gap-4">
           <button
             onClick={toggleTheme}
-            className="p-2 text-slate-600 dark:text-slate-300 hover:text-amber-500 transition-colors rounded-full hover:bg-slate-100 dark:hover:bg-slate-800"
+            className="flex min-h-10 min-w-10 items-center justify-center p-2 text-slate-600 dark:text-slate-300 hover:text-amber-500 transition-colors rounded-full hover:bg-slate-100 dark:hover:bg-slate-800"
             title="Toggle theme"
           >
             {theme === 'dark' ? <Sun className="w-4 h-4 text-amber-400" /> : <Moon className="w-4 h-4 text-slate-700" />}
@@ -131,16 +131,21 @@ export const AdminShell: React.FC<{ children: React.ReactNode }> = ({ children }
           <Link
             href="/"
             target="_blank"
-            className="text-xs uppercase tracking-wider text-slate-600 dark:text-slate-300 hover:text-amber-500 font-bold transition-colors hidden sm:flex items-center gap-1.5"
+            rel="noopener noreferrer"
+            aria-label="View website"
+            title="View website"
+            className="flex min-h-10 items-center justify-center gap-1.5 rounded-lg border border-slate-200 bg-slate-50 px-2 text-[10px] font-bold uppercase tracking-wider text-slate-600 transition-colors hover:text-amber-500 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-amber-500 dark:border-slate-700 dark:bg-slate-900 dark:text-slate-300 sm:border-0 sm:bg-transparent sm:px-0 sm:text-xs sm:dark:bg-transparent"
           >
-            <span>View Website</span>
+            <span className="sm:hidden">Website</span>
+            <span className="hidden sm:inline">View Website</span>
             <ExternalLink className="w-3.5 h-3.5" />
           </Link>
 
           <button
             onClick={handleLogout}
             disabled={loggingOut}
-            className="text-xs uppercase tracking-wider text-rose-600 dark:text-rose-400 hover:text-rose-500 font-bold transition-colors flex items-center gap-1.5 bg-rose-50 dark:bg-rose-950/40 border border-rose-200 dark:border-rose-900/60 px-3 py-1.5 rounded-lg"
+            aria-label={loggingOut ? 'Signing out' : 'Sign out'}
+            className="min-h-10 min-w-10 justify-center text-xs uppercase tracking-wider text-rose-600 dark:text-rose-400 hover:text-rose-500 font-bold transition-colors flex items-center gap-1.5 bg-rose-50 dark:bg-rose-950/40 border border-rose-200 dark:border-rose-900/60 px-2 sm:px-3 py-1.5 rounded-lg"
           >
             {loggingOut ? <span className="h-3.5 w-3.5 animate-spin rounded-full border-2 border-rose-300 border-t-rose-600" /> : <LogOut className="w-3.5 h-3.5" />}
             <span className="hidden sm:inline">{loggingOut ? 'Signing Out...' : 'Sign Out'}</span>
