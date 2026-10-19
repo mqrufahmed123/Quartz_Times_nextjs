@@ -1,6 +1,7 @@
 import connectToDatabase from '@/lib/mongodb';
 import HeroSettings from '@/models/HeroSettings';
 import { IHeroSettings } from '@/types';
+import { getBrowserImageUrl } from '@/lib/imageDelivery';
 
 export const DEFAULT_HERO_SETTINGS: IHeroSettings = {
   badgeText: 'Authentic Watch Boutique',
@@ -26,7 +27,7 @@ function documentToHeroSettings(doc: any): IHeroSettings {
     titleLine1: obj.titleLine1 || DEFAULT_HERO_SETTINGS.titleLine1,
     titleHighlight: obj.titleHighlight || DEFAULT_HERO_SETTINGS.titleHighlight,
     subtitle: obj.subtitle || DEFAULT_HERO_SETTINGS.subtitle,
-    heroImage: obj.heroImage || DEFAULT_HERO_SETTINGS.heroImage,
+    heroImage: getBrowserImageUrl(obj.heroImage || DEFAULT_HERO_SETTINGS.heroImage),
     heroImageAlt: obj.heroImageAlt || DEFAULT_HERO_SETTINGS.heroImageAlt,
     featuredWatchTitle: obj.featuredWatchTitle || DEFAULT_HERO_SETTINGS.featuredWatchTitle,
     featuredWatchRef: obj.featuredWatchRef || DEFAULT_HERO_SETTINGS.featuredWatchRef,

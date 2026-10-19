@@ -19,11 +19,11 @@ export async function PUT(
     if (!updated) {
       return NextResponse.json({ error: 'Category not found' }, { status: 404 });
     }
-    revalidateTag('catalogue-filters', 'max');
+    revalidateTag('catalogue-filters', { expire: 0 });
     revalidatePath('/');
     revalidatePath('/watches');
     revalidatePath('/admin/categories');
-    revalidatePath('/categories', 'layout');
+    revalidatePath('/categories/[slug]', 'page');
     return NextResponse.json(updated);
   } catch (err: any) {
     return NextResponse.json({ error: err.message }, { status: 500 });
@@ -45,11 +45,11 @@ export async function DELETE(
     if (!deleted) {
       return NextResponse.json({ error: 'Category not found' }, { status: 404 });
     }
-    revalidateTag('catalogue-filters', 'max');
+    revalidateTag('catalogue-filters', { expire: 0 });
     revalidatePath('/');
     revalidatePath('/watches');
     revalidatePath('/admin/categories');
-    revalidatePath('/categories', 'layout');
+    revalidatePath('/categories/[slug]', 'page');
     return NextResponse.json({ success: true });
   } catch (err: any) {
     return NextResponse.json({ error: err.message }, { status: 500 });

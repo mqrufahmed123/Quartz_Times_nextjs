@@ -10,6 +10,7 @@ import { ProductSpecs } from '@/components/product/ProductSpecs';
 import { DirectInquiryForm } from '@/components/product/DirectInquiryForm';
 import { RelatedProducts } from '@/components/product/RelatedProducts';
 import { formatPrice } from '@/lib/utils';
+import { StorefrontProductEditor } from '@/components/admin/StorefrontProductEditor';
 
 export interface ProductDetailPageProps {
   params: Promise<{
@@ -119,7 +120,7 @@ export default async function ProductDetailPage({
           </Link>
           <ChevronRight className="w-3.5 h-3.5 text-slate-400 dark:text-slate-600" />
           <Link
-            href={`/watches?category=${product.category.toLowerCase()}`}
+            href={`/watches?category=${encodeURIComponent(product.category)}`}
             className="hover:text-amber-500 transition-colors"
           >
             {product.category}
@@ -131,9 +132,11 @@ export default async function ProductDetailPage({
         </nav>
 
         {/* Gallery + Info */}
+        <StorefrontProductEditor product={product} />
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-14 items-start">
           <div className="lg:col-span-7">
             <ProductGallery
+              key={JSON.stringify([product.images, product.video])}
               images={product.images}
               video={product.video}
               productName={product.name}

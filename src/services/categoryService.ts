@@ -4,15 +4,16 @@ import Category, { ICategoryDocument } from '@/models/Category';
 import { ICategory } from '@/types';
 import { sampleCategories } from '@/lib/mockData';
 import { slugify } from '@/lib/utils';
+import { getBrowserImageUrl } from '@/lib/imageDelivery';
 
 let inMemoryCategories: ICategory[] = [...sampleCategories];
-let hasCheckedInitialSeed = false;
 
 function documentToCategory(doc: any): ICategory {
   if (!doc) return doc;
   const obj = doc.toObject ? doc.toObject() : doc;
   return {
     ...obj,
+    image: obj.image ? getBrowserImageUrl(obj.image) : obj.image,
     id: obj._id ? obj._id.toString() : obj.id,
     _id: obj._id ? obj._id.toString() : obj.id,
     createdAt: obj.createdAt ? new Date(obj.createdAt).toISOString() : undefined,
@@ -24,34 +25,15 @@ export async function getCategories(onlyActive = true): Promise<ICategory[]> {
   try {
     const conn = await connectToDatabase();
     if (conn) {
-      if (!hasCheckedInitialSeed) {
-        hasCheckedInitialSeed = true;
-        try {
-          const count = await Category.estimatedDocumentCount();
-          if (count === 0) {
-            await Category.insertMany(
-              sampleCategories.map((c) => ({
-                name: c.name,
-                slug: c.slug,
-                description: c.description,
-                image: c.image,
-                active: c.active,
-              }))
-            );
-          }
-        } catch (seedErr) {
-          console.warn('Initial category seed error:', seedErr);
-        }
-      }
-
       const query = onlyActive ? { active: true } : {};
       const docs = await Category.find(query).sort({ name: 1 }).lean();
       return docs.map(documentToCategory);
     }
   } catch (err) {
-    console.warn('Category query error, falling back to memory:', err);
+    console.warn('Category query error:', err);
   }
 
+  if (process.env.MONGODB_URI) return [];
   return onlyActive ? inMemoryCategories.filter((c) => c.active) : inMemoryCategories;
 }
 
@@ -59,16 +41,15 @@ export async function getCategoryBySlug(slug: string): Promise<ICategory | null>
   try {
     const conn = await connectToDatabase();
     if (conn) {
-      const doc = await Category.findOne({ slug }).lean();
-      if (doc) {
-        return documentToCategory(doc);
-      }
+      const doc = await Category.findOne({ slug, active: true }).lean();
+      return doc ? documentToCategory(doc) : null;
     }
   } catch (err) {
     console.warn('Error fetching category by slug:', err);
   }
 
-  return inMemoryCategories.find((c) => c.slug === slug) || null;
+  if (process.env.MONGODB_URI) return null;
+  return inMemoryCategories.find((c) => c.slug === slug && c.active) || null;
 }
 
 export async function createCategory(data: Partial<ICategory>): Promise<ICategory> {

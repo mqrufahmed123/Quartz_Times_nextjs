@@ -23,6 +23,7 @@ export const ProductInfo: React.FC<ProductInfoProps> = ({ product }) => {
     sku: product.sku,
     price: product.price,
     currency: product.currency,
+    images: product.images,
   });
 
   const availabilityLabels = {
@@ -146,7 +147,7 @@ export const ProductInfo: React.FC<ProductInfoProps> = ({ product }) => {
           <Award className="w-4 h-4 text-amber-500 shrink-0 mt-0.5" />
           <div className="text-[11px]">
             <strong className="text-slate-900 dark:text-slate-200 block font-semibold">Warranty</strong>
-            <span className="text-slate-500 dark:text-slate-400">2-Year guarantee</span>
+            <span className="text-slate-500 dark:text-slate-400">{product.specifications?.warranty || 'Ask about warranty details'}</span>
           </div>
         </div>
 

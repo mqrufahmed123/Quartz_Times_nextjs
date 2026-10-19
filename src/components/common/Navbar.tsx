@@ -16,6 +16,7 @@ import {
 import { getGeneralWhatsAppUrl } from '@/lib/whatsapp';
 import { useTheme } from '@/components/common/ThemeProvider';
 import { cn } from '@/lib/utils';
+import { useStorefrontCategories } from './StorefrontCategoriesProvider';
 
 export const Navbar: React.FC = () => {
   const [isScrolled, setIsScrolled] = useState(false);
@@ -25,6 +26,7 @@ export const Navbar: React.FC = () => {
   const pathname = usePathname();
   const router = useRouter();
   const { theme, toggleTheme } = useTheme();
+  const categories = useStorefrontCategories();
 
   useEffect(() => {
     const handleScroll = () => {
@@ -52,14 +54,14 @@ export const Navbar: React.FC = () => {
     }
   };
 
+  const categoryLinks = categories.map(category => ({ label: category.name, href: `/categories/${encodeURIComponent(category.slug)}` }));
   const navLinks = [
     { label: 'Shop All', href: '/watches' },
-    { label: 'Automatic', href: '/watches?category=automatic' },
-    { label: 'Chronographs', href: '/watches?category=chronograph' },
-    { label: 'Vintage', href: '/watches?category=vintage' },
+    ...(categoryLinks.length <= 3 ? categoryLinks : []),
     { label: 'About Us', href: '/about' },
     { label: 'Contact', href: '/contact' },
   ];
+  const mobileLinks = [navLinks[0], ...categoryLinks, ...navLinks.slice(-2)];
 
   return (
     <>
@@ -67,13 +69,13 @@ export const Navbar: React.FC = () => {
         className={cn(
           'sticky top-0 z-40 w-full transition-all duration-300 border-b',
           isScrolled
-            ? 'bg-white/95 dark:bg-[#0A0A0B]/95 backdrop-blur-md border-slate-200 dark:border-slate-800 shadow-sm py-3'
-            : 'bg-white/80 dark:bg-[#0A0A0B]/80 backdrop-blur-sm border-slate-100 dark:border-slate-900 py-4'
+            ? 'bg-white/95 dark:bg-[#0A0A0B]/95 backdrop-blur-md border-slate-200 dark:border-slate-800 shadow-sm py-2 sm:py-3'
+            : 'bg-white/80 dark:bg-[#0A0A0B]/80 backdrop-blur-sm border-slate-100 dark:border-slate-900 py-2 sm:py-4'
         )}
       >
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex items-center justify-between">
           {/* Mobile Menu Toggle */}
-          <div className="flex items-center lg:hidden">
+          <div className="flex items-center xl:hidden">
             <button
               onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
               className="p-2 text-slate-700 dark:text-slate-300 hover:text-amber-600 dark:hover:text-amber-400 focus:outline-none"
@@ -84,9 +86,9 @@ export const Navbar: React.FC = () => {
           </div>
 
           {/* Logo */}
-          <div className="flex items-center">
+          <div className="flex shrink-0 items-center">
             <Link href="/" className="group flex flex-col items-center sm:items-start">
-              <span className="font-serif text-xl sm:text-2xl font-bold tracking-wider text-slate-900 dark:text-slate-100 group-hover:text-amber-600 dark:group-hover:text-amber-400 transition-colors">
+              <span className="whitespace-nowrap font-serif text-xl sm:text-2xl font-bold tracking-wider text-slate-900 dark:text-slate-100 group-hover:text-amber-600 dark:group-hover:text-amber-400 transition-colors">
                 QUARTZ TIMES
               </span>
               <span className="text-[10px] tracking-widest uppercase text-amber-600 dark:text-amber-400/80 -mt-0.5 font-medium hidden sm:block">
@@ -96,19 +98,19 @@ export const Navbar: React.FC = () => {
           </div>
 
           {/* Desktop Navigation */}
-          <nav className="hidden lg:flex items-center space-x-7">
+          <nav aria-label="Main navigation" className="hidden xl:flex items-center gap-5">
             {navLinks.map((link) => {
               const isActive =
-                link.href === '/watches'
-                  ? pathname === '/watches' && !pathname.includes('?')
-                  : pathname === link.href;
+                pathname === link.href;
 
               return (
                 <Link
-                  key={link.label}
+                  key={link.href}
                   href={link.href}
+                  title={link.label}
+                  aria-current={isActive ? 'page' : undefined}
                   className={cn(
-                    'text-xs uppercase tracking-wider font-semibold transition-colors py-1 relative group',
+                    'max-w-28 truncate text-xs uppercase tracking-wider font-semibold transition-colors py-1 relative group',
                     isActive
                       ? 'text-amber-600 dark:text-amber-400'
                       : 'text-slate-600 dark:text-slate-300 hover:text-slate-900 dark:hover:text-white'
@@ -124,10 +126,16 @@ export const Navbar: React.FC = () => {
                 </Link>
               );
             })}
+            {categoryLinks.length > 3 && <details className="relative shrink-0 text-xs font-semibold text-slate-600 dark:text-slate-300">
+              <summary className="cursor-pointer py-1 uppercase tracking-wider">Categories</summary>
+              <div className="absolute left-0 top-full mt-3 max-h-80 w-56 overflow-y-auto rounded-xl border border-slate-200 bg-white p-2 shadow-xl dark:border-slate-700 dark:bg-slate-900">
+                {categoryLinks.map(link => <Link key={link.href} href={link.href} onClick={event => event.currentTarget.closest('details')?.removeAttribute('open')} aria-current={pathname === link.href ? 'page' : undefined} className="block rounded-lg px-3 py-2 hover:bg-amber-50 hover:text-amber-700 dark:hover:bg-slate-800 dark:hover:text-amber-400">{link.label}</Link>)}
+              </div>
+            </details>}
           </nav>
 
           {/* Header Action Icons */}
-          <div className="flex items-center space-x-2 sm:space-x-3">
+          <div className="flex shrink-0 items-center space-x-2 sm:space-x-3">
             {/* Search Trigger */}
             <button
               onClick={() => setIsSearchOpen(true)}
@@ -241,7 +249,7 @@ export const Navbar: React.FC = () => {
 
       {/* Mobile Drawer Navigation */}
       {isMobileMenuOpen && (
-        <div className="fixed inset-0 z-50 lg:hidden">
+        <div className="fixed inset-0 z-50 xl:hidden">
           <div
             className="fixed inset-0 bg-slate-900/60 dark:bg-black/80 backdrop-blur-sm"
             onClick={() => setIsMobileMenuOpen(false)}
@@ -266,9 +274,9 @@ export const Navbar: React.FC = () => {
               </div>
 
               <div className="space-y-1 mb-8">
-                {navLinks.map((link) => (
+                {mobileLinks.map((link) => (
                   <Link
-                    key={link.label}
+                    key={link.href}
                     href={link.href}
                     onClick={() => setIsMobileMenuOpen(false)}
                     className="flex items-center justify-between py-3 px-3 text-sm text-slate-700 dark:text-slate-200 hover:text-amber-600 dark:hover:text-amber-400 hover:bg-slate-100 dark:hover:bg-slate-800 rounded-lg transition-colors font-medium"

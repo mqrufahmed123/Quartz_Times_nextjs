@@ -15,8 +15,8 @@ export const DirectInquiryForm: React.FC<DirectInquiryFormProps> = ({ product })
   const [email, setEmail] = useState('');
   const [message, setMessage] = useState(
     product
-      ? `Hi, I am interested in buying the ${product.brand} ${product.name} (SKU: ${product.sku}). Please let me know current availability and delivery process.`
-      : 'Hi, I would like to inquire about your watch collection and availability.'
+      ? 'Is this watch available?'
+      : 'Please share the available watches.'
   );
 
   const [loading, setLoading] = useState(false);
@@ -65,6 +65,7 @@ export const DirectInquiryForm: React.FC<DirectInquiryFormProps> = ({ product })
     name: name || 'Customer',
     product: product ? `${product.brand} ${product.name} (${product.sku})` : undefined,
     message,
+    images: product?.images,
   });
 
   return (

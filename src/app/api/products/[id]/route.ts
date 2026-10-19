@@ -5,7 +5,7 @@ import {
   deleteProduct,
 } from '@/services/productService';
 import { getAdminSession } from '@/lib/auth';
-import { revalidatePath } from 'next/cache';
+import { revalidatePath, revalidateTag } from 'next/cache';
 
 export async function GET(
   req: NextRequest,
@@ -40,7 +40,10 @@ export async function PUT(
       return NextResponse.json({ error: 'Unauthorized admin access' }, { status: 401 });
     }
 
-    const data = await req.json();
+    const body = await req.json();
+    if (!body || typeof body !== 'object' || Array.isArray(body)) return NextResponse.json({ error: 'Invalid product details.' }, { status: 400 });
+    const fields = ['name', 'slug', 'brand', 'category', 'description', 'story', 'price', 'originalPrice', 'currency', 'sku', 'stock', 'availability', 'featured', 'isNewArrival', 'status', 'specifications', 'images', 'video', 'tags'];
+    const data = Object.fromEntries(fields.filter(field => field in body).map(field => [field, body[field]]));
     const isFullProductUpdate = ['name', 'brand', 'description', 'price', 'sku'].some(
       (field) => field in data
     );
@@ -50,6 +53,16 @@ export async function PUT(
         { status: 400 }
       );
     }
+    if (
+      ('price' in data && (typeof data.price !== 'number' || !Number.isFinite(data.price) || data.price <= 0)) ||
+      ('originalPrice' in data && data.originalPrice !== null && (typeof data.originalPrice !== 'number' || !Number.isFinite(data.originalPrice) || data.originalPrice < 0)) ||
+      ('stock' in data && (!Number.isSafeInteger(data.stock) || data.stock < 0)) ||
+      ('currency' in data && (typeof data.currency !== 'string' || !/^[A-Z]{3}$/.test(data.currency))) ||
+      ('slug' in data && (typeof data.slug !== 'string' || !/^[a-z0-9]+(?:-[a-z0-9]+)*$/i.test(data.slug)))
+    ) return NextResponse.json({ error: 'Check the price, stock quantity, currency, and URL slug.' }, { status: 400 });
+
+    const previous = await getProductById(id);
+    if (!previous) return NextResponse.json({ error: 'Product not found for update' }, { status: 404 });
     const updated = await updateProduct(id, data);
     if (!updated) {
       return NextResponse.json({ error: 'Product not found for update' }, { status: 404 });
@@ -58,6 +71,10 @@ export async function PUT(
     revalidatePath('/');
     revalidatePath('/watches');
     revalidatePath(`/watches/${updated.slug}`);
+    if (previous.slug !== updated.slug) revalidatePath(`/watches/${previous.slug}`);
+    revalidatePath('/categories/[slug]', 'page');
+    revalidatePath('/admin/products');
+    revalidateTag('catalogue-filters', 'max');
 
     return NextResponse.json(updated);
   } catch (err: any) {

@@ -13,9 +13,7 @@ export const AnnouncementBar: React.FC = () => {
 
         <div className="w-full md:w-auto text-center flex items-center justify-center gap-2">
           <Sparkles className="w-3 h-3 text-amber-400 animate-pulse" />
-          <span>Authentic Swiss & Japanese Watches</span>
-          <span className="hidden sm:inline text-slate-500">•</span>
-          <span className="hidden sm:inline text-slate-300">Fast Delivery & Support</span>
+          <span className="text-slate-300">Fast Delivery & Support</span>
         </div>
 
         <div className="hidden lg:flex items-center gap-4">

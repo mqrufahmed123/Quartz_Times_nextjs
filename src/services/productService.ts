@@ -4,6 +4,8 @@ import Product, { IProductDocument } from '@/models/Product';
 import { IProduct, IProductFilterQuery, IPaginatedResult } from '@/types';
 import { sampleProducts } from '@/lib/mockData';
 import { slugify } from '@/lib/utils';
+import { getBrowserImageUrl } from '@/lib/imageDelivery';
+import { getCategories } from '@/services/categoryService';
 
 // In-memory runtime store for dev/demonstration when DB is not actively reachable
 let inMemoryProducts: IProduct[] = [...sampleProducts];
@@ -15,7 +17,7 @@ function escapeRegExp(value: string): string {
 function serializeImages(images: any[]): any[] {
   if (!Array.isArray(images)) return [];
   return images.map((img) => ({
-    url: img.url ?? '',
+    url: getBrowserImageUrl(img.url ?? ''),
     publicId: img.publicId ?? undefined,
     alt: img.alt ?? '',
     isPrimary: img.isPrimary ?? false,
@@ -54,6 +56,17 @@ export async function getProducts(
   const page = Math.max(1, Number(params.page) || 1);
   const limit = Math.max(1, Math.min(50, Number(params.limit) || 12));
   const skip = (page - 1) * limit;
+  let categoryAliases: string[] | undefined;
+  if (params.category && params.category !== 'all') {
+    const requestedCategory = params.category.trim();
+    const categories = await getCategories(true);
+    const category = categories.find((item) =>
+      item.slug.toLowerCase() === requestedCategory.toLowerCase() ||
+      item.name.toLowerCase() === requestedCategory.toLowerCase()
+    );
+    // Products historically stored either the category's name or its slug.
+    categoryAliases = category ? [category.name, category.slug] : [requestedCategory];
+  }
 
   try {
     const conn = await connectToDatabase();
@@ -61,8 +74,8 @@ export async function getProducts(
       // Build MongoDB query
       const query: any = params.includeInactive ? { status: { $ne: 'archived' } } : { status: 'active' };
 
-      if (params.category && params.category !== 'all') {
-        query.category = { $regex: new RegExp(`^${escapeRegExp(params.category)}$`, 'i') };
+      if (categoryAliases) {
+        query.category = { $in: categoryAliases.map((value) => new RegExp(`^${escapeRegExp(value)}$`, 'i')) };
       }
 
       if (params.brand && params.brand !== 'all') {
@@ -115,16 +128,14 @@ export async function getProducts(
         .limit(limit)
         .lean();
 
-      if (total > 0) {
-        const items = docs.map(documentToProduct);
-        return {
-          items,
-          total,
-          page,
-          totalPages: Math.ceil(total / limit),
-          hasMore: page * limit < total,
-        };
-      }
+      const items = docs.map(documentToProduct);
+      return {
+        items,
+        total,
+        page,
+        totalPages: Math.ceil(total / limit),
+        hasMore: page * limit < total,
+      };
     }
   } catch (err) {
     console.warn('Product query error, falling back to local dataset:', err);
@@ -135,9 +146,9 @@ export async function getProducts(
     params.includeInactive ? p.status !== 'archived' : p.status === 'active'
   );
 
-  if (params.category && params.category !== 'all') {
+  if (categoryAliases) {
     filtered = filtered.filter(
-      (p) => p.category.toLowerCase() === params.category?.toLowerCase()
+      (p) => categoryAliases.some((value) => p.category.toLowerCase() === value.toLowerCase())
     );
   }
 
@@ -362,7 +373,7 @@ export async function updateProduct(id: string, data: Partial<IProduct>): Promis
   try {
     const conn = await connectToDatabase();
     if (conn && mongoose.isValidObjectId(id)) {
-      const doc = await Product.findByIdAndUpdate(id, data, { new: true });
+      const doc = await Product.findByIdAndUpdate(id, data, { new: true, runValidators: true });
       if (doc) {
         const updated = documentToProduct(doc);
         inMemoryProducts = inMemoryProducts.map((p) => (p.id === id || p._id === id ? updated : p));

@@ -22,7 +22,8 @@ export const ProductFilters: React.FC<ProductFiltersProps> = ({
 
   const [isOpenMobile, setIsOpenMobile] = useState(false);
 
-  const currentCategory = searchParams.get('category') || 'all';
+  const routeCategory = pathname.startsWith('/categories/') ? decodeURIComponent(pathname.slice('/categories/'.length)) : '';
+  const currentCategory = routeCategory || searchParams.get('category') || 'all';
   const currentBrand = searchParams.get('brand') || 'all';
   const currentMovement = searchParams.get('movement') || 'all';
   const currentAvailability = searchParams.get('availability') || 'all';
@@ -44,7 +45,8 @@ export const ProductFilters: React.FC<ProductFiltersProps> = ({
       params.delete(key);
     }
     params.delete('page');
-    router.push(`${pathname}?${params.toString()}`);
+    const destination = key === 'category' && routeCategory ? '/watches' : pathname;
+    router.push(`${destination}${params.size ? `?${params.toString()}` : ''}`);
   };
 
   const clearAllFilters = () => {
@@ -107,7 +109,7 @@ export const ProductFilters: React.FC<ProductFiltersProps> = ({
           </button>
 
           {categories.map((cat) => {
-            const isSelected = currentCategory.toLowerCase() === cat.slug.toLowerCase();
+            const isSelected = [cat.slug, cat.name].some(value => currentCategory.toLowerCase() === value.toLowerCase());
             return (
               <button
                 key={cat.slug}
@@ -231,10 +233,10 @@ export const ProductFilters: React.FC<ProductFiltersProps> = ({
   return (
     <>
       {/* Mobile Filter Button */}
-      <div className="lg:hidden mb-4">
+      <div className="lg:hidden w-full sm:w-auto sm:mb-4">
         <button
           onClick={() => setIsOpenMobile(true)}
-          className="w-full flex items-center justify-center gap-2 bg-white dark:bg-slate-900 border border-slate-300 dark:border-slate-700 text-slate-800 dark:text-slate-200 text-xs font-bold uppercase tracking-wider py-3 rounded-lg shadow-sm transition-colors"
+          className="w-full flex items-center justify-center gap-2 bg-white dark:bg-slate-900 border border-slate-300 dark:border-slate-700 text-slate-800 dark:text-slate-200 text-xs font-bold uppercase tracking-wider px-4 py-2 sm:py-3 rounded-lg shadow-sm transition-colors"
         >
           <Filter className="w-4 h-4 text-amber-500" />
           <span>Filter Watches {hasActiveFilters && '(Active)'}</span>

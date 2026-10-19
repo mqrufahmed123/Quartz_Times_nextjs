@@ -15,9 +15,11 @@ import {
 } from 'lucide-react';
 import { getGeneralWhatsAppUrl, getFormattedWhatsAppDisplay } from '@/lib/whatsapp';
 import { useTheme } from '@/components/common/ThemeProvider';
+import { useStorefrontCategories } from './StorefrontCategoriesProvider';
 
 export const Footer: React.FC = () => {
   const { theme, toggleTheme } = useTheme();
+  const categories = useStorefrontCategories();
 
   return (
     <footer className="bg-slate-900 dark:bg-[#070708] border-t border-slate-800 text-slate-300 relative z-20 transition-colors">
@@ -117,31 +119,9 @@ export const Footer: React.FC = () => {
                   All Watches
                 </Link>
               </li>
-              <li>
-                <Link href="/watches?category=automatic" className="hover:text-amber-400 transition-colors">
-                  Automatic Watches
-                </Link>
-              </li>
-              <li>
-                <Link href="/watches?category=chronograph" className="hover:text-amber-400 transition-colors">
-                  Chronographs
-                </Link>
-              </li>
-              <li>
-                <Link href="/watches?category=vintage" className="hover:text-amber-400 transition-colors">
-                  Vintage Watches
-                </Link>
-              </li>
-              <li>
-                <Link href="/watches?category=dress" className="hover:text-amber-400 transition-colors">
-                  Dress Watches
-                </Link>
-              </li>
-              <li>
-                <Link href="/watches?category=diver" className="hover:text-amber-400 transition-colors">
-                  Diver Watches
-                </Link>
-              </li>
+              {categories.map(category => <li key={category.slug}>
+                <Link href={`/categories/${encodeURIComponent(category.slug)}`} className="hover:text-amber-400 transition-colors">{category.name}</Link>
+              </li>)}
             </ul>
           </div>
 

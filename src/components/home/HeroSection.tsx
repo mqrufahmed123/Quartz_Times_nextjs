@@ -41,12 +41,12 @@ export const HeroSection: React.FC<HeroSectionProps> = ({ settings }) => {
             </div>
 
             {/* Headline */}
-            <div className="space-y-3">
-              <h1 className="font-serif text-4xl sm:text-5xl lg:text-6xl font-bold text-slate-900 dark:text-slate-100 tracking-tight leading-[1.1]">
-                {titleLine1} <br className="hidden sm:inline" />
-                <span className="text-amber-600 dark:text-amber-400">{titleHighlight}</span>
+            <div className="space-y-5">
+              <h1 className="font-sans text-[clamp(2rem,6vw,3rem)] sm:text-5xl lg:text-[clamp(3rem,4.5vw,4rem)] font-semibold text-slate-900 dark:text-slate-100 tracking-[-0.035em] leading-[1.15] [text-wrap:balance] break-words">
+                <span className="block">{titleLine1}</span>{' '}
+                <span className="block text-amber-600 dark:text-amber-400">{titleHighlight}</span>
               </h1>
-              <p className="text-base sm:text-lg text-slate-600 dark:text-slate-300 max-w-xl mx-auto lg:mx-0 font-normal leading-relaxed">
+              <p className="font-sans text-base sm:text-lg text-slate-600 dark:text-slate-300 max-w-[48ch] mx-auto lg:mx-0 font-normal leading-[1.75]">
                 {subtitle}
               </p>
             </div>
@@ -72,33 +72,6 @@ export const HeroSection: React.FC<HeroSectionProps> = ({ settings }) => {
               </a>
             </div>
 
-            {/* Feature Highlights */}
-            <div className="pt-6 border-t border-slate-200 dark:border-slate-900 grid grid-cols-3 gap-4 max-w-lg mx-auto lg:mx-0 text-left">
-              <div>
-                <span className="block font-serif text-lg sm:text-xl text-slate-900 dark:text-slate-100 font-bold">
-                  100%
-                </span>
-                <span className="text-[11px] uppercase tracking-wider text-slate-500 dark:text-slate-400 font-medium">
-                  Authentic Guarantee
-                </span>
-              </div>
-              <div>
-                <span className="block font-serif text-lg sm:text-xl text-slate-900 dark:text-slate-100 font-bold">
-                  32-Point
-                </span>
-                <span className="text-[11px] uppercase tracking-wider text-slate-500 dark:text-slate-400 font-medium">
-                  Quality Audit
-                </span>
-              </div>
-              <div>
-                <span className="block font-serif text-lg sm:text-xl text-slate-900 dark:text-slate-100 font-bold">
-                  Insured
-                </span>
-                <span className="text-[11px] uppercase tracking-wider text-slate-500 dark:text-slate-400 font-medium">
-                  Nationwide Express
-                </span>
-              </div>
-            </div>
           </div>
 
           {/* Hero Image Stage */}

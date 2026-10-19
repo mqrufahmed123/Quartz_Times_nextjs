@@ -12,6 +12,9 @@ export interface CategoryPageProps {
     brand?: string;
     movement?: string;
     availability?: string;
+    minPrice?: string;
+    maxPrice?: string;
+    search?: string;
     sort?: 'featured' | 'newest' | 'price-low' | 'price-high';
   }>;
 }
@@ -38,23 +41,26 @@ export default async function CategoryPage({ params, searchParams }: CategoryPag
     brand: query.brand,
     movement: query.movement,
     availability: query.availability,
+    minPrice: query.minPrice ? Number(query.minPrice) : undefined,
+    maxPrice: query.maxPrice ? Number(query.maxPrice) : undefined,
+    search: query.search,
     sort: query.sort,
     page: 1,
     limit: 12,
   });
 
   return (
-    <div className="min-h-screen bg-slate-50 py-10 text-slate-900 dark:bg-[#0A0A0B] dark:text-slate-100 sm:py-16">
-      <div className="mx-auto max-w-7xl space-y-6 px-4 sm:px-6 lg:px-8">
+    <div className="min-h-screen bg-slate-50 py-3 text-slate-900 dark:bg-[#0A0A0B] dark:text-slate-100 sm:py-16">
+      <div className="mx-auto max-w-7xl space-y-2 sm:space-y-6 px-3 sm:px-6 lg:px-8">
         <Suspense fallback={<CatalogueHeaderSkeleton />}>
           <CatalogueSummary productsPromise={productsPromise} categoryName={`${category.name} Watches`} />
         </Suspense>
 
         {category.description && (
-          <p className="-mt-4 max-w-2xl text-sm text-slate-600 dark:text-slate-400">{category.description}</p>
+          <p className="hidden sm:block sm:-mt-4 max-w-2xl text-sm text-slate-600 dark:text-slate-400">{category.description}</p>
         )}
 
-        <div className="flex flex-col items-start gap-8 pt-4 lg:flex-row lg:gap-10">
+        <div className="flex flex-col items-start gap-2 sm:gap-8 sm:pt-4 lg:flex-row lg:gap-10">
           <Suspense fallback={<FilterSkeleton />}>
             <CatalogueFiltersData />
           </Suspense>

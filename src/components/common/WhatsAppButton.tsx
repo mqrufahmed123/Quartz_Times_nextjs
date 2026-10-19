@@ -1,14 +1,17 @@
 'use client';
 
 import React, { useState } from 'react';
+import { usePathname } from 'next/navigation';
 import { MessageCircle, X, Shield, Clock } from 'lucide-react';
 import { getGeneralWhatsAppUrl, getFormattedWhatsAppDisplay } from '@/lib/whatsapp';
 
 export const WhatsAppFloatingButton: React.FC = () => {
   const [isOpen, setIsOpen] = useState(false);
+  const pathname = usePathname();
+  const hasProductChatButtons = pathname === '/watches' || pathname.startsWith('/categories/');
 
   return (
-    <div className="fixed bottom-6 right-6 z-50 flex flex-col items-end">
+    <div className={`fixed bottom-6 right-6 z-50 ${hasProductChatButtons ? 'hidden sm:flex' : 'flex'} flex-col items-end`}>
       {/* Popover Bubble */}
       {isOpen && (
         <div className="mb-3 w-80 rounded-xl bg-luxury-900/95 border border-luxury-700 shadow-2xl backdrop-blur-md p-4 transition-all duration-300 animate-in fade-in slide-in-from-bottom-2 text-luxury-100">

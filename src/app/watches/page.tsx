@@ -57,13 +57,13 @@ export default async function WatchesPage({ searchParams }: WatchesPageProps) {
   });
 
   return (
-    <div className="min-h-screen bg-slate-50 py-10 text-slate-900 transition-colors dark:bg-[#0A0A0B] dark:text-slate-100 sm:py-16">
-      <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+    <div className="min-h-screen bg-slate-50 py-3 text-slate-900 transition-colors dark:bg-[#0A0A0B] dark:text-slate-100 sm:py-16">
+      <div className="mx-auto max-w-7xl px-3 sm:px-6 lg:px-8">
         <Suspense fallback={<CatalogueHeaderSkeleton />}>
           <CatalogueSummary productsPromise={productsPromise} />
         </Suspense>
 
-        <div className="flex flex-col items-start gap-8 lg:flex-row lg:gap-10">
+        <div className="flex flex-col items-start gap-2 sm:gap-8 lg:flex-row lg:gap-10">
           <Suspense fallback={<FilterSkeleton />}>
             <CatalogueFiltersData />
           </Suspense>

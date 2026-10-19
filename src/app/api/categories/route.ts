@@ -3,10 +3,10 @@ import { getCategories, createCategory } from '@/services/categoryService';
 import { getAdminSession } from '@/lib/auth';
 import { revalidatePath, revalidateTag } from 'next/cache';
 
-export async function GET() {
+export async function GET(req: NextRequest) {
   try {
-    const categories = await getCategories(false);
-    return NextResponse.json(categories);
+    const categories = await getCategories(req.nextUrl.searchParams.get('active') === 'true');
+    return NextResponse.json(categories, { headers: { 'Cache-Control': 'no-store' } });
   } catch (err: any) {
     return NextResponse.json(
       { error: err.message || 'Failed to fetch categories' },
@@ -28,9 +28,11 @@ export async function POST(req: NextRequest) {
     }
 
     const created = await createCategory(data);
-    revalidateTag('catalogue-filters', 'max');
+    revalidateTag('catalogue-filters', { expire: 0 });
     revalidatePath('/');
     revalidatePath('/watches');
+    revalidatePath('/admin/categories');
+    revalidatePath('/categories/[slug]', 'page');
     return NextResponse.json(created, { status: 201 });
   } catch (err: any) {
     return NextResponse.json(

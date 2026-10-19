@@ -9,13 +9,13 @@ import { ProductGrid } from './ProductGrid';
 const getFilterOptions = unstable_cache(
   async () => {
     const [categories, brands, movements] = await Promise.all([
-      getCategories(false),
+      getCategories(true),
       getDistinctBrands(),
       getDistinctMovements(),
     ]);
     return { categories, brands, movements };
   },
-  ['catalogue-filter-options'],
+  ['active-catalogue-filter-options'],
   { revalidate: 300, tags: ['catalogue-filters'] }
 );
 

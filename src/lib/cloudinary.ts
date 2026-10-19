@@ -101,9 +101,10 @@ export async function uploadToCloudinary(
     folder?: string;
     resourceType?: 'image' | 'video' | 'auto';
     filename?: string;
+    outputFormat?: 'jpg';
   } = {}
 ): Promise<UploadApiResponse> {
-  const { folder = 'quartz-times/watches', resourceType = 'auto', filename } = options;
+  const { folder = 'quartz-times/watches', resourceType = 'auto', filename, outputFormat } = options;
 
   return new Promise((resolve, reject) => {
     const uploadStream = cloudinary.uploader.upload_stream(
@@ -112,7 +113,8 @@ export async function uploadToCloudinary(
         resource_type: resourceType,
         public_id: filename ? filename.replace(/\.[^/.]+$/, '') : undefined,
         overwrite: true,
-        // Cloudinary handles HEIC conversion automatically when requested in standard formats
+        // HEIC must be explicitly converted; its original URL is not browser-compatible.
+        format: outputFormat,
       },
       (error, result) => {
         if (error || !result) {

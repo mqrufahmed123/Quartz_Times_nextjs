@@ -20,7 +20,7 @@ The next requested product direction is payment integration. Do not add a paymen
 - Authentication: signed HS256 JWTs with `jose`, stored in an HTTP-only admin cookie; bcrypt for persisted admin passwords.
 - Media: Cloudinary server SDK; Next Image accepts Cloudinary and Unsplash.
 - Icons: Lucide React.
-- There is no test framework or automated test suite at present.
+- There is no test framework. Run `node scripts/test-media.mjs` for upload/image-delivery checks and `node scripts/test-storefront-editor.mjs` for protected editor-data and product-update regression checks. Provider/session/service dependencies are stubbed.
 
 Use these commands from the repository root:
 
@@ -55,15 +55,16 @@ Keep business/data behavior in `src/services`, persistence schemas in `src/model
 
 ## Public application flow
 
-- `/`: server-rendered homepage with 60-second ISR. It concurrently loads featured products, active categories, and new arrivals.
-- `/watches`: server-rendered catalogue. URL query parameters are the source of truth for filters: `category`, `brand`, `movement`, `availability`, `minPrice`, `maxPrice`, `sort`, and `search`.
+- `/`: server-rendered homepage with 60-second ISR. It concurrently loads featured products, active categories, and new arrivals. `src/proxy.ts` redirects mobile phone visitors from `/` to `/watches` before rendering, preserving query parameters. Desktop/tablet visitors and bots keep the homepage; other routes are unaffected. Mobile redirects use private/no-store caching.
+- `/watches`: server-rendered catalogue. URL query parameters are the source of truth for filters: `category`, `brand`, `movement`, `availability`, `minPrice`, `maxPrice`, `sort`, and `search`. Phones use a compact two-column grid with 4:3 photos, two-line titles, prices, and per-watch WhatsApp buttons; desktop retains richer cards and a three-column grid. Loading skeletons match the responsive grid. The floating chat widget is hidden on mobile catalogue/category listings to avoid covering card actions.
 - `/categories/[slug]`: category-specific catalogue with the same filtering/grid machinery and a fixed category base query.
 - `/watches/[slug]`: active product detail with dynamic metadata, canonical/OpenGraph/Twitter data, Product JSON-LD, media gallery, specifications, related products, WhatsApp CTA, and inquiry form.
 - `/about` and `/contact`: static marketing/support pages; contact embeds the generic inquiry form.
 - `sitemap.xml` includes static routes, active products, and active categories. `robots.txt` disallows `/admin/` and `/api/`.
 - The public shell includes announcement bar, responsive navbar/search, footer, floating WhatsApp button, dark/light theme persistence, and a navigation progress indicator. Admin routes bypass this shell.
+- Header, mobile navigation, and footer category links share `StorefrontCategoriesProvider`, fetching `/api/categories?active=true` without caching on navigation/focus. They use the real active category names/slugs; no fixed Automatic/Chronograph/Vintage list remains. Desktop shows up to three category links or a Categories menu for longer lists; the drawer is used below the xl breakpoint and mobile/footer expose all active categories. Public filter options also use only active categories. Product forms list admin-managed categories, retaining a clearly marked current value for products still assigned to a removed category.
 
-Catalogue filter options are wrapped in `unstable_cache` for 300 seconds under tag `catalogue-filters`. Category mutations revalidate this tag and relevant paths. Product mutations revalidate homepage/catalogue/product paths. The catalogue initially renders 12 products server-side; `ProductGrid` loads more through `/api/products`.
+Catalogue filter options are wrapped in `unstable_cache` for 300 seconds under tag `catalogue-filters`. Category mutations expire this tag immediately and revalidate relevant paths. Product mutations revalidate homepage/catalogue/product paths. Category filtering resolves real category slugs to stored names, with slug aliases retained for older products. Category pages show the not-found view for removed/inactive categories and their filter sidebar correctly switches back to the catalogue when selecting another category or All Watches. The catalogue initially renders 12 products server-side; `ProductGrid` loads more through `/api/products`.
 
 ## Admin application flow
 
@@ -71,6 +72,9 @@ Catalogue filter options are wrapped in `unstable_cache` for 300 seconds under t
 - `/admin`: dashboard counts, configuration status, and recent inquiries.
 - `/admin/products`: list, delete, publish/status updates, and links to edit.
 - `/admin/products/new` and `/admin/products/[id]/edit`: full product form and media manager.
+- Signed-in admins also see Edit product on storefront cards and watch detail pages. `StorefrontAdminProvider` checks `/api/auth/me` client-side with private/no-store responses, keeping session-dependent controls out of public server-rendered caches. The full form is loaded only when opening a modal and fetches fresh product/categories from the independently protected `/api/admin/products/[id]/editor` endpoint. Cancel/discard stays on the storefront; save refreshes it, follows renamed slugs, and returns hidden products to the catalogue. Modal editing reuses ProductForm; admin dashboard navigation remains its default when no callbacks are provided.
+- Media controls are locked during uploads/saves. Card image loading/error state follows the image URL, and product galleries remount when their media changes so replacing photos or removing a video refreshes selection correctly.
+- `MediaUploader` has a persistent click/drag/drop photo area. `src/lib/imageDrop.ts` prefers dropped files, otherwise extracts image sources from browser HTML/URI payloads, decodes embedded raster images and same-origin blobs, and unwraps this site's Next image URLs. Each successful upload is kept even if another photo fails. Public HTTP(S) image URLs are imported through the authenticated upload endpoint; blocked/private/authenticated sources show a download-and-upload fallback message.
 - `/admin/categories`: category CRUD and active toggles.
 - `/admin/inquiries`: inquiry pipeline management and WhatsApp follow-up.
 
@@ -111,12 +115,13 @@ No Order, Payment, Customer, Cart, Address, Shipment, WebhookEvent, or idempoten
 - `GET /api/products`: public paginated/filterable active product list, maximum service page size 50.
 - `POST /api/products`: admin-only create.
 - `GET /api/products/[id]`: public for active products; admin can read inactive products.
+- `GET /api/admin/products/[id]/editor`: admin-only fresh full product/categories for storefront editing, private/no-store on every response.
 - `PUT /api/products/[id]`, `DELETE /api/products/[id]`: admin-only.
-- `GET /api/categories`: currently public and returns active and inactive categories.
+- `GET /api/categories`: public and returns active and inactive categories by default; `?active=true` returns active categories only. Responses use no-store.
 - `POST /api/categories`, `PUT|DELETE /api/categories/[id]`: admin-only.
 - `POST /api/inquiries`: public inquiry creation.
 - `GET /api/inquiries`, `PUT /api/inquiries/[id]`: admin-only.
-- `POST /api/upload`: admin-only multipart upload, Node runtime. Images up to 15 MB; videos up to 30 MB; accepted MIME types are defined in the route.
+- `POST /api/upload`: admin-only multipart upload or JSON `{ imageUrl }` photo import, Node runtime. Images up to 15 MB; videos up to 30 MB; accepted MIME types are defined in the route, including GIF. Remote imports use `src/lib/remoteImage.ts`: checked public DNS pinned to the socket, HTTP(S) standard ports, rechecked redirects (up to three), a 15-second total deadline, bounded streaming, signature-derived raster formats, and no forwarded credentials. Cloudinary upload IDs are unique so browser-supplied filenames cannot overwrite another photo.
 - `POST /api/auth/login`, `POST /api/auth/logout`, `GET /api/auth/me`: admin session lifecycle.
 - `POST /api/seed`: superadmin-only idempotent-ish upsert of sample categories/products/inquiries and creation of the configured admin.
 
@@ -129,9 +134,10 @@ The services attempt MongoDB first and fall back to module-level arrays initiali
 Important distinctions:
 
 - Without `MONGODB_URI`, CRUD affects only process memory and disappears on restart/redeploy.
+- Category reads never seed the database. Defaults can be added explicitly through the protected seed endpoint. With MongoDB configured, unavailable category reads return an empty list/null instead of restoring sample categories; successful missing/empty results remain missing/empty.
 - When `MONGODB_URI` is configured but unavailable, create/update/delete operations generally throw instead of pretending to persist; reads may still display mock data.
-- Uploads use Cloudinary only when all three Cloudinary credentials exist. Otherwise they return a base64 data URL for local demonstration. Do not treat base64 fallback media as durable production storage.
-- If a connected MongoDB collection is empty, read services can fall back to sample data. This makes demos resilient but means “empty database” may not render an empty catalogue.
+- Uploads use Cloudinary only when all three Cloudinary credentials exist. HEIC/HEIF photos explicitly request JPEG conversion; existing Cloudinary HEIC URLs are normalized to JPEG delivery on product, category, and hero reads without changing the stored originals. Empty/octet-stream MIME types are accepted for HEIC filenames. Without Cloudinary, HEIC returns an actionable error rather than an unrenderable data URL; supported browser formats retain the base64 demo fallback. Do not treat base64 fallback media as durable production storage.
+- Successful connected product-list queries preserve empty results, including empty category filters, instead of filling them with sample watches. Other product/detail read fallbacks remain as implemented in their services.
 
 For payment/order work, durable MongoDB must be required. Never create financial records in the in-memory fallback, and never report payment success solely from client redirect/query parameters.
 
@@ -170,7 +176,7 @@ Required by the current deployment check:
 - API input validation is currently hand-written and minimal; validate and normalize all new payment/order inputs server-side.
 - Login has no rate limiting, lockout, or CSRF token. SameSite=Lax provides partial CSRF protection, but sensitive new flows should receive an explicit threat review.
 - Public inquiry submission has no rate limiting, CAPTCHA, or abuse control.
-- Product create/update checks use truthiness for price, so zero is rejected at the route even though the schema permits zero.
+- Product creation still uses truthiness for price. Product updates allowlist editable fields, validate positive prices, nonnegative integer stock, currency and slug, and run Mongoose validators. Zero price is rejected even though the schema permits zero. Empty original price/video are sent as explicit nulls so removal persists. ProductForm exposes stock, currency and tags plus image-alt descriptions; saving is disabled during media uploads. Update invalidation covers old/new slugs, category pages, admin list and catalogue filter options.
 - There is no transaction around stock changes and no inventory reservation strategy.
 - Cloudinary deletion is not performed when product media or products are removed, so remote assets may remain orphaned.
 - JSON-LD maps every non-`in_stock` state to PreOrder and always emits UsedCondition; revisit this if condition/availability accuracy matters.
@@ -197,6 +203,8 @@ Before completing a change:
 
 - Run `npm run typecheck`.
 - Run `npm run lint`.
+- For category changes, run `node scripts/test-categories.mjs` (authoritative category reads, active API options, slug/name matching, empty results and demo CRUD).
+- For photo drop/import changes, run `node scripts/test-image-drop.mjs`, `node scripts/test-remote-image.mjs`, and `node scripts/test-media.mjs`.
 - Run `npm run build` when deployment variables are available or the task changes build/runtime behavior; explain if the environment check prevents it.
 - Exercise affected public and admin paths, including unauthenticated API behavior.
 - For schema changes, consider existing MongoDB documents, fallback mock data, serialization, indexes, and seed behavior.

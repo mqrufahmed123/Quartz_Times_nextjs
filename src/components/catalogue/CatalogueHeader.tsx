@@ -39,19 +39,19 @@ export const CatalogueHeader: React.FC<CatalogueHeaderProps> = ({
   };
 
   return (
-    <div className="space-y-4 mb-8">
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-4 border-b border-slate-200 dark:border-slate-800">
-        <div>
-          <h1 className="font-serif text-2xl sm:text-3xl text-slate-900 dark:text-slate-100 font-bold">
-            {categoryName || (currentSearch ? `Search: "${currentSearch}"` : 'Watch Collection')}
+    <div className="space-y-2 sm:space-y-4 mb-2 sm:mb-8">
+      <div className="flex items-center justify-between gap-2 sm:gap-4 pb-2 sm:pb-4 border-b border-slate-200 dark:border-slate-800">
+        <div className="min-w-0">
+          <h1 className="font-sans sm:font-serif text-lg sm:text-3xl text-slate-900 dark:text-slate-100 font-bold break-words">
+            {categoryName || (currentSearch ? `Search: "${currentSearch}"` : <><span className="sm:hidden">Shop All</span><span className="hidden sm:inline">Watch Collection</span></>)}
           </h1>
-          <p className="text-xs uppercase tracking-wider text-slate-500 dark:text-slate-400 mt-1 font-medium">
+          <p className="text-[10px] sm:text-xs uppercase tracking-wider text-slate-500 dark:text-slate-400 mt-0.5 sm:mt-1 font-medium">
             Showing {total} {total === 1 ? 'watch' : 'watches'}
           </p>
         </div>
 
         {/* Sort Controls */}
-        <div className="flex items-center gap-2 self-end sm:self-auto">
+        <div className="flex shrink-0 items-center gap-2">
           <span className="text-[11px] uppercase tracking-wider text-slate-500 dark:text-slate-400 hidden sm:flex items-center gap-1 font-medium">
             <ArrowUpDown className="w-3 h-3 text-amber-500" />
             Sort By:
@@ -60,7 +60,7 @@ export const CatalogueHeader: React.FC<CatalogueHeaderProps> = ({
             value={currentSort}
             onChange={(e) => handleSortChange(e.target.value)}
             aria-label="Sort watches"
-            className="bg-white dark:bg-slate-900 border border-slate-300 dark:border-slate-700 text-slate-800 dark:text-slate-200 text-xs rounded-lg px-3 py-2 focus:outline-none focus:border-amber-500 transition-colors font-medium"
+            className="max-w-[132px] sm:max-w-none bg-white dark:bg-slate-900 border border-slate-300 dark:border-slate-700 text-slate-800 dark:text-slate-200 text-xs rounded-lg px-2 sm:px-3 py-2 focus:outline-none focus:border-amber-500 transition-colors font-medium"
           >
             <option value="featured">Featured</option>
             <option value="newest">Newest First</option>
