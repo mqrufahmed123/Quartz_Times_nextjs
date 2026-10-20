@@ -1,9 +1,7 @@
-'use client';
-
-import React, { useEffect } from 'react';
-import Link from 'next/link';
-import { AlertTriangle, RotateCcw, Home } from 'lucide-react';
-
+"use client";
+import { useEffect } from "react";
+import Link from "next/link";
+import { RotateCcw } from "lucide-react";
 export default function Error({
   error,
   reset,
@@ -12,45 +10,24 @@ export default function Error({
   reset: () => void;
 }) {
   useEffect(() => {
-    console.error('Application Error:', error);
+    console.error("Application error:", error);
   }, [error]);
-
   return (
-    <div className="min-h-[70vh] flex items-center justify-center bg-luxury-950 px-4 py-16">
-      <div className="max-w-md w-full text-center space-y-6">
-        <div className="w-16 h-16 rounded-full bg-rose-950/40 border border-rose-800/60 text-rose-400 flex items-center justify-center mx-auto">
-          <AlertTriangle className="w-8 h-8" />
-        </div>
-
-        <div className="space-y-2">
-          <span className="text-[11px] uppercase tracking-ultra text-rose-400 font-semibold">
-            System Synchronization Interrupted
-          </span>
-          <h1 className="font-serif text-3xl text-luxury-100 font-normal">
-            Horological Vault Error
-          </h1>
-          <p className="text-xs text-luxury-400 font-light leading-relaxed">
-            We encountered a temporary synchronization glitch. You may retry reloading the vault or navigate back to the main collection.
-          </p>
-        </div>
-
-        <div className="flex flex-col sm:flex-row items-center justify-center gap-3 pt-2">
-          <button
-            onClick={() => reset()}
-            className="w-full sm:w-auto inline-flex items-center justify-center gap-2 bg-gold hover:bg-gold-hover text-luxury-950 font-bold text-xs uppercase tracking-wider px-6 py-3 rounded-lg transition-all"
-          >
-            <RotateCcw className="w-4 h-4" />
-            <span>Reload Vault</span>
-          </button>
-
-          <Link
-            href="/"
-            className="w-full sm:w-auto inline-flex items-center justify-center gap-2 bg-luxury-900 hover:bg-luxury-800 text-luxury-200 border border-luxury-800 text-xs uppercase tracking-wider px-5 py-3 rounded-lg transition-all"
-          >
-            <Home className="w-4 h-4" />
-            <span>Home</span>
-          </Link>
-        </div>
+    <div className="qt-container flex min-h-[60vh] flex-col items-center justify-center text-center py-20">
+      <p className="qt-eyebrow qt-muted mb-6">Something went wrong</p>
+      <h1 className="text-4xl font-semibold tracking-tighter">
+        Let’s try that again.
+      </h1>
+      <p className="qt-muted text-sm leading-7 mt-5 mb-8 max-w-md">
+        We couldn’t load this page. Try again, or head back to the collection.
+      </p>
+      <div className="flex gap-3 flex-wrap justify-center">
+        <button onClick={reset} className="qt-button">
+          <RotateCcw size={17} /> Try again
+        </button>
+        <Link href="/products" className="qt-button qt-button-secondary">
+          Browse products
+        </Link>
       </div>
     </div>
   );

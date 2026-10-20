@@ -90,6 +90,8 @@ async function main() {
       },
     },
   };
+  const catalogue = load('src/lib/productCatalog.ts', {});
+  dependencies['@/lib/productValidation'] = load('src/lib/productValidation.ts', { './productCatalog': catalogue });
   const context = () => ({ params: Promise.resolve({ id: 'prod-editor' }) });
   const editor = load('src/app/api/admin/products/[id]/editor/route.ts', dependencies);
 
@@ -166,7 +168,7 @@ async function main() {
   assert.equal(mutations[0][0], 'update');
   assert.equal(mutations[0][1], 'prod-editor');
   assert.deepEqual(JSON.parse(JSON.stringify(mutations[0][2])), payload);
-  for (const route of ['/', '/watches', '/watches/original-watch', '/watches/renamed-watch', '/admin/products']) {
+  for (const route of ['/', '/watches', '/watches/original-watch', '/watches/renamed-watch', '/products', '/admin/products']) {
     assert(invalidatedPaths.some(([actual]) => actual === route), `Missing invalidation for ${route}`);
   }
   assert(invalidatedPaths.some(([route, type]) => route === '/categories/[slug]' && type === 'page'),

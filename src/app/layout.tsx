@@ -20,13 +20,15 @@ const playfair = Playfair_Display({
 
 export const metadata: Metadata = {
   title: {
-    default: 'Quartz Times | Premium & Luxury Watches',
+    default: 'Quartz Times | Watches, Shoes & T-shirts',
     template: '%s | Quartz Times',
   },
   description:
-    'Quartz Times is a luxury watch boutique offering 100% authentic Swiss & Japanese watches with insured nationwide shipping and instant WhatsApp support.',
+    'Quartz Times is a curated boutique for watches, shoes, and T-shirts with insured nationwide shipping and instant WhatsApp support.',
   keywords: [
     'luxury watches',
+    'shoes',
+    't-shirts',
     'Rolex',
     'Omega',
     'Audemars Piguet',
@@ -39,9 +41,9 @@ export const metadata: Metadata = {
   authors: [{ name: 'Quartz Times' }],
   metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3000'),
   openGraph: {
-    title: 'Quartz Times | Premium & Luxury Watches',
+    title: 'Quartz Times | Watches, Shoes & T-shirts',
     description:
-      'Shop 100% authentic luxury timepieces with insured delivery and direct WhatsApp assistance.',
+      'Explore watches, shoes, and T-shirts with insured delivery and direct WhatsApp assistance.',
     type: 'website',
     locale: 'en_IN',
     siteName: 'Quartz Times',
@@ -66,8 +68,7 @@ export default function RootLayout({
               (function() {
                 try {
                   var saved = localStorage.getItem('theme');
-                  var prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
-                  if (saved === 'dark' || (!saved && prefersDark)) {
+                  if (saved === 'dark') {
                     document.documentElement.classList.add('dark');
                   } else {
                     document.documentElement.classList.remove('dark');

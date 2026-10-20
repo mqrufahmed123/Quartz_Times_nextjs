@@ -37,7 +37,7 @@ export function StorefrontProductEditor({ product, compact = false }: { product:
     fetch(`/api/admin/products/${id}/editor`, { cache: 'no-store', signal: controller.signal })
       .then(async response => {
         const result = await response.json();
-        if (!response.ok) throw new Error(response.status === 401 ? 'Your admin session expired. Sign in again to edit this watch.' : result.error);
+        if (!response.ok) throw new Error(response.status === 401 ? 'Your admin session expired. Sign in again to edit this product.' : result.error);
         setData(result);
       })
       .catch(error => { if (!controller.signal.aborted) setError(error.message || 'Unable to load product.'); });
@@ -62,9 +62,9 @@ export function StorefrontProductEditor({ product, compact = false }: { product:
     setOpen(false);
     setDirty(false);
     notify(updated.status === 'active' ? 'Product changes saved.' : 'Product saved and hidden from the public catalogue.');
-    if (pathname === `/watches/${product.slug}`) {
-      if (updated.status !== 'active') router.replace('/watches');
-      else if (updated.slug !== product.slug) router.replace(`/watches/${encodeURIComponent(updated.slug)}`);
+    if (pathname === `/products/${product.slug}` || pathname === `/watches/${product.slug}`) {
+      if (updated.status !== 'active') router.replace('/products');
+      else if (updated.slug !== product.slug) router.replace(`/products/${encodeURIComponent(updated.slug)}`);
     }
     router.refresh();
   };

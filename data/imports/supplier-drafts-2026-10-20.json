@@ -1,0 +1,1277 @@
+{
+  "observedDate": "2026-10-20",
+  "purpose": "Real supplier listings, published and marked in stock at merchant request.",
+  "items": [
+    {
+      "source": {
+        "name": "Dry Fit T-Shirt | UD15",
+        "source": "https://qikink.com/custom/t-shirts/dry-fit-t-shirts-ud15/",
+        "supplier": "Qikink",
+        "price": 116,
+        "currency": "INR",
+        "imageUrl": "https://qikink-stores.s3.ap-south-1.amazonaws.com/assets/mockups/365/b64828e3-abfd-48a5-8232-f30155012845.webp",
+        "material": "160 GSM Polyester",
+        "productType": "tshirt",
+        "pricingNote": "Supplier blank-product price includes 5% GST; printing and shipping extra. White-label supplier.",
+        "assetId": "01"
+      },
+      "product": {
+        "name": "Dry Fit T-Shirt | UD15",
+        "slug": "unbranded-dry-fit-t-shirts-ud15",
+        "brand": "Unbranded",
+        "category": "T-shirts",
+        "productType": "tshirt",
+        "description": "White-label dry fit t-shirt in 160 GSM Polyester. Offered as a blank garment by the supplier.",
+        "story": "Supplier reference: Qikink\nProduct source: https://qikink.com/custom/t-shirts/dry-fit-t-shirts-ud15/\nPrice source: https://qikink.com/custom/collections/t-shirts/\nObserved: 2026-10-20\nQuoted base price: INR 116.00. Supplier blank-product price includes 5% GST; printing and shipping extra. White-label supplier.\nSupplier photos show the blank garment. Stock, selected colours/sizes, final selling price and fulfilment terms have not been confirmed for Quartz Times. Published and marked in stock at the merchant’s request. Catalogue quantity is set to 1; physical stock quantity has not been verified.",
+        "price": 116,
+        "currency": "INR",
+        "sku": "QT-SRC-TS-UD15",
+        "stock": 1,
+        "availability": "in_stock",
+        "featured": false,
+        "isNewArrival": false,
+        "status": "active",
+        "variants": [],
+        "specifications": {
+          "material": "160 GSM Polyester",
+          "referenceNumber": "UD15"
+        },
+        "tags": [
+          "supplier-reference",
+          "stock-unconfirmed",
+          "unbranded"
+        ],
+        "images": [
+          {
+            "url": "https://res.cloudinary.com/rkwu8gb2/image/upload/v1792517177/quartz-times/products/0a1922cb-8855-4b7e-b478-d1816a9eff83.webp",
+            "publicId": "quartz-times/products/0a1922cb-8855-4b7e-b478-d1816a9eff83",
+            "alt": "Dry Fit T-Shirt | UD15 — supplier photograph",
+            "width": 1500,
+            "height": 1500,
+            "isPrimary": true
+          }
+        ]
+      },
+      "savedId": "6ad7a3cd83800cbf70199825",
+      "publication": {
+        "requestedBy": "merchant",
+        "at": "2026-10-20T17:34:48.620Z",
+        "previous": {
+          "status": "draft",
+          "availability": "sold_out",
+          "stock": 0
+        },
+        "stockQuantityBasis": "Minimum catalogue quantity of 1 to represent requested in-stock status; physical quantity unverified."
+      }
+    },
+    {
+      "source": {
+        "name": "Female Classic Crew T-Shirt",
+        "source": "https://qikink.com/custom/t-shirts/women-t-shirt-uc21/",
+        "supplier": "Qikink",
+        "price": 168,
+        "currency": "INR",
+        "imageUrl": "https://qikink-stores.s3.ap-south-1.amazonaws.com/assets/mockups/35/8fd16556-57c2-4cf8-8146-ea11cb000849.webp",
+        "material": "180 GSM Cotton",
+        "productType": "tshirt",
+        "pricingNote": "Supplier blank-product price includes 5% GST; printing and shipping extra. White-label supplier.",
+        "assetId": "02"
+      },
+      "product": {
+        "name": "Women’s Classic Crew T-Shirt",
+        "slug": "unbranded-women-t-shirt-uc21",
+        "brand": "Unbranded",
+        "category": "T-shirts",
+        "productType": "tshirt",
+        "description": "White-label female classic crew t-shirt in 180 GSM Cotton. Offered as a blank garment by the supplier.",
+        "story": "Supplier reference: Qikink\nProduct source: https://qikink.com/custom/t-shirts/women-t-shirt-uc21/\nPrice source: https://qikink.com/custom/collections/t-shirts/\nObserved: 2026-10-20\nQuoted base price: INR 168.00. Supplier blank-product price includes 5% GST; printing and shipping extra. White-label supplier.\nSupplier photos show the blank garment. Stock, selected colours/sizes, final selling price and fulfilment terms have not been confirmed for Quartz Times. Published and marked in stock at the merchant’s request. Catalogue quantity is set to 1; physical stock quantity has not been verified.",
+        "price": 168,
+        "currency": "INR",
+        "sku": "QT-SRC-TS-UC21",
+        "stock": 1,
+        "availability": "in_stock",
+        "featured": false,
+        "isNewArrival": false,
+        "status": "active",
+        "variants": [],
+        "specifications": {
+          "material": "180 GSM Cotton",
+          "referenceNumber": "UC21",
+          "neckline": "Crew neck"
+        },
+        "tags": [
+          "supplier-reference",
+          "stock-unconfirmed",
+          "unbranded"
+        ],
+        "images": [
+          {
+            "url": "https://res.cloudinary.com/rkwu8gb2/image/upload/v1792517070/quartz-times/products/75d29a94-bf74-4cb1-be6a-bf0962b56672.webp",
+            "publicId": "quartz-times/products/75d29a94-bf74-4cb1-be6a-bf0962b56672",
+            "alt": "Women’s Classic Crew T-Shirt — supplier photograph",
+            "width": 640,
+            "height": 640,
+            "isPrimary": true
+          }
+        ]
+      },
+      "savedId": "6ad7a3cf83800cbf70199827",
+      "publication": {
+        "requestedBy": "merchant",
+        "at": "2026-10-20T17:34:48.620Z",
+        "previous": {
+          "status": "draft",
+          "availability": "sold_out",
+          "stock": 0
+        },
+        "stockQuantityBasis": "Minimum catalogue quantity of 1 to represent requested in-stock status; physical quantity unverified."
+      }
+    },
+    {
+      "source": {
+        "name": "Jersey T-Shirt | US02",
+        "source": "https://qikink.com/custom/t-shirts/jersey-t-shirt-us02/",
+        "supplier": "Qikink",
+        "price": 126,
+        "currency": "INR",
+        "imageUrl": "https://qikink-stores.s3.ap-south-1.amazonaws.com/assets/mockups/366/760db687-8817-47b8-bf3f-1cea5d712a8f.webp",
+        "material": "170 GSM Polyester",
+        "productType": "tshirt",
+        "pricingNote": "Supplier blank-product price includes 5% GST; printing and shipping extra. White-label supplier.",
+        "assetId": "03"
+      },
+      "product": {
+        "name": "Jersey T-Shirt | US02",
+        "slug": "unbranded-jersey-t-shirt-us02",
+        "brand": "Unbranded",
+        "category": "T-shirts",
+        "productType": "tshirt",
+        "description": "White-label jersey t-shirt in 170 GSM Polyester. Offered as a blank garment by the supplier.",
+        "story": "Supplier reference: Qikink\nProduct source: https://qikink.com/custom/t-shirts/jersey-t-shirt-us02/\nPrice source: https://qikink.com/custom/collections/t-shirts/\nObserved: 2026-10-20\nQuoted base price: INR 126.00. Supplier blank-product price includes 5% GST; printing and shipping extra. White-label supplier.\nSupplier photos show the blank garment. Stock, selected colours/sizes, final selling price and fulfilment terms have not been confirmed for Quartz Times. Published and marked in stock at the merchant’s request. Catalogue quantity is set to 1; physical stock quantity has not been verified.",
+        "price": 126,
+        "currency": "INR",
+        "sku": "QT-SRC-TS-US02",
+        "stock": 1,
+        "availability": "in_stock",
+        "featured": false,
+        "isNewArrival": false,
+        "status": "active",
+        "variants": [],
+        "specifications": {
+          "material": "170 GSM Polyester",
+          "referenceNumber": "US02"
+        },
+        "tags": [
+          "supplier-reference",
+          "stock-unconfirmed",
+          "unbranded"
+        ],
+        "images": [
+          {
+            "url": "https://res.cloudinary.com/rkwu8gb2/image/upload/v1792517074/quartz-times/products/8852bf2e-56a2-459a-85ba-730c0eda8e30.webp",
+            "publicId": "quartz-times/products/8852bf2e-56a2-459a-85ba-730c0eda8e30",
+            "alt": "Jersey T-Shirt | US02 — supplier photograph",
+            "width": 1500,
+            "height": 1500,
+            "isPrimary": true
+          }
+        ]
+      },
+      "savedId": "6ad7a3d383800cbf70199829",
+      "publication": {
+        "requestedBy": "merchant",
+        "at": "2026-10-20T17:34:48.620Z",
+        "previous": {
+          "status": "draft",
+          "availability": "sold_out",
+          "stock": 0
+        },
+        "stockQuantityBasis": "Minimum catalogue quantity of 1 to represent requested in-stock status; physical quantity unverified."
+      }
+    },
+    {
+      "source": {
+        "name": "Male Classic Crew T-Shirt",
+        "source": "https://qikink.com/custom/t-shirts/round-neck-t-shirt-classic-uc21/",
+        "supplier": "Qikink",
+        "price": 200,
+        "currency": "INR",
+        "imageUrl": "https://qikink-stores.s3.ap-south-1.amazonaws.com/assets/mockups/6/116044d8-3f67-43ed-9b7a-0e6c33f7a3d3.webp",
+        "material": "180 GSM Combed Cotton",
+        "productType": "tshirt",
+        "pricingNote": "Supplier blank-product price includes 5% GST; printing and shipping extra. White-label supplier.",
+        "assetId": "04"
+      },
+      "product": {
+        "name": "Men’s Classic Crew T-Shirt",
+        "slug": "unbranded-round-neck-t-shirt-classic-uc21",
+        "brand": "Unbranded",
+        "category": "T-shirts",
+        "productType": "tshirt",
+        "description": "White-label male classic crew t-shirt in 180 GSM Combed Cotton. Offered as a blank garment by the supplier.",
+        "story": "Supplier reference: Qikink\nProduct source: https://qikink.com/custom/t-shirts/round-neck-t-shirt-classic-uc21/\nPrice source: https://qikink.com/custom/collections/t-shirts/\nObserved: 2026-10-20\nQuoted base price: INR 200.00. Supplier blank-product price includes 5% GST; printing and shipping extra. White-label supplier.\nSupplier photos show the blank garment. Stock, selected colours/sizes, final selling price and fulfilment terms have not been confirmed for Quartz Times. Published and marked in stock at the merchant’s request. Catalogue quantity is set to 1; physical stock quantity has not been verified.",
+        "price": 200,
+        "currency": "INR",
+        "sku": "QT-SRC-TS-M-UC21",
+        "stock": 1,
+        "availability": "in_stock",
+        "featured": false,
+        "isNewArrival": false,
+        "status": "active",
+        "variants": [],
+        "specifications": {
+          "material": "180 GSM Combed Cotton",
+          "referenceNumber": "UC21",
+          "neckline": "Crew neck"
+        },
+        "tags": [
+          "supplier-reference",
+          "stock-unconfirmed",
+          "unbranded"
+        ],
+        "images": [
+          {
+            "url": "https://res.cloudinary.com/rkwu8gb2/image/upload/v1792517140/quartz-times/products/11e93274-11d3-455f-a0d0-2e2e3421c99d.webp",
+            "publicId": "quartz-times/products/11e93274-11d3-455f-a0d0-2e2e3421c99d",
+            "alt": "Men’s Classic Crew T-Shirt — supplier photograph",
+            "width": 640,
+            "height": 640,
+            "isPrimary": true
+          }
+        ]
+      },
+      "savedId": "6ad7a41583800cbf70199838",
+      "publication": {
+        "requestedBy": "merchant",
+        "at": "2026-10-20T17:34:48.620Z",
+        "previous": {
+          "status": "draft",
+          "availability": "sold_out",
+          "stock": 0
+        },
+        "stockQuantityBasis": "Minimum catalogue quantity of 1 to represent requested in-stock status; physical quantity unverified."
+      }
+    },
+    {
+      "source": {
+        "name": "Male Full Sleeve T-Shirt",
+        "source": "https://qikink.com/custom/t-shirts/full-sleeve-t-shirt-mf31/",
+        "supplier": "Qikink",
+        "price": 242,
+        "currency": "INR",
+        "imageUrl": "https://qikink-stores.s3.ap-south-1.amazonaws.com/assets/mockups/21/c88cd1c4-42d3-4f7c-b4bf-9f9fa09d9ba1.webp",
+        "material": "180 GSM Cotton",
+        "productType": "tshirt",
+        "pricingNote": "Supplier blank-product price includes 5% GST; printing and shipping extra. White-label supplier.",
+        "assetId": "05"
+      },
+      "product": {
+        "name": "Men’s Full Sleeve T-Shirt",
+        "slug": "unbranded-full-sleeve-t-shirt-mf31",
+        "brand": "Unbranded",
+        "category": "T-shirts",
+        "productType": "tshirt",
+        "description": "White-label male full sleeve t-shirt in 180 GSM Cotton. Offered as a blank garment by the supplier.",
+        "story": "Supplier reference: Qikink\nProduct source: https://qikink.com/custom/t-shirts/full-sleeve-t-shirt-mf31/\nPrice source: https://qikink.com/custom/collections/t-shirts/\nObserved: 2026-10-20\nQuoted base price: INR 242.00. Supplier blank-product price includes 5% GST; printing and shipping extra. White-label supplier.\nSupplier photos show the blank garment. Stock, selected colours/sizes, final selling price and fulfilment terms have not been confirmed for Quartz Times. Published and marked in stock at the merchant’s request. Catalogue quantity is set to 1; physical stock quantity has not been verified.",
+        "price": 242,
+        "currency": "INR",
+        "sku": "QT-SRC-TS-MF31",
+        "stock": 1,
+        "availability": "in_stock",
+        "featured": false,
+        "isNewArrival": false,
+        "status": "active",
+        "variants": [],
+        "specifications": {
+          "material": "180 GSM Cotton",
+          "referenceNumber": "MF31",
+          "sleeveLength": "Long sleeve"
+        },
+        "tags": [
+          "supplier-reference",
+          "stock-unconfirmed",
+          "unbranded"
+        ],
+        "images": [
+          {
+            "url": "https://res.cloudinary.com/rkwu8gb2/image/upload/v1792517076/quartz-times/products/a298eda8-4a07-45d9-98f2-dd1f1681391c.webp",
+            "publicId": "quartz-times/products/a298eda8-4a07-45d9-98f2-dd1f1681391c",
+            "alt": "Men’s Full Sleeve T-Shirt — supplier photograph",
+            "width": 640,
+            "height": 640,
+            "isPrimary": true
+          }
+        ]
+      },
+      "savedId": "6ad7a3d483800cbf7019982b",
+      "publication": {
+        "requestedBy": "merchant",
+        "at": "2026-10-20T17:34:48.620Z",
+        "previous": {
+          "status": "draft",
+          "availability": "sold_out",
+          "stock": 0
+        },
+        "stockQuantityBasis": "Minimum catalogue quantity of 1 to represent requested in-stock status; physical quantity unverified."
+      }
+    },
+    {
+      "source": {
+        "name": "Male Polo | MP25",
+        "source": "https://qikink.com/custom/t-shirts/polo-t-shirts-mp25/",
+        "supplier": "Qikink",
+        "price": 336,
+        "currency": "INR",
+        "imageUrl": "https://qikink-stores.s3.ap-south-1.amazonaws.com/assets/mockups/18/627027f8-4a41-46d8-b1ee-e035d4aed0f9.webp",
+        "material": "220 GSM Cotton Pique",
+        "productType": "tshirt",
+        "pricingNote": "Supplier blank-product price includes 5% GST; printing and shipping extra. White-label supplier.",
+        "assetId": "06"
+      },
+      "product": {
+        "name": "Men’s Polo | MP25",
+        "slug": "unbranded-polo-t-shirts-mp25",
+        "brand": "Unbranded",
+        "category": "T-shirts",
+        "productType": "tshirt",
+        "description": "White-label male polo in 220 GSM Cotton Pique. Offered as a blank garment by the supplier.",
+        "story": "Supplier reference: Qikink\nProduct source: https://qikink.com/custom/t-shirts/polo-t-shirts-mp25/\nPrice source: https://qikink.com/custom/collections/t-shirts/\nObserved: 2026-10-20\nQuoted base price: INR 336.00. Supplier blank-product price includes 5% GST; printing and shipping extra. White-label supplier.\nSupplier photos show the blank garment. Stock, selected colours/sizes, final selling price and fulfilment terms have not been confirmed for Quartz Times. Published and marked in stock at the merchant’s request. Catalogue quantity is set to 1; physical stock quantity has not been verified.",
+        "price": 336,
+        "currency": "INR",
+        "sku": "QT-SRC-TS-MP25",
+        "stock": 1,
+        "availability": "in_stock",
+        "featured": false,
+        "isNewArrival": false,
+        "status": "active",
+        "variants": [],
+        "specifications": {
+          "material": "220 GSM Cotton Pique",
+          "referenceNumber": "MP25"
+        },
+        "tags": [
+          "supplier-reference",
+          "stock-unconfirmed",
+          "unbranded"
+        ],
+        "images": [
+          {
+            "url": "https://res.cloudinary.com/rkwu8gb2/image/upload/v1792517179/quartz-times/products/d75d05a7-6f26-4ba2-8c0b-6b528a4529eb.webp",
+            "publicId": "quartz-times/products/d75d05a7-6f26-4ba2-8c0b-6b528a4529eb",
+            "alt": "Men’s Polo | MP25 — supplier photograph",
+            "width": 640,
+            "height": 640,
+            "isPrimary": true
+          }
+        ]
+      },
+      "savedId": "6ad7a3d683800cbf7019982d",
+      "publication": {
+        "requestedBy": "merchant",
+        "at": "2026-10-20T17:34:48.620Z",
+        "previous": {
+          "status": "draft",
+          "availability": "sold_out",
+          "stock": 0
+        },
+        "stockQuantityBasis": "Minimum catalogue quantity of 1 to represent requested in-stock status; physical quantity unverified."
+      }
+    },
+    {
+      "source": {
+        "name": "Male Raglan T-Shirt | UR37",
+        "source": "https://qikink.com/custom/t-shirts/raglan-t-shirt-ur37/",
+        "supplier": "Qikink",
+        "price": 273,
+        "currency": "INR",
+        "imageUrl": "https://qikink-stores.s3.ap-south-1.amazonaws.com/assets/mockups/67/49829e8b-e3e9-4b8f-a3dc-5628a4c11b61.webp",
+        "material": "180 GSM Cotton",
+        "productType": "tshirt",
+        "pricingNote": "Supplier blank-product price includes 5% GST; printing and shipping extra. White-label supplier.",
+        "assetId": "07"
+      },
+      "product": {
+        "name": "Men’s Raglan T-Shirt | UR37",
+        "slug": "unbranded-raglan-t-shirt-ur37",
+        "brand": "Unbranded",
+        "category": "T-shirts",
+        "productType": "tshirt",
+        "description": "White-label male raglan t-shirt in 180 GSM Cotton. Offered as a blank garment by the supplier.",
+        "story": "Supplier reference: Qikink\nProduct source: https://qikink.com/custom/t-shirts/raglan-t-shirt-ur37/\nPrice source: https://qikink.com/custom/collections/t-shirts/\nObserved: 2026-10-20\nQuoted base price: INR 273.00. Supplier blank-product price includes 5% GST; printing and shipping extra. White-label supplier.\nSupplier photos show the blank garment. Stock, selected colours/sizes, final selling price and fulfilment terms have not been confirmed for Quartz Times. Published and marked in stock at the merchant’s request. Catalogue quantity is set to 1; physical stock quantity has not been verified.",
+        "price": 273,
+        "currency": "INR",
+        "sku": "QT-SRC-TS-UR37",
+        "stock": 1,
+        "availability": "in_stock",
+        "featured": false,
+        "isNewArrival": false,
+        "status": "active",
+        "variants": [],
+        "specifications": {
+          "material": "180 GSM Cotton",
+          "referenceNumber": "UR37"
+        },
+        "tags": [
+          "supplier-reference",
+          "stock-unconfirmed",
+          "unbranded"
+        ],
+        "images": [
+          {
+            "url": "https://res.cloudinary.com/rkwu8gb2/image/upload/v1792517181/quartz-times/products/76dfc722-34bb-4834-9f1d-2e5c522946e5.webp",
+            "publicId": "quartz-times/products/76dfc722-34bb-4834-9f1d-2e5c522946e5",
+            "alt": "Men’s Raglan T-Shirt | UR37 — supplier photograph",
+            "width": 640,
+            "height": 640,
+            "isPrimary": true
+          }
+        ]
+      },
+      "savedId": "6ad7a3d883800cbf7019982f",
+      "publication": {
+        "requestedBy": "merchant",
+        "at": "2026-10-20T17:34:48.620Z",
+        "previous": {
+          "status": "draft",
+          "availability": "sold_out",
+          "stock": 0
+        },
+        "stockQuantityBasis": "Minimum catalogue quantity of 1 to represent requested in-stock status; physical quantity unverified."
+      }
+    },
+    {
+      "source": {
+        "name": "Male Standard Crew T-Shirt | US21",
+        "source": "https://qikink.com/custom/t-shirts/round-neck-t-shirt-standard-us21/",
+        "supplier": "Qikink",
+        "price": 179,
+        "currency": "INR",
+        "imageUrl": "https://qikink-stores.s3.ap-south-1.amazonaws.com/assets/mockups/2/05285db3-9d73-4c14-96fc-31c5765ddd2e.webp",
+        "material": "180 GSM Cotton",
+        "productType": "tshirt",
+        "pricingNote": "Supplier blank-product price includes 5% GST; printing and shipping extra. White-label supplier.",
+        "assetId": "08"
+      },
+      "product": {
+        "name": "Men’s Standard Crew T-Shirt | US21",
+        "slug": "unbranded-round-neck-t-shirt-standard-us21",
+        "brand": "Unbranded",
+        "category": "T-shirts",
+        "productType": "tshirt",
+        "description": "White-label male standard crew t-shirt in 180 GSM Cotton. Offered as a blank garment by the supplier.",
+        "story": "Supplier reference: Qikink\nProduct source: https://qikink.com/custom/t-shirts/round-neck-t-shirt-standard-us21/\nPrice source: https://qikink.com/custom/collections/t-shirts/\nObserved: 2026-10-20\nQuoted base price: INR 179.00. Supplier blank-product price includes 5% GST; printing and shipping extra. White-label supplier.\nSupplier photos show the blank garment. Stock, selected colours/sizes, final selling price and fulfilment terms have not been confirmed for Quartz Times. Published and marked in stock at the merchant’s request. Catalogue quantity is set to 1; physical stock quantity has not been verified.",
+        "price": 179,
+        "currency": "INR",
+        "sku": "QT-SRC-TS-US21",
+        "stock": 1,
+        "availability": "in_stock",
+        "featured": false,
+        "isNewArrival": false,
+        "status": "active",
+        "variants": [],
+        "specifications": {
+          "material": "180 GSM Cotton",
+          "referenceNumber": "US21",
+          "neckline": "Crew neck"
+        },
+        "tags": [
+          "supplier-reference",
+          "stock-unconfirmed",
+          "unbranded"
+        ],
+        "images": [
+          {
+            "url": "https://res.cloudinary.com/rkwu8gb2/image/upload/v1792517182/quartz-times/products/618a31e5-31b6-41d9-b9e7-91ea97b4dd12.webp",
+            "publicId": "quartz-times/products/618a31e5-31b6-41d9-b9e7-91ea97b4dd12",
+            "alt": "Men’s Standard Crew T-Shirt | US21 — supplier photograph",
+            "width": 640,
+            "height": 640,
+            "isPrimary": true
+          }
+        ]
+      },
+      "savedId": "6ad7a3da83800cbf70199831",
+      "publication": {
+        "requestedBy": "merchant",
+        "at": "2026-10-20T17:34:48.620Z",
+        "previous": {
+          "status": "draft",
+          "availability": "sold_out",
+          "stock": 0
+        },
+        "stockQuantityBasis": "Minimum catalogue quantity of 1 to represent requested in-stock status; physical quantity unverified."
+      }
+    },
+    {
+      "source": {
+        "name": "Male V Neck T-Shirt | UV34",
+        "source": "https://qikink.com/custom/t-shirts/v-neck-t-shirts-uv34/",
+        "supplier": "Qikink",
+        "price": 210,
+        "currency": "INR",
+        "imageUrl": "https://qikink-stores.s3.ap-south-1.amazonaws.com/assets/mockups/8/7a691f16-e852-41ee-a232-e526a532ee31.webp",
+        "material": "180 GSM Cotton",
+        "productType": "tshirt",
+        "pricingNote": "Supplier blank-product price includes 5% GST; printing and shipping extra. White-label supplier.",
+        "assetId": "09"
+      },
+      "product": {
+        "name": "Men’s V Neck T-Shirt | UV34",
+        "slug": "unbranded-v-neck-t-shirts-uv34",
+        "brand": "Unbranded",
+        "category": "T-shirts",
+        "productType": "tshirt",
+        "description": "White-label male v neck t-shirt in 180 GSM Cotton. Offered as a blank garment by the supplier.",
+        "story": "Supplier reference: Qikink\nProduct source: https://qikink.com/custom/t-shirts/v-neck-t-shirts-uv34/\nPrice source: https://qikink.com/custom/collections/t-shirts/\nObserved: 2026-10-20\nQuoted base price: INR 210.00. Supplier blank-product price includes 5% GST; printing and shipping extra. White-label supplier.\nSupplier photos show the blank garment. Stock, selected colours/sizes, final selling price and fulfilment terms have not been confirmed for Quartz Times. Published and marked in stock at the merchant’s request. Catalogue quantity is set to 1; physical stock quantity has not been verified.",
+        "price": 210,
+        "currency": "INR",
+        "sku": "QT-SRC-TS-UV34",
+        "stock": 1,
+        "availability": "in_stock",
+        "featured": false,
+        "isNewArrival": false,
+        "status": "active",
+        "variants": [],
+        "specifications": {
+          "material": "180 GSM Cotton",
+          "referenceNumber": "UV34",
+          "neckline": "V-neck"
+        },
+        "tags": [
+          "supplier-reference",
+          "stock-unconfirmed",
+          "unbranded"
+        ],
+        "images": [
+          {
+            "url": "https://res.cloudinary.com/rkwu8gb2/image/upload/v1792517184/quartz-times/products/e337a3c8-c545-46e8-9ea9-52cb33850aa4.webp",
+            "publicId": "quartz-times/products/e337a3c8-c545-46e8-9ea9-52cb33850aa4",
+            "alt": "Men’s V Neck T-Shirt | UV34 — supplier photograph",
+            "width": 640,
+            "height": 640,
+            "isPrimary": true
+          }
+        ]
+      },
+      "savedId": "6ad7a3dc83800cbf70199833",
+      "publication": {
+        "requestedBy": "merchant",
+        "at": "2026-10-20T17:34:48.620Z",
+        "previous": {
+          "status": "draft",
+          "availability": "sold_out",
+          "stock": 0
+        },
+        "stockQuantityBasis": "Minimum catalogue quantity of 1 to represent requested in-stock status; physical quantity unverified."
+      }
+    },
+    {
+      "source": {
+        "name": "Oversized Jersey T-Shirt | UJ35",
+        "source": "https://qikink.com/custom/t-shirts/oversized-jersey-t-shirt-uj35/",
+        "supplier": "Qikink",
+        "price": 179,
+        "currency": "INR",
+        "imageUrl": "https://qikink-stores.s3.ap-south-1.amazonaws.com/assets/mockups/364/7405671e-31e9-4bdf-b0fa-d2d80b650e61.webp",
+        "material": "240 GSM Polyester",
+        "productType": "tshirt",
+        "pricingNote": "Supplier blank-product price includes 5% GST; printing and shipping extra. White-label supplier.",
+        "assetId": "10"
+      },
+      "product": {
+        "name": "Oversized Jersey T-Shirt | UJ35",
+        "slug": "unbranded-oversized-jersey-t-shirt-uj35",
+        "brand": "Unbranded",
+        "category": "T-shirts",
+        "productType": "tshirt",
+        "description": "White-label oversized jersey t-shirt in 240 GSM Polyester. Offered as a blank garment by the supplier.",
+        "story": "Supplier reference: Qikink\nProduct source: https://qikink.com/custom/t-shirts/oversized-jersey-t-shirt-uj35/\nPrice source: https://qikink.com/custom/collections/t-shirts/\nObserved: 2026-10-20\nQuoted base price: INR 179.00. Supplier blank-product price includes 5% GST; printing and shipping extra. White-label supplier.\nSupplier photos show the blank garment. Stock, selected colours/sizes, final selling price and fulfilment terms have not been confirmed for Quartz Times. Published and marked in stock at the merchant’s request. Catalogue quantity is set to 1; physical stock quantity has not been verified.",
+        "price": 179,
+        "currency": "INR",
+        "sku": "QT-SRC-TS-UJ35",
+        "stock": 1,
+        "availability": "in_stock",
+        "featured": false,
+        "isNewArrival": false,
+        "status": "active",
+        "variants": [],
+        "specifications": {
+          "material": "240 GSM Polyester",
+          "referenceNumber": "UJ35",
+          "fit": "Oversized"
+        },
+        "tags": [
+          "supplier-reference",
+          "stock-unconfirmed",
+          "unbranded"
+        ],
+        "images": [
+          {
+            "url": "https://res.cloudinary.com/rkwu8gb2/image/upload/v1792517186/quartz-times/products/13a01713-a2d7-43a5-8800-5cef6d721c11.webp",
+            "publicId": "quartz-times/products/13a01713-a2d7-43a5-8800-5cef6d721c11",
+            "alt": "Oversized Jersey T-Shirt | UJ35 — supplier photograph",
+            "width": 1500,
+            "height": 1500,
+            "isPrimary": true
+          }
+        ]
+      },
+      "savedId": "6ad7a3df83800cbf70199835",
+      "publication": {
+        "requestedBy": "merchant",
+        "at": "2026-10-20T17:34:48.620Z",
+        "previous": {
+          "status": "draft",
+          "availability": "sold_out",
+          "stock": 0
+        },
+        "stockQuantityBasis": "Minimum catalogue quantity of 1 to represent requested in-stock status; physical quantity unverified."
+      }
+    },
+    {
+      "source": {
+        "name": "New Brand Fashion Black Cowhide Sneaker for Men Elastic Quick Lace Wenzhou Factory Export Casual s Unbrand Hot Sale African",
+        "source": "https://www.alibaba.com/product-detail/New-Brand-Fashion-Black-Cowhide-Sneaker_1601673169789.html",
+        "supplier": "Fujian Quanzhou Canjin Trading Co., Ltd.",
+        "price": 1451.5,
+        "maxPrice": 1646.34,
+        "currency": "INR",
+        "imageUrl": "https://s.alicdn.com/@sc04/kf/H0a7a9bc993a24f3f803aa4a67c20d12eW.jpg_300x300.jpg",
+        "productType": "shoes",
+        "moq": "1 pair",
+        "pricingNote": "Localized supplier quote in INR; price varies with order quantity. Shipping, import charges and taxes not confirmed.",
+        "assetId": "13"
+      },
+      "product": {
+        "name": "Black Leather Lace-Up Sneakers",
+        "slug": "unbranded-black-leather-lace-up-sneakers-69789",
+        "brand": "Unbranded",
+        "category": "Shoes",
+        "productType": "shoes",
+        "description": "Black Leather Lace-Up Sneakers. Supplier lists this product as unbranded.",
+        "story": "Supplier: Fujian Quanzhou Canjin Trading Co., Ltd.\nProduct source: https://www.alibaba.com/product-detail/New-Brand-Fashion-Black-Cowhide-Sneaker_1601673169789.html\nOriginal listing title: New Brand Fashion Black Cowhide Sneaker for Men Elastic Quick Lace Wenzhou Factory Export Casual s Unbrand Hot Sale African\nObserved: 2026-10-20\nQuoted price range: INR 1451.50–1646.34. Catalogue price uses the lower quoted bound, not a confirmed Quartz Times retail price.\nMinimum order: 1 pair. Localized supplier quote in INR; price varies with order quantity. Shipping, import charges and taxes not confirmed.\nSupplier lists this product as unbranded. Photos are supplied by the listing and may show custom-logo/packaging examples. Stock, sizing, materials not explicitly listed, authenticity of supplier claims, final selling price and import/fulfilment terms are unconfirmed. Published and marked in stock at the merchant’s request. Catalogue quantity is set to 1; physical stock quantity has not been verified.",
+        "price": 1451.5,
+        "currency": "INR",
+        "sku": "QT-SRC-SH-1601673169789",
+        "stock": 1,
+        "availability": "in_stock",
+        "featured": false,
+        "isNewArrival": false,
+        "status": "active",
+        "variants": [],
+        "specifications": {
+          "upperMaterial": "Cowhide",
+          "closure": "Lace-up",
+          "referenceNumber": "1601673169789"
+        },
+        "tags": [
+          "supplier-reference",
+          "stock-unconfirmed",
+          "unbranded"
+        ],
+        "images": [
+          {
+            "url": "https://res.cloudinary.com/rkwu8gb2/image/upload/v1792517143/quartz-times/products/29c26f0a-be66-4d53-ad27-555708e7e649.jpg",
+            "publicId": "quartz-times/products/29c26f0a-be66-4d53-ad27-555708e7e649",
+            "alt": "Black Leather Lace-Up Sneakers — supplier photograph",
+            "width": 300,
+            "height": 300,
+            "isPrimary": true
+          }
+        ]
+      },
+      "savedId": "6ad7a41883800cbf7019983a",
+      "publication": {
+        "requestedBy": "merchant",
+        "at": "2026-10-20T17:34:48.620Z",
+        "previous": {
+          "status": "draft",
+          "availability": "sold_out",
+          "stock": 0
+        },
+        "stockQuantityBasis": "Minimum catalogue quantity of 1 to represent requested in-stock status; physical quantity unverified."
+      }
+    },
+    {
+      "source": {
+        "name": "Wholesale Men's Casual Walking Style Shoes Microfiber Leather Breathable Sneakers for Men Zapatos Deportivos Hombre Custom Made",
+        "source": "https://www.alibaba.com/product-detail/Wholesale-Men-s-Casual-Walking-Style_1601925620128.html",
+        "supplier": "Fujian Jiulong Trading Co., Ltd.",
+        "price": 1675.56,
+        "maxPrice": 2234.73,
+        "currency": "INR",
+        "imageUrl": "https://s.alicdn.com/@sc04/kf/H6c2452556500407eb28f0eff0b36131er.jpg_300x300.jpg",
+        "productType": "shoes",
+        "moq": "1 pair",
+        "pricingNote": "Localized supplier quote in INR; price varies with order quantity. Shipping, import charges and taxes not confirmed.",
+        "assetId": "15"
+      },
+      "product": {
+        "name": "Custom Microfiber Casual Sneakers",
+        "slug": "unbranded-custom-microfiber-casual-sneakers-20128",
+        "brand": "Unbranded",
+        "category": "Shoes",
+        "productType": "shoes",
+        "description": "Custom Microfiber Casual Sneakers. Plain or custom-logo supplier reference; confirm the no-logo production option with the supplier.",
+        "story": "Supplier: Fujian Jiulong Trading Co., Ltd.\nProduct source: https://www.alibaba.com/product-detail/Wholesale-Men-s-Casual-Walking-Style_1601925620128.html\nOriginal listing title: Wholesale Men's Casual Walking Style Shoes Microfiber Leather Breathable Sneakers for Men Zapatos Deportivos Hombre Custom Made\nObserved: 2026-10-20\nQuoted price range: INR 1675.56–2234.73. Catalogue price uses the lower quoted bound, not a confirmed Quartz Times retail price.\nMinimum order: 1 pair. Localized supplier quote in INR; price varies with order quantity. Shipping, import charges and taxes not confirmed.\nPlain or custom-logo supplier reference; confirm the no-logo production option with the supplier. Photos are supplied by the listing and may show custom-logo/packaging examples. Stock, sizing, materials not explicitly listed, authenticity of supplier claims, final selling price and import/fulfilment terms are unconfirmed. Published and marked in stock at the merchant’s request. Catalogue quantity is set to 1; physical stock quantity has not been verified.",
+        "price": 1675.56,
+        "currency": "INR",
+        "sku": "QT-SRC-SH-1601925620128",
+        "stock": 1,
+        "availability": "in_stock",
+        "featured": false,
+        "isNewArrival": false,
+        "status": "active",
+        "variants": [],
+        "specifications": {
+          "upperMaterial": "Microfiber leather",
+          "referenceNumber": "1601925620128"
+        },
+        "tags": [
+          "supplier-reference",
+          "stock-unconfirmed",
+          "unbranded"
+        ],
+        "images": [
+          {
+            "url": "https://res.cloudinary.com/rkwu8gb2/image/upload/v1792517145/quartz-times/products/7c6aca54-dc97-475b-8a58-81da4c2f8e3d.jpg",
+            "publicId": "quartz-times/products/7c6aca54-dc97-475b-8a58-81da4c2f8e3d",
+            "alt": "Custom Microfiber Casual Sneakers — supplier photograph",
+            "width": 300,
+            "height": 300,
+            "isPrimary": true
+          }
+        ]
+      },
+      "savedId": "6ad7a41a83800cbf7019983c",
+      "publication": {
+        "requestedBy": "merchant",
+        "at": "2026-10-20T17:34:48.620Z",
+        "previous": {
+          "status": "draft",
+          "availability": "sold_out",
+          "stock": 0
+        },
+        "stockQuantityBasis": "Minimum catalogue quantity of 1 to represent requested in-stock status; physical quantity unverified."
+      }
+    },
+    {
+      "source": {
+        "name": "Unbranded Sneakers Mesh Breathable Fashion Factory Direct Sales Wholesale Shoes for Men",
+        "source": "https://www.alibaba.com/product-detail/Unbranded-Sneakers-Mesh-Breathable-Fashion-Factory_1601961941472.html",
+        "supplier": "Quanzhou Cenh Hang E-commerce Co., Ltd.",
+        "price": 1071.58,
+        "maxPrice": 1106.65,
+        "currency": "INR",
+        "imageUrl": "https://s.alicdn.com/@sc04/kf/H093e2e3a2d644c78aa34f8ca3927b03eE.jpg_300x300.jpg",
+        "productType": "shoes",
+        "moq": "50 pairs",
+        "pricingNote": "Localized supplier quote in INR; price varies with order quantity. Shipping, import charges and taxes not confirmed.",
+        "assetId": "18"
+      },
+      "product": {
+        "name": "White Mesh Everyday Sneakers",
+        "slug": "unbranded-white-mesh-everyday-sneakers-41472",
+        "brand": "Unbranded",
+        "category": "Shoes",
+        "productType": "shoes",
+        "description": "White Mesh Everyday Sneakers. Supplier lists this product as unbranded.",
+        "story": "Supplier: Quanzhou Cenh Hang E-commerce Co., Ltd.\nProduct source: https://www.alibaba.com/product-detail/Unbranded-Sneakers-Mesh-Breathable-Fashion-Factory_1601961941472.html\nOriginal listing title: Unbranded Sneakers Mesh Breathable Fashion Factory Direct Sales Wholesale Shoes for Men\nObserved: 2026-10-20\nQuoted price range: INR 1071.58–1106.65. Catalogue price uses the lower quoted bound, not a confirmed Quartz Times retail price.\nMinimum order: 50 pairs. Localized supplier quote in INR; price varies with order quantity. Shipping, import charges and taxes not confirmed.\nSupplier lists this product as unbranded. Photos are supplied by the listing and may show custom-logo/packaging examples. Stock, sizing, materials not explicitly listed, authenticity of supplier claims, final selling price and import/fulfilment terms are unconfirmed. Published and marked in stock at the merchant’s request. Catalogue quantity is set to 1; physical stock quantity has not been verified.",
+        "price": 1071.58,
+        "currency": "INR",
+        "sku": "QT-SRC-SH-1601961941472",
+        "stock": 1,
+        "availability": "in_stock",
+        "featured": false,
+        "isNewArrival": false,
+        "status": "active",
+        "variants": [],
+        "specifications": {
+          "referenceNumber": "1601961941472"
+        },
+        "tags": [
+          "supplier-reference",
+          "stock-unconfirmed",
+          "unbranded"
+        ],
+        "images": [
+          {
+            "url": "https://res.cloudinary.com/rkwu8gb2/image/upload/v1792517147/quartz-times/products/0fa89f9f-3dbb-4a84-9775-bad50bc11eb6.jpg",
+            "publicId": "quartz-times/products/0fa89f9f-3dbb-4a84-9775-bad50bc11eb6",
+            "alt": "White Mesh Everyday Sneakers — supplier photograph",
+            "width": 300,
+            "height": 300,
+            "isPrimary": true
+          }
+        ]
+      },
+      "savedId": "6ad7a41c83800cbf7019983e",
+      "publication": {
+        "requestedBy": "merchant",
+        "at": "2026-10-20T17:34:48.620Z",
+        "previous": {
+          "status": "draft",
+          "availability": "sold_out",
+          "stock": 0
+        },
+        "stockQuantityBasis": "Minimum catalogue quantity of 1 to represent requested in-stock status; physical quantity unverified."
+      }
+    },
+    {
+      "source": {
+        "name": "Men's Chunky Sneakers Dial Closure Lace Free PU Leather Casual Shoes Zapatillas Hombre Custom Logo Wholesale Dropshipping",
+        "source": "https://www.alibaba.com/product-detail/Men-s-Chunky-Sneakers-Dial-Closure_1601947848340.html",
+        "supplier": "Fujian Jiulong Trading Co., Ltd.",
+        "price": 915.72,
+        "maxPrice": 1220.63,
+        "currency": "INR",
+        "imageUrl": "https://s.alicdn.com/@sc04/kf/Hfe96a0d2abac4837a60d275c949a3ef6N.jpg_300x300.jpg",
+        "productType": "shoes",
+        "moq": "1 piece",
+        "pricingNote": "Localized supplier quote in INR; price varies with order quantity. Shipping, import charges and taxes not confirmed.",
+        "assetId": "20"
+      },
+      "product": {
+        "name": "Custom PU Casual Sneakers",
+        "slug": "unbranded-custom-pu-casual-sneakers-48340",
+        "brand": "Unbranded",
+        "category": "Shoes",
+        "productType": "shoes",
+        "description": "Custom PU Casual Sneakers. Plain or custom-logo supplier reference; confirm the no-logo production option with the supplier.",
+        "story": "Supplier: Fujian Jiulong Trading Co., Ltd.\nProduct source: https://www.alibaba.com/product-detail/Men-s-Chunky-Sneakers-Dial-Closure_1601947848340.html\nOriginal listing title: Men's Chunky Sneakers Dial Closure Lace Free PU Leather Casual Shoes Zapatillas Hombre Custom Logo Wholesale Dropshipping\nObserved: 2026-10-20\nQuoted price range: INR 915.72–1220.63. Catalogue price uses the lower quoted bound, not a confirmed Quartz Times retail price.\nMinimum order: 1 piece. Localized supplier quote in INR; price varies with order quantity. Shipping, import charges and taxes not confirmed.\nPlain or custom-logo supplier reference; confirm the no-logo production option with the supplier. Photos are supplied by the listing and may show custom-logo/packaging examples. Stock, sizing, materials not explicitly listed, authenticity of supplier claims, final selling price and import/fulfilment terms are unconfirmed. Published and marked in stock at the merchant’s request. Catalogue quantity is set to 1; physical stock quantity has not been verified.",
+        "price": 915.72,
+        "currency": "INR",
+        "sku": "QT-SRC-SH-1601947848340",
+        "stock": 1,
+        "availability": "in_stock",
+        "featured": false,
+        "isNewArrival": false,
+        "status": "active",
+        "variants": [],
+        "specifications": {
+          "upperMaterial": "PU leather",
+          "referenceNumber": "1601947848340"
+        },
+        "tags": [
+          "supplier-reference",
+          "stock-unconfirmed",
+          "unbranded"
+        ],
+        "images": [
+          {
+            "url": "https://res.cloudinary.com/rkwu8gb2/image/upload/v1792517149/quartz-times/products/ed0629c2-78ef-4fd3-8761-eb944ee09101.jpg",
+            "publicId": "quartz-times/products/ed0629c2-78ef-4fd3-8761-eb944ee09101",
+            "alt": "Custom PU Casual Sneakers — supplier photograph",
+            "width": 300,
+            "height": 300,
+            "isPrimary": true
+          }
+        ]
+      },
+      "savedId": "6ad7a41e83800cbf70199840",
+      "publication": {
+        "requestedBy": "merchant",
+        "at": "2026-10-20T17:34:48.620Z",
+        "previous": {
+          "status": "draft",
+          "availability": "sold_out",
+          "stock": 0
+        },
+        "stockQuantityBasis": "Minimum catalogue quantity of 1 to represent requested in-stock status; physical quantity unverified."
+      }
+    },
+    {
+      "source": {
+        "name": "Unbranded Sneakers Men's Casual Sports Shoes Fashion White Shoes Factory Wholesale Sneakers Manufacturing",
+        "source": "https://www.alibaba.com/product-detail/Unbranded-Sneakers-Men-s-Casual-Sports_1601943408163.html",
+        "supplier": "Guangzhou Maizhituo Trading Co., Ltd.",
+        "price": 711.14,
+        "maxPrice": 743.29,
+        "currency": "INR",
+        "imageUrl": "https://s.alicdn.com/@sc04/kf/H103aa3a5cfc1401697e64b3510d18695q.jpg_300x300.jpg",
+        "productType": "shoes",
+        "moq": "50 pairs",
+        "pricingNote": "Localized supplier quote in INR; price varies with order quantity. Shipping, import charges and taxes not confirmed.",
+        "assetId": "21"
+      },
+      "product": {
+        "name": "White Low-Top Casual Sneakers",
+        "slug": "unbranded-white-low-top-casual-sneakers-08163",
+        "brand": "Unbranded",
+        "category": "Shoes",
+        "productType": "shoes",
+        "description": "White Low-Top Casual Sneakers. Supplier lists this product as unbranded.",
+        "story": "Supplier: Guangzhou Maizhituo Trading Co., Ltd.\nProduct source: https://www.alibaba.com/product-detail/Unbranded-Sneakers-Men-s-Casual-Sports_1601943408163.html\nOriginal listing title: Unbranded Sneakers Men's Casual Sports Shoes Fashion White Shoes Factory Wholesale Sneakers Manufacturing\nObserved: 2026-10-20\nQuoted price range: INR 711.14–743.29. Catalogue price uses the lower quoted bound, not a confirmed Quartz Times retail price.\nMinimum order: 50 pairs. Localized supplier quote in INR; price varies with order quantity. Shipping, import charges and taxes not confirmed.\nSupplier lists this product as unbranded. Photos are supplied by the listing and may show custom-logo/packaging examples. Stock, sizing, materials not explicitly listed, authenticity of supplier claims, final selling price and import/fulfilment terms are unconfirmed. Published and marked in stock at the merchant’s request. Catalogue quantity is set to 1; physical stock quantity has not been verified.",
+        "price": 711.14,
+        "currency": "INR",
+        "sku": "QT-SRC-SH-1601943408163",
+        "stock": 1,
+        "availability": "in_stock",
+        "featured": false,
+        "isNewArrival": false,
+        "status": "active",
+        "variants": [],
+        "specifications": {
+          "referenceNumber": "1601943408163"
+        },
+        "tags": [
+          "supplier-reference",
+          "stock-unconfirmed",
+          "unbranded"
+        ],
+        "images": [
+          {
+            "url": "https://res.cloudinary.com/rkwu8gb2/image/upload/v1792517150/quartz-times/products/7536261c-eefc-449e-8ee1-c73fe18fd1d1.jpg",
+            "publicId": "quartz-times/products/7536261c-eefc-449e-8ee1-c73fe18fd1d1",
+            "alt": "White Low-Top Casual Sneakers — supplier photograph",
+            "width": 300,
+            "height": 300,
+            "isPrimary": true
+          }
+        ]
+      },
+      "savedId": "6ad7a41f83800cbf70199842",
+      "publication": {
+        "requestedBy": "merchant",
+        "at": "2026-10-20T17:34:48.620Z",
+        "previous": {
+          "status": "draft",
+          "availability": "sold_out",
+          "stock": 0
+        },
+        "stockQuantityBasis": "Minimum catalogue quantity of 1 to represent requested in-stock status; physical quantity unverified."
+      }
+    },
+    {
+      "source": {
+        "name": "2026 Autumn New Fashion Solid Lace-up Leisure Sneakers Youth Student White Mens Korean-Style Casual Trendy Shoes",
+        "source": "https://www.alibaba.com/product-detail/2026-Autumn-New-Fashion-Solid-Lace_1601966334387.html",
+        "supplier": "Shishi Futai Jinchen Trade Import and Export Co., Ltd.",
+        "price": 1363.83,
+        "maxPrice": 1461.24,
+        "currency": "INR",
+        "imageUrl": "https://s.alicdn.com/@sc04/kf/Hedf58da8f4114562b711d5076ead42aa7.jpg_300x300.jpg",
+        "productType": "shoes",
+        "moq": "1 piece",
+        "pricingNote": "Localized supplier INR quote; order quantity changes the price. Shipping, import charges and taxes not confirmed.",
+        "assetId": "23"
+      },
+      "product": {
+        "name": "White Lace-Up Leisure Sneakers",
+        "slug": "unbranded-white-lace-up-leisure-sneakers-34387",
+        "brand": "Unbranded",
+        "category": "Shoes",
+        "productType": "shoes",
+        "description": "White Lace-Up Leisure Sneakers. Plain or custom-logo supplier reference; confirm the no-logo production option with the supplier.",
+        "story": "Supplier: Shishi Futai Jinchen Trade Import and Export Co., Ltd.\nProduct source: https://www.alibaba.com/product-detail/2026-Autumn-New-Fashion-Solid-Lace_1601966334387.html\nOriginal listing title: 2026 Autumn New Fashion Solid Lace-up Leisure Sneakers Youth Student White Mens Korean-Style Casual Trendy Shoes\nObserved: 2026-10-20\nQuoted price range: INR 1363.83–1461.24. Catalogue price uses the lower quoted bound, not a confirmed Quartz Times retail price.\nMinimum order: 1 piece. Localized supplier INR quote; order quantity changes the price. Shipping, import charges and taxes not confirmed.\nPlain or custom-logo supplier reference; confirm the no-logo production option with the supplier. Photos are supplied by the listing and may show custom-logo/packaging examples. Stock, sizing, materials not explicitly listed, authenticity of supplier claims, final selling price and import/fulfilment terms are unconfirmed. Published and marked in stock at the merchant’s request. Catalogue quantity is set to 1; physical stock quantity has not been verified.",
+        "price": 1363.83,
+        "currency": "INR",
+        "sku": "QT-SRC-SH-1601966334387",
+        "stock": 1,
+        "availability": "in_stock",
+        "featured": false,
+        "isNewArrival": false,
+        "status": "active",
+        "variants": [],
+        "specifications": {
+          "closure": "Lace-up",
+          "referenceNumber": "1601966334387"
+        },
+        "tags": [
+          "supplier-reference",
+          "stock-unconfirmed",
+          "unbranded"
+        ],
+        "images": [
+          {
+            "url": "https://res.cloudinary.com/rkwu8gb2/image/upload/v1792517152/quartz-times/products/c6cc8f15-087f-4b7c-a439-86d43eb60692.jpg",
+            "publicId": "quartz-times/products/c6cc8f15-087f-4b7c-a439-86d43eb60692",
+            "alt": "White Lace-Up Leisure Sneakers — supplier photograph",
+            "width": 300,
+            "height": 300,
+            "isPrimary": true
+          }
+        ]
+      },
+      "savedId": "6ad7a42183800cbf70199844",
+      "publication": {
+        "requestedBy": "merchant",
+        "at": "2026-10-20T17:34:48.620Z",
+        "previous": {
+          "status": "draft",
+          "availability": "sold_out",
+          "stock": 0
+        },
+        "stockQuantityBasis": "Minimum catalogue quantity of 1 to represent requested in-stock status; physical quantity unverified."
+      }
+    },
+    {
+      "source": {
+        "name": "Women's 2026 Spring Autumn White Platform Sneakers , Cute Chunky Round Toe Lace-Up Wavy Sole Casual Fashion Shoes",
+        "source": "https://www.alibaba.com/product-detail/Women-s-2026-Spring-Autumn-White_1601964309526.html",
+        "supplier": "Shishi Fuxitongyang Import & Export Trading Co., Ltd.",
+        "price": 2678.94,
+        "maxPrice": 2727.65,
+        "currency": "INR",
+        "imageUrl": "https://s.alicdn.com/@sc04/kf/He646656ea3f44723ba156b0d94a18d29C.jpg_300x300.jpg",
+        "productType": "shoes",
+        "moq": "1 piece",
+        "pricingNote": "Localized supplier INR quote; order quantity changes the price. Shipping, import charges and taxes not confirmed.",
+        "assetId": "30"
+      },
+      "product": {
+        "name": "Women’s White Wavy-Sole Platform Sneakers",
+        "slug": "unbranded-women-s-white-wavy-sole-platform-sneakers-09526",
+        "brand": "Unbranded",
+        "category": "Shoes",
+        "productType": "shoes",
+        "description": "Women’s White Wavy-Sole Platform Sneakers. Plain or custom-logo supplier reference; confirm the no-logo production option with the supplier.",
+        "story": "Supplier: Shishi Fuxitongyang Import & Export Trading Co., Ltd.\nProduct source: https://www.alibaba.com/product-detail/Women-s-2026-Spring-Autumn-White_1601964309526.html\nOriginal listing title: Women's 2026 Spring Autumn White Platform Sneakers , Cute Chunky Round Toe Lace-Up Wavy Sole Casual Fashion Shoes\nObserved: 2026-10-20\nQuoted price range: INR 2678.94–2727.65. Catalogue price uses the lower quoted bound, not a confirmed Quartz Times retail price.\nMinimum order: 1 piece. Localized supplier INR quote; order quantity changes the price. Shipping, import charges and taxes not confirmed.\nPlain or custom-logo supplier reference; confirm the no-logo production option with the supplier. Photos are supplied by the listing and may show custom-logo/packaging examples. Stock, sizing, materials not explicitly listed, authenticity of supplier claims, final selling price and import/fulfilment terms are unconfirmed. Published and marked in stock at the merchant’s request. Catalogue quantity is set to 1; physical stock quantity has not been verified.",
+        "price": 2678.94,
+        "currency": "INR",
+        "sku": "QT-SRC-SH-1601964309526",
+        "stock": 1,
+        "availability": "in_stock",
+        "featured": false,
+        "isNewArrival": false,
+        "status": "active",
+        "variants": [],
+        "specifications": {
+          "closure": "Lace-up",
+          "referenceNumber": "1601964309526"
+        },
+        "tags": [
+          "supplier-reference",
+          "stock-unconfirmed",
+          "unbranded"
+        ],
+        "images": [
+          {
+            "url": "https://res.cloudinary.com/rkwu8gb2/image/upload/v1792517154/quartz-times/products/e49ee37e-ac54-4096-846e-0197847d8b69.jpg",
+            "publicId": "quartz-times/products/e49ee37e-ac54-4096-846e-0197847d8b69",
+            "alt": "Women’s White Wavy-Sole Platform Sneakers — supplier photograph",
+            "width": 300,
+            "height": 300,
+            "isPrimary": true
+          }
+        ]
+      },
+      "savedId": "6ad7a42383800cbf70199846",
+      "publication": {
+        "requestedBy": "merchant",
+        "at": "2026-10-20T17:34:48.620Z",
+        "previous": {
+          "status": "draft",
+          "availability": "sold_out",
+          "stock": 0
+        },
+        "stockQuantityBasis": "Minimum catalogue quantity of 1 to represent requested in-stock status; physical quantity unverified."
+      }
+    },
+    {
+      "source": {
+        "name": "China Wholesale Factory Customized Men's Logo Unbranded Sports Running Shoes Sneakers Original Brand High Quality",
+        "source": "https://www.alibaba.com/product-detail/China-Wholesale-Factory-Customized-Men-s_1600687847035.html",
+        "supplier": "Baoding Smart Trading Co., Ltd.",
+        "price": 326.35,
+        "maxPrice": 384.8,
+        "currency": "INR",
+        "imageUrl": "https://s.alicdn.com/@sc04/kf/H907359b6e4cc4193a7d170b212d150a3q.jpg_300x300.jpg",
+        "productType": "shoes",
+        "moq": "2 pairs",
+        "pricingNote": "Localized supplier quote in INR; price varies with order quantity. Shipping, import charges and taxes not confirmed.",
+        "assetId": "33"
+      },
+      "product": {
+        "name": "Black Knit Slip-On Sports Sneakers",
+        "slug": "unbranded-black-knit-slip-on-sports-sneakers-47035",
+        "brand": "Unbranded",
+        "category": "Shoes",
+        "productType": "shoes",
+        "description": "Black Knit Slip-On Sports Sneakers. Supplier lists this product as unbranded.",
+        "story": "Supplier: Baoding Smart Trading Co., Ltd.\nProduct source: https://www.alibaba.com/product-detail/China-Wholesale-Factory-Customized-Men-s_1600687847035.html\nOriginal listing title: China Wholesale Factory Customized Men's Logo Unbranded Sports Running Shoes Sneakers Original Brand High Quality\nObserved: 2026-10-20\nQuoted price range: INR 326.35–384.80. Catalogue price uses the lower quoted bound, not a confirmed Quartz Times retail price.\nMinimum order: 2 pairs. Localized supplier quote in INR; price varies with order quantity. Shipping, import charges and taxes not confirmed.\nSupplier lists this product as unbranded. Photos are supplied by the listing and may show custom-logo/packaging examples. Stock, sizing, materials not explicitly listed, authenticity of supplier claims, final selling price and import/fulfilment terms are unconfirmed. Published and marked in stock at the merchant’s request. Catalogue quantity is set to 1; physical stock quantity has not been verified.",
+        "price": 326.35,
+        "currency": "INR",
+        "sku": "QT-SRC-SH-1600687847035",
+        "stock": 1,
+        "availability": "in_stock",
+        "featured": false,
+        "isNewArrival": false,
+        "status": "active",
+        "variants": [],
+        "specifications": {
+          "referenceNumber": "1600687847035"
+        },
+        "tags": [
+          "supplier-reference",
+          "stock-unconfirmed",
+          "unbranded"
+        ],
+        "images": [
+          {
+            "url": "https://res.cloudinary.com/rkwu8gb2/image/upload/v1792517155/quartz-times/products/b3feec16-40b6-4e3a-9458-0147d24f2506.jpg",
+            "publicId": "quartz-times/products/b3feec16-40b6-4e3a-9458-0147d24f2506",
+            "alt": "Black Knit Slip-On Sports Sneakers — supplier photograph",
+            "width": 300,
+            "height": 300,
+            "isPrimary": true
+          }
+        ]
+      },
+      "savedId": "6ad7a42483800cbf70199848",
+      "publication": {
+        "requestedBy": "merchant",
+        "at": "2026-10-20T17:34:48.620Z",
+        "previous": {
+          "status": "draft",
+          "availability": "sold_out",
+          "stock": 0
+        },
+        "stockQuantityBasis": "Minimum catalogue quantity of 1 to represent requested in-stock status; physical quantity unverified."
+      }
+    },
+    {
+      "source": {
+        "name": "Unbranded Sneakers Low Cut Martin Board Shoes Fashion Casual Sneakers Factory Direct Shoes Sneakers for Men",
+        "source": "https://www.alibaba.com/product-detail/Unbranded-Sneakers-Low-Cut-Martin-Board_1601943302952.html",
+        "supplier": "Guangzhou Maizhituo Trading Co., Ltd.",
+        "price": 681.92,
+        "maxPrice": 716.99,
+        "currency": "INR",
+        "imageUrl": "https://s.alicdn.com/@sc04/kf/H95c0436a990c433a998e832ac0542bedV.jpg_300x300.jpg",
+        "productType": "shoes",
+        "moq": "50 pairs",
+        "pricingNote": "Localized supplier quote in INR; price varies with order quantity. Shipping, import charges and taxes not confirmed.",
+        "assetId": "34"
+      },
+      "product": {
+        "name": "Low-Cut Casual Board Sneakers",
+        "slug": "unbranded-low-cut-casual-board-sneakers-02952",
+        "brand": "Unbranded",
+        "category": "Shoes",
+        "productType": "shoes",
+        "description": "Low-Cut Casual Board Sneakers. Supplier lists this product as unbranded.",
+        "story": "Supplier: Guangzhou Maizhituo Trading Co., Ltd.\nProduct source: https://www.alibaba.com/product-detail/Unbranded-Sneakers-Low-Cut-Martin-Board_1601943302952.html\nOriginal listing title: Unbranded Sneakers Low Cut Martin Board Shoes Fashion Casual Sneakers Factory Direct Shoes Sneakers for Men\nObserved: 2026-10-20\nQuoted price range: INR 681.92–716.99. Catalogue price uses the lower quoted bound, not a confirmed Quartz Times retail price.\nMinimum order: 50 pairs. Localized supplier quote in INR; price varies with order quantity. Shipping, import charges and taxes not confirmed.\nSupplier lists this product as unbranded. Photos are supplied by the listing and may show custom-logo/packaging examples. Stock, sizing, materials not explicitly listed, authenticity of supplier claims, final selling price and import/fulfilment terms are unconfirmed. Published and marked in stock at the merchant’s request. Catalogue quantity is set to 1; physical stock quantity has not been verified.",
+        "price": 681.92,
+        "currency": "INR",
+        "sku": "QT-SRC-SH-1601943302952",
+        "stock": 1,
+        "availability": "in_stock",
+        "featured": false,
+        "isNewArrival": false,
+        "status": "active",
+        "variants": [],
+        "specifications": {
+          "referenceNumber": "1601943302952"
+        },
+        "tags": [
+          "supplier-reference",
+          "stock-unconfirmed",
+          "unbranded"
+        ],
+        "images": [
+          {
+            "url": "https://res.cloudinary.com/rkwu8gb2/image/upload/v1792517157/quartz-times/products/a550b59f-6e1f-47b8-b7f5-2bbe9008bb25.jpg",
+            "publicId": "quartz-times/products/a550b59f-6e1f-47b8-b7f5-2bbe9008bb25",
+            "alt": "Low-Cut Casual Board Sneakers — supplier photograph",
+            "width": 300,
+            "height": 300,
+            "isPrimary": true
+          }
+        ]
+      },
+      "savedId": "6ad7a42683800cbf7019984a",
+      "publication": {
+        "requestedBy": "merchant",
+        "at": "2026-10-20T17:34:48.620Z",
+        "previous": {
+          "status": "draft",
+          "availability": "sold_out",
+          "stock": 0
+        },
+        "stockQuantityBasis": "Minimum catalogue quantity of 1 to represent requested in-stock status; physical quantity unverified."
+      }
+    },
+    {
+      "source": {
+        "name": "Minimalist Engineered Knit Sneakers Unbranded Athletic Performance Breathable Ash Grey Mesh Daily Running Gym Training",
+        "source": "https://www.alibaba.com/product-detail/Minimalist-Engineered-Knit-Sneakers-Unbranded-Athletic_1601731941010.html",
+        "supplier": "Dongguan Youana Footwear Co., Ltd.",
+        "price": 2825.07,
+        "maxPrice": 3117.32,
+        "currency": "INR",
+        "imageUrl": "https://s.alicdn.com/@sc04/kf/H7b5331c1f719426f8bf30b3cad728f84x.jpg_300x300.jpg",
+        "productType": "shoes",
+        "moq": "300 pieces",
+        "pricingNote": "Localized supplier quote in INR; price varies with order quantity. Shipping, import charges and taxes not confirmed.",
+        "assetId": "36"
+      },
+      "product": {
+        "name": "Ash Grey Engineered Knit Sneakers",
+        "slug": "unbranded-ash-grey-engineered-knit-sneakers-41010",
+        "brand": "Unbranded",
+        "category": "Shoes",
+        "productType": "shoes",
+        "description": "Ash Grey Engineered Knit Sneakers. Supplier lists this product as unbranded.",
+        "story": "Supplier: Dongguan Youana Footwear Co., Ltd.\nProduct source: https://www.alibaba.com/product-detail/Minimalist-Engineered-Knit-Sneakers-Unbranded-Athletic_1601731941010.html\nOriginal listing title: Minimalist Engineered Knit Sneakers Unbranded Athletic Performance Breathable Ash Grey Mesh Daily Running Gym Training\nObserved: 2026-10-20\nQuoted price range: INR 2825.07–3117.32. Catalogue price uses the lower quoted bound, not a confirmed Quartz Times retail price.\nMinimum order: 300 pieces. Localized supplier quote in INR; price varies with order quantity. Shipping, import charges and taxes not confirmed.\nSupplier lists this product as unbranded. Photos are supplied by the listing and may show custom-logo/packaging examples. Stock, sizing, materials not explicitly listed, authenticity of supplier claims, final selling price and import/fulfilment terms are unconfirmed. Published and marked in stock at the merchant’s request. Existing positive stock quantities are preserved.",
+        "price": 2825.07,
+        "currency": "INR",
+        "sku": "QT-SRC-SH-1601731941010",
+        "stock": 3,
+        "availability": "in_stock",
+        "featured": false,
+        "isNewArrival": false,
+        "status": "active",
+        "variants": [
+          {
+            "sku": "1",
+            "size": "8",
+            "color": "White",
+            "stock": 3
+          }
+        ],
+        "specifications": {
+          "referenceNumber": "1601731941010"
+        },
+        "tags": [
+          "supplier-reference",
+          "stock-unconfirmed",
+          "unbranded"
+        ],
+        "images": [
+          {
+            "url": "https://res.cloudinary.com/rkwu8gb2/image/upload/v1792517159/quartz-times/products/17a45391-cf90-4c7c-9b9c-7e9293e04510.jpg",
+            "publicId": "quartz-times/products/17a45391-cf90-4c7c-9b9c-7e9293e04510",
+            "alt": "Ash Grey Engineered Knit Sneakers — supplier photograph",
+            "width": 300,
+            "height": 300,
+            "isPrimary": true
+          }
+        ]
+      },
+      "savedId": "6ad7a42783800cbf7019984c",
+      "publication": {
+        "requestedBy": "merchant",
+        "at": "2026-10-20T17:34:48.620Z",
+        "previous": {
+          "status": "active",
+          "availability": "in_stock",
+          "stock": 3
+        },
+        "stockQuantityBasis": "Existing positive stock quantities preserved."
+      }
+    }
+  ],
+  "verifiedAt": "2026-10-20T17:35:07.482Z",
+  "verification": {
+    "persistedDrafts": 0,
+    "tshirts": 10,
+    "shoes": 10,
+    "cloudinaryImagesDelivered": 20,
+    "publicDraftsExposed": 0,
+    "stock": "Positive quantities preserved; zero quantities set to 1 on merchant request, physical quantity unverified",
+    "publishedProducts": 20,
+    "inStockProducts": 20,
+    "activeImportedCategories": 2
+  }
+}

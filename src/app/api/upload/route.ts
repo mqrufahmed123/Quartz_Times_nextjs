@@ -67,7 +67,7 @@ export async function POST(req: NextRequest) {
       process.env.CLOUDINARY_API_SECRET
     ) {
       const uploadRes = await uploadToCloudinary(buffer, {
-        folder: 'quartz-times/watches',
+        folder: 'quartz-times/products',
         resourceType: isVideo ? 'video' : 'image',
         filename: randomUUID(),
         outputFormat: isHeic ? 'jpg' : undefined,

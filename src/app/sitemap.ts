@@ -12,6 +12,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
 
   const staticRoutes = [
     '',
+    '/products',
     '/watches',
     '/about',
     '/contact',
@@ -23,7 +24,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   }));
 
   const productRoutes = productsData.items.map((prod) => ({
-    url: `${baseUrl}/watches/${prod.slug}`,
+    url: `${baseUrl}/products/${prod.slug}`,
     lastModified: prod.updatedAt ? new Date(prod.updatedAt) : new Date(),
     changeFrequency: 'weekly' as const,
     priority: 0.9,

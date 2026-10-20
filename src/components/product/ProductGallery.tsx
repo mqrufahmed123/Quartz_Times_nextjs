@@ -1,211 +1,158 @@
-'use client';
-
-import React, { useState } from 'react';
-import Image from 'next/image';
-import { Maximize2, X, ChevronLeft, ChevronRight, Film } from 'lucide-react';
-import { IProductMedia, IProductVideo } from '@/types';
-
+"use client";
+import { useState } from "react";
+import Image from "next/image";
+import {
+  Maximize2,
+  ChevronLeft,
+  ChevronRight,
+  Film,
+  ImageOff,
+} from "lucide-react";
+import { IProductMedia, IProductVideo } from "@/types";
+import { Modal } from "@/components/common/Modal";
 export interface ProductGalleryProps {
   images: IProductMedia[];
   video?: IProductVideo;
   productName: string;
 }
-
-export const ProductGallery: React.FC<ProductGalleryProps> = ({
+export const ProductGallery = ({
   images,
   video,
   productName,
-}) => {
-  const [selectedIndex, setSelectedIndex] = useState(0);
-  const [isVideoActive, setIsVideoActive] = useState(false);
-  const [isLightboxOpen, setIsLightboxOpen] = useState(false);
-
-  const displayImages = images && images.length > 0
-    ? images
-    : [
-        {
-          url: 'https://images.unsplash.com/photo-1547996160-71dfabbce5fa?q=80&w=1200&auto=format&fit=crop',
-          alt: productName,
-          isPrimary: true,
-        },
-      ];
-
-  const currentMedia = displayImages[selectedIndex] || displayImages[0];
-
-  const handleNext = () => {
-    setIsVideoActive(false);
-    setSelectedIndex((prev) => (prev + 1) % displayImages.length);
+}: ProductGalleryProps) => {
+  const [index, setIndex] = useState(0);
+  const [videoActive, setVideoActive] = useState(false);
+  const [lightbox, setLightbox] = useState(false);
+  const photos = images || [];
+  const current = photos[index] || photos[0];
+  const move = (delta: number) => {
+    if (!photos.length) return;
+    setVideoActive(false);
+    setIndex((value) => (value + delta + photos.length) % photos.length);
   };
-
-  const handlePrev = () => {
-    setIsVideoActive(false);
-    setSelectedIndex((prev) => (prev - 1 + displayImages.length) % displayImages.length);
-  };
-
+  const arrows = (
+    <>
+      <button
+        onClick={() => move(-1)}
+        className="icon-button absolute left-3 top-1/2 -translate-y-1/2 bg-white/90 text-black"
+        aria-label="Previous photo"
+      >
+        <ChevronLeft size={20} />
+      </button>
+      <button
+        onClick={() => move(1)}
+        className="icon-button absolute right-3 top-1/2 -translate-y-1/2 bg-white/90 text-black"
+        aria-label="Next photo"
+      >
+        <ChevronRight size={20} />
+      </button>
+    </>
+  );
   return (
-    <div className="space-y-4">
-      {/* Primary Stage */}
-      <div className="relative aspect-[4/5] sm:aspect-[1/1] w-full rounded-xl overflow-hidden bg-slate-100 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 shadow-sm group">
-        {isVideoActive && video?.url ? (
-          <div className="w-full h-full flex items-center justify-center bg-black">
-            <video
-              src={video.url}
-              controls
-              autoPlay
-              playsInline
-              className="w-full h-full object-contain"
-            />
-          </div>
-        ) : (
-          <div
-            className="w-full h-full relative cursor-zoom-in"
-            onClick={() => setIsLightboxOpen(true)}
+    <div>
+      <div className="qt-gallery-stage">
+        {videoActive && video?.url ? (
+          <video
+            src={video.url}
+            controls
+            autoPlay
+            playsInline
+            className="w-full h-full object-contain bg-black"
+          />
+        ) : current ? (
+          <button
+            type="button"
+            className="relative cursor-zoom-in"
+            onClick={() => setLightbox(true)}
+            aria-label={`Enlarge ${productName} photo ${index + 1}`}
           >
             <Image
-              src={currentMedia.url}
-              alt={currentMedia.alt || `${productName} view ${selectedIndex + 1}`}
+              src={current.url}
+              alt={current.alt || `${productName}, view ${index + 1}`}
               fill
               priority
-              sizes="(max-width: 1024px) 100vw, 50vw"
-              className="object-cover object-center transition-transform duration-500 group-hover:scale-105"
+              sizes="(max-width: 639px) 100vw, 55vw"
+              className="object-cover"
             />
-            <div className="absolute inset-0 bg-gradient-to-t from-slate-950/40 via-transparent to-transparent opacity-40" />
+          </button>
+        ) : (
+          <div className="absolute inset-0 flex flex-col items-center justify-center gap-4 qt-muted">
+            <ImageOff size={36} strokeWidth={1} />
+            <p className="text-sm">Photos coming soon</p>
           </div>
         )}
-
-        {/* Fullscreen Button */}
-        <div className="absolute top-4 right-4 flex items-center gap-2 z-10">
-          {!isVideoActive && (
-            <button
-              onClick={() => setIsLightboxOpen(true)}
-              className="p-2.5 rounded-full bg-white/80 dark:bg-slate-900/80 text-slate-700 dark:text-slate-200 hover:text-amber-500 border border-slate-200 dark:border-slate-700 backdrop-blur-sm transition-all shadow-md"
-              aria-label="Expand image"
-            >
-              <Maximize2 className="w-4 h-4" />
-            </button>
-          )}
-        </div>
-
-        {/* Gallery Navigation Arrows */}
-        {displayImages.length > 1 && !isVideoActive && (
-          <>
-            <button
-              onClick={(e) => {
-                e.stopPropagation();
-                handlePrev();
-              }}
-              className="absolute left-3 top-1/2 -translate-y-1/2 p-2.5 rounded-full bg-white/80 dark:bg-slate-900/80 text-slate-700 dark:text-slate-200 hover:text-amber-500 border border-slate-200 dark:border-slate-700 backdrop-blur-sm transition-all opacity-0 group-hover:opacity-100 shadow-md"
-              aria-label="Previous photo"
-            >
-              <ChevronLeft className="w-4 h-4" />
-            </button>
-
-            <button
-              onClick={(e) => {
-                e.stopPropagation();
-                handleNext();
-              }}
-              className="absolute right-3 top-1/2 -translate-y-1/2 p-2.5 rounded-full bg-white/80 dark:bg-slate-900/80 text-slate-700 dark:text-slate-200 hover:text-amber-500 border border-slate-200 dark:border-slate-700 backdrop-blur-sm transition-all opacity-0 group-hover:opacity-100 shadow-md"
-              aria-label="Next photo"
-            >
-              <ChevronRight className="w-4 h-4" />
-            </button>
-          </>
+        {current && !videoActive && (
+          <button
+            onClick={() => setLightbox(true)}
+            className="icon-button absolute top-4 right-4 bg-white/90 text-black"
+            aria-label="Expand image"
+          >
+            <Maximize2 size={17} />
+          </button>
         )}
-
-        {/* Photo Counter Pill */}
-        <div className="absolute bottom-3 left-3 bg-white/80 dark:bg-slate-950/80 backdrop-blur-md px-3 py-1 rounded-full border border-slate-200 dark:border-slate-800 text-[10px] uppercase tracking-wider text-slate-700 dark:text-slate-300 font-bold z-10">
-          {isVideoActive
-            ? 'Product Video'
-            : `Photo ${selectedIndex + 1} of ${displayImages.length}`}
-        </div>
+        {photos.length > 1 && !videoActive && arrows}
+        <span
+          aria-live="polite"
+          className="absolute bottom-4 left-4 bg-white/90 text-black px-3 py-1.5 text-xs rounded-full"
+        >
+          {videoActive
+            ? "Product video"
+            : photos.length
+              ? `${index + 1} / ${photos.length}`
+              : "No photos yet"}
+        </span>
       </div>
-
-      {/* Thumbnails Row */}
-      {(displayImages.length > 1 || video?.url) && (
-        <div className="flex items-center gap-3 overflow-x-auto pb-2 scrollbar-thin">
-          {displayImages.map((img, idx) => {
-            const isSelected = !isVideoActive && selectedIndex === idx;
-            return (
-              <button
-                key={img.url + idx}
-                onClick={() => {
-                  setIsVideoActive(false);
-                  setSelectedIndex(idx);
-                }}
-                className={`relative w-20 h-20 sm:w-24 sm:h-24 rounded-lg overflow-hidden shrink-0 border-2 transition-all bg-slate-100 dark:bg-slate-950 ${
-                  isSelected
-                    ? 'border-amber-500 scale-[1.02]'
-                    : 'border-slate-200 dark:border-slate-800 opacity-70 hover:opacity-100'
-                }`}
-              >
-                <Image
-                  src={img.url}
-                  alt={img.alt || `Thumbnail ${idx + 1}`}
-                  fill
-                  sizes="100px"
-                  className="object-cover"
-                />
-              </button>
-            );
-          })}
-
+      {(photos.length > 1 || video?.url) && (
+        <div className="qt-gallery-thumbs" aria-label="Product media">
+          {photos.map((photo, i) => (
+            <button
+              key={photo.url + i}
+              onClick={() => {
+                setVideoActive(false);
+                setIndex(i);
+              }}
+              aria-pressed={!videoActive && index === i}
+              aria-label={`View photo ${i + 1}`}
+            >
+              <Image
+                src={photo.url}
+                alt={photo.alt || `Product thumbnail ${i + 1}`}
+                fill
+                sizes="80px"
+                className="object-cover"
+              />
+            </button>
+          ))}
           {video?.url && (
             <button
-              onClick={() => setIsVideoActive(true)}
-              className={`relative w-20 h-20 sm:w-24 sm:h-24 rounded-lg overflow-hidden shrink-0 border-2 transition-all bg-slate-100 dark:bg-slate-900 flex flex-col items-center justify-center text-slate-700 dark:text-slate-300 ${
-                isVideoActive
-                  ? 'border-amber-500 scale-[1.02] text-amber-500'
-                  : 'border-slate-200 dark:border-slate-800 opacity-70 hover:opacity-100'
-              }`}
+              onClick={() => setVideoActive(true)}
+              aria-pressed={videoActive}
+              aria-label="Play product video"
+              className="flex flex-col items-center justify-center gap-2"
             >
-              <Film className="w-6 h-6 mb-1 text-amber-500" />
-              <span className="text-[9px] uppercase tracking-wider font-bold">
-                Video
-              </span>
+              <Film size={20} />
+              <span className="text-xs">Video</span>
             </button>
           )}
         </div>
       )}
-
-      {/* Fullscreen Lightbox */}
-      {isLightboxOpen && (
-        <div className="fixed inset-0 z-50 bg-black/95 backdrop-blur-md flex items-center justify-center p-4">
-          <button
-            onClick={() => setIsLightboxOpen(false)}
-            className="absolute top-6 right-6 p-3 rounded-full bg-slate-900 text-slate-300 hover:text-white border border-slate-700 z-50"
-            aria-label="Close"
-          >
-            <X className="w-6 h-6" />
-          </button>
-
-          <div className="relative max-w-5xl max-h-[85vh] w-full h-[80vh] flex items-center justify-center">
+      {lightbox && current && (
+        <Modal
+          title={`${productName} · ${index + 1} / ${photos.length}`}
+          onClose={() => setLightbox(false)}
+          className="qt-lightbox"
+        >
+          <div className="qt-lightbox-photo">
             <Image
-              src={currentMedia.url}
-              alt={currentMedia.alt || productName}
+              src={current.url}
+              alt={current.alt || productName}
               fill
-              className="object-contain"
               sizes="100vw"
+              className="object-contain"
             />
+            {photos.length > 1 && arrows}
           </div>
-
-          {displayImages.length > 1 && (
-            <>
-              <button
-                onClick={handlePrev}
-                className="absolute left-6 top-1/2 -translate-y-1/2 p-3 rounded-full bg-slate-900/80 text-slate-200 hover:text-amber-400 border border-slate-700"
-              >
-                <ChevronLeft className="w-6 h-6" />
-              </button>
-              <button
-                onClick={handleNext}
-                className="absolute right-6 top-1/2 -translate-y-1/2 p-3 rounded-full bg-slate-900/80 text-slate-200 hover:text-amber-400 border border-slate-700"
-              >
-                <ChevronRight className="w-6 h-6" />
-              </button>
-            </>
-          )}
-        </div>
+        </Modal>
       )}
     </div>
   );

@@ -1,120 +1,127 @@
-'use client';
+"use client";
 
-import React, { useState } from 'react';
-import { useRouter } from 'next/navigation';
-import Link from 'next/link';
-import { Lock, Mail, Shield, ArrowRight, Loader2, AlertCircle } from 'lucide-react';
+import React, { useState } from "react";
+import { useRouter } from "next/navigation";
+import Link from "next/link";
+import { ArrowRight, Loader2, AlertCircle } from "lucide-react";
 
 export default function AdminLoginPage() {
   const router = useRouter();
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
-  const [error, setError] = useState('');
+  const [error, setError] = useState("");
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setLoading(true);
-    setError('');
+    setError("");
 
     try {
-      const res = await fetch('/api/auth/login', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+      const res = await fetch("/api/auth/login", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ email, password }),
       });
 
       const data = await res.json();
       if (!res.ok) {
-        throw new Error(data.error || 'Authentication failed');
+        throw new Error(data.error || "Authentication failed");
       }
 
-      router.push('/admin');
+      router.push("/admin");
       router.refresh();
     } catch (err: any) {
-      setError(err.message || 'Invalid email or password.');
+      setError(err.message || "Invalid email or password.");
     } finally {
       setLoading(false);
     }
   };
 
   return (
-    <div className="min-h-screen bg-slate-50 dark:bg-slate-950 flex flex-col items-center justify-center p-4 relative">
-      <div className="w-full max-w-md bg-slate-100 dark:bg-slate-900/80 border border-slate-200 dark:border-slate-800 rounded-2xl p-8 shadow-2xl backdrop-blur-md space-y-6">
-        <div className="text-center space-y-2">
-          <div className="w-12 h-12 rounded-full bg-amber-50 dark:bg-amber-500/15 border border-amber-300 dark:border-amber-500/40 text-amber-600 dark:text-amber-400 flex items-center justify-center mx-auto mb-3">
-            <Shield className="w-6 h-6" />
-          </div>
-          <h1 className="font-serif text-2xl font-bold tracking-wider text-slate-900 dark:text-slate-100">
-            QUARTZ TIMES
-          </h1>
-          <p className="text-xs uppercase tracking-widest text-amber-600 dark:text-amber-400/80">
-            Admin Login
+    <div className="qt-admin min-h-screen grid lg:grid-cols-2">
+      <div className="hidden lg:flex flex-col justify-between bg-neutral-950 text-white p-16">
+        <Link href="/" className="qt-wordmark">
+          QUARTZ<span className="qt-wordmark-dot">.</span>
+          <span className="qt-wordmark-second">TIMES</span>
+        </Link>
+        <div>
+          <p className="text-xs uppercase tracking-widest text-neutral-400">
+            Behind the collection
           </p>
+          <h2 className="text-6xl font-semibold tracking-tighter leading-tight mt-6">
+            Good finds.
+            <br />
+            Thoughtfully managed.
+          </h2>
         </div>
-
-        {error && (
-          <div className="p-3.5 rounded-lg bg-rose-50 dark:bg-rose-950/60 border border-rose-200 dark:border-rose-800 text-rose-700 dark:text-rose-300 text-xs flex items-center gap-2" role="alert">
-            <AlertCircle className="w-4 h-4 shrink-0" />
-            <span>{error}</span>
-          </div>
-        )}
-
-        <form onSubmit={handleSubmit} className="space-y-4">
-          <div className="space-y-1.5">
-            <label className="text-xs uppercase tracking-widest text-slate-500 dark:text-slate-400 font-medium block">
-              Email
-            </label>
-            <div className="relative">
-              <Mail className="w-4 h-4 text-slate-400 dark:text-slate-500 absolute left-3.5 top-3" />
+        <p className="text-sm text-neutral-500">
+          Quartz Times · Store management
+        </p>
+      </div>
+      <div className="flex items-center justify-center px-6 py-16">
+        <div className="w-full max-w-sm">
+          <Link href="/" className="qt-wordmark mb-12 lg:hidden">
+            QUARTZ<span className="qt-wordmark-dot">.</span>
+            <span className="qt-wordmark-second">TIMES</span>
+          </Link>
+          <p className="qt-eyebrow qt-muted">Store management</p>
+          <h1 className="text-4xl font-semibold tracking-tighter mt-4 mb-3">
+            Welcome back.
+          </h1>
+          <p className="qt-muted text-sm mb-10">
+            Sign in to manage your collection and inquiries.
+          </p>
+          {error && (
+            <div role="alert" className="text-sm text-rose-600 mb-6 flex gap-2">
+              <AlertCircle size={18} />
+              {error}
+            </div>
+          )}
+          <form onSubmit={handleSubmit} className="space-y-6">
+            <div>
+              <label htmlFor="admin-email" className="block text-sm mb-2">
+                Email address
+              </label>
               <input
+                id="admin-email"
                 type="email"
                 required
+                autoComplete="username"
                 value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                placeholder="admin@example.com"
-                className="w-full bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 rounded-lg pl-10 pr-4 py-2.5 text-xs text-slate-900 dark:text-slate-100 placeholder-slate-400 dark:placeholder-slate-600 focus:border-amber-500 focus:outline-none"
+                onChange={(event) => setEmail(event.target.value)}
+                className="w-full rounded border border-[var(--qt-line)] bg-[var(--qt-bg)] px-4 py-3"
               />
             </div>
-          </div>
-
-          <div className="space-y-1.5">
-            <label className="text-xs uppercase tracking-widest text-slate-500 dark:text-slate-400 font-medium block">
-              Password
-            </label>
-            <div className="relative">
-              <Lock className="w-4 h-4 text-slate-400 dark:text-slate-500 absolute left-3.5 top-3" />
+            <div>
+              <label htmlFor="admin-password" className="block text-sm mb-2">
+                Password
+              </label>
               <input
+                id="admin-password"
                 type="password"
                 required
+                autoComplete="current-password"
                 value={password}
-                onChange={(e) => setPassword(e.target.value)}
-                placeholder="••••••••••••"
-                className="w-full bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 rounded-lg pl-10 pr-4 py-2.5 text-xs text-slate-900 dark:text-slate-100 placeholder-slate-400 dark:placeholder-slate-600 focus:border-amber-500 focus:outline-none"
+                onChange={(event) => setPassword(event.target.value)}
+                className="w-full rounded border border-[var(--qt-line)] bg-[var(--qt-bg)] px-4 py-3"
               />
             </div>
-          </div>
-
-          <button
-            type="submit"
-            disabled={loading}
-            className="w-full bg-amber-500 hover:bg-amber-600 text-slate-950 font-bold text-xs uppercase tracking-wider py-3.5 rounded-lg shadow-md transition-all flex items-center justify-center gap-2 disabled:opacity-50 mt-2"
-          >
-            {loading ? (
-              <Loader2 className="w-4 h-4 animate-spin" />
-            ) : (
-              <ArrowRight className="w-4 h-4" />
-            )}
-            <span>{loading ? 'Signing in...' : 'Sign In'}</span>
-          </button>
-        </form>
-
-        <div className="pt-4 border-t border-slate-200 dark:border-slate-800 text-center">
-          <Link
-            href="/"
-            className="text-xs text-slate-500 dark:text-slate-400 hover:text-amber-600 dark:hover:text-amber-400 transition-colors"
-          >
-            ← Return to Store
+            <button
+              type="submit"
+              disabled={loading}
+              className="qt-button w-full"
+            >
+              {loading ? (
+                <Loader2 size={18} className="animate-spin" />
+              ) : (
+                <ArrowRight size={18} />
+              )}{" "}
+              {loading ? "Signing in…" : "Sign in"}
+            </button>
+          </form>
+          <Link href="/products" className="qt-text-link qt-muted mt-8">
+            Back to the collection
           </Link>
         </div>
       </div>

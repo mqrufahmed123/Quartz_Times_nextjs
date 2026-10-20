@@ -45,7 +45,7 @@ export const InquiryList: React.FC<InquiryListProps> = ({ initialInquiries }) =>
     const rawNumber = inquiry.phone.replace(/[^0-9]/g, '');
     const text = `Hello ${inquiry.name},
 
-Thank you for contacting Quartz Times about ${inquiry.product || 'our watches'}.
+Thank you for contacting Quartz Times about ${inquiry.product || 'our products'}.
 I am following up on your message: "${inquiry.message}".
 
 How may I assist you with high-definition media or acquisition details today?`;
@@ -132,7 +132,7 @@ How may I assist you with high-definition media or acquisition details today?`;
                 {/* Inquired Product info */}
                 {inq.product && (
                   <div className="bg-slate-50 dark:bg-slate-950/70 p-2.5 rounded border border-slate-200 dark:border-slate-800/60 text-xs flex items-center justify-between">
-                    <span className="text-slate-500 dark:text-slate-400">Watch:</span>
+                    <span className="text-slate-500 dark:text-slate-400">Product:</span>
                     <span className="font-medium text-amber-600 dark:text-amber-400">{inq.product}</span>
                   </div>
                 )}

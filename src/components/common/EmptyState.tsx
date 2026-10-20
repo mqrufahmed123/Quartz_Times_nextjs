@@ -1,7 +1,5 @@
-import React from 'react';
-import { Watch, RotateCcw } from 'lucide-react';
-import { Button } from './Button';
-
+import Link from "next/link";
+import { Search, RotateCcw } from "lucide-react";
 export interface EmptyStateProps {
   title?: string;
   description?: string;
@@ -9,34 +7,27 @@ export interface EmptyStateProps {
   resetLabel?: string;
   onReset?: () => void;
 }
-
-export const EmptyState: React.FC<EmptyStateProps> = ({
-  title = 'No Watches Found',
-  description = 'We could not find any watches matching your criteria. Try resetting filters or changing search keywords.',
-  resetUrl = '/watches',
-  resetLabel = 'Reset All Filters',
+export const EmptyState = ({
+  title = "No matches just yet.",
+  description = "Try a different search or remove a few filters to explore more products.",
+  resetUrl = "/products",
+  resetLabel = "Reset filters",
   onReset,
-}) => {
-  return (
-    <div className="flex flex-col items-center justify-center text-center p-10 my-8 rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900/40 max-w-lg mx-auto shadow-sm transition-colors">
-      <div className="w-16 h-16 rounded-full bg-slate-100 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 flex items-center justify-center mb-4 text-amber-500">
-        <Watch className="w-8 h-8" />
-      </div>
-      <h3 className="text-xl font-serif font-bold text-slate-900 dark:text-slate-100 tracking-wide mb-2">
-        {title}
-      </h3>
-      <p className="text-sm text-slate-600 dark:text-slate-400 max-w-sm mb-6 leading-relaxed">
-        {description}
-      </p>
-      {onReset ? (
-        <Button variant="outline" size="sm" onClick={onReset} leftIcon={<RotateCcw className="w-3.5 h-3.5" />}>
-          {resetLabel}
-        </Button>
-      ) : (
-        <Button variant="outline" size="sm" href={resetUrl} leftIcon={<RotateCcw className="w-3.5 h-3.5" />}>
-          {resetLabel}
-        </Button>
-      )}
-    </div>
-  );
-};
+}: EmptyStateProps) => (
+  <div className="flex flex-col items-center text-center py-20 px-6">
+    <Search size={36} strokeWidth={1} className="qt-muted mb-6" />
+    <h2 className="text-2xl tracking-tight mb-3">{title}</h2>
+    <p className="qt-muted max-w-sm text-sm leading-7 mb-7">{description}</p>
+    {onReset ? (
+      <button onClick={onReset} className="qt-button qt-button-secondary">
+        <RotateCcw size={16} />
+        {resetLabel}
+      </button>
+    ) : (
+      <Link href={resetUrl} className="qt-button qt-button-secondary">
+        <RotateCcw size={16} />
+        {resetLabel}
+      </Link>
+    )}
+  </div>
+);

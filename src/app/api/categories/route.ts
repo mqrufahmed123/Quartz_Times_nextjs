@@ -31,6 +31,7 @@ export async function POST(req: NextRequest) {
     revalidateTag('catalogue-filters', { expire: 0 });
     revalidatePath('/');
     revalidatePath('/watches');
+    revalidatePath('/products');
     revalidatePath('/admin/categories');
     revalidatePath('/categories/[slug]', 'page');
     return NextResponse.json(created, { status: 201 });

@@ -1,3 +1,4 @@
+import type { ProductType, IProductSpecifications, IProductVariant } from '@/types';
 import mongoose, { Schema, Document, Model } from 'mongoose';
 
 export interface IProductDocument extends Document {
@@ -16,19 +17,9 @@ export interface IProductDocument extends Document {
   featured: boolean;
   isNewArrival?: boolean;
   status: 'active' | 'draft' | 'archived';
-  specifications: {
-    movement?: string;
-    caseMaterial?: string;
-    strapMaterial?: string;
-    dialColor?: string;
-    waterResistance?: string;
-    caseDiameter?: string;
-    crystal?: string;
-    powerReserve?: string;
-    warranty?: string;
-    referenceNumber?: string;
-    condition?: string;
-  };
+  productType: ProductType;
+  variants: IProductVariant[];
+  specifications: IProductSpecifications;
   images: Array<{
     url: string;
     publicId?: string;
@@ -53,6 +44,14 @@ const ProductSchema = new Schema<IProductDocument>(
     slug: { type: String, required: true, unique: true, index: true, trim: true },
     brand: { type: String, required: true, index: true, trim: true },
     category: { type: String, required: true, index: true, trim: true },
+    productType: { type: String, enum: ['watch', 'shoes', 'tshirt'], default: 'watch', index: true },
+    variants: [{
+      _id: false,
+      sku: { type: String, required: true, trim: true, uppercase: true },
+      size: { type: String, required: true, trim: true },
+      color: { type: String, required: true, trim: true },
+      stock: { type: Number, required: true, min: 0, validate: Number.isSafeInteger },
+    }],
     description: { type: String, required: true },
     story: { type: String, default: '' },
     price: { type: Number, required: true, min: 0, index: true },
@@ -75,6 +74,16 @@ const ProductSchema = new Schema<IProductDocument>(
       index: true,
     },
     specifications: {
+      material: { type: String, default: '' },
+      upperMaterial: { type: String, default: '' },
+      soleMaterial: { type: String, default: '' },
+      closure: { type: String, default: '' },
+      fit: { type: String, default: '' },
+      neckline: { type: String, default: '' },
+      sleeveLength: { type: String, default: '' },
+      pattern: { type: String, default: '' },
+      careInstructions: { type: String, default: '' },
+
       movement: { type: String, default: '' },
       caseMaterial: { type: String, default: '' },
       strapMaterial: { type: String, default: '' },
@@ -109,10 +118,21 @@ const ProductSchema = new Schema<IProductDocument>(
   }
 );
 
+ProductSchema.index({ status: 1, productType: 1, price: 1 });
+
 // Compound indexes for optimal catalogue filtering
 ProductSchema.index({ status: 1, category: 1, price: 1 });
 ProductSchema.index({ status: 1, brand: 1, price: 1 });
 ProductSchema.index({ status: 1, featured: 1, createdAt: -1 });
+
+// Next.js hot reload can retain a model compiled before new catalogue fields existed.
+// Recompile that obsolete development model so strict mode does not discard them.
+const cachedProduct = mongoose.models.Product;
+if (process.env.NODE_ENV !== 'production' && cachedProduct &&
+    ['productType', 'variants', 'specifications.material', 'specifications.upperMaterial']
+      .some((path) => !cachedProduct.schema.path(path))) {
+  mongoose.deleteModel('Product');
+}
 
 export const Product: Model<IProductDocument> =
   mongoose.models.Product || mongoose.model<IProductDocument>('Product', ProductSchema);

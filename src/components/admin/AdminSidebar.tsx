@@ -35,7 +35,7 @@ export const AdminSidebar: React.FC = () => {
 
   const links = [
     { label: 'Dashboard', href: '/admin', icon: LayoutDashboard, exact: true },
-    { label: 'All Watches', href: '/admin/products', icon: Watch },
+    { label: 'All Products', href: '/admin/products', icon: Watch },
     { label: 'Add Timepiece', href: '/admin/products/new', icon: PlusCircle },
     { label: 'Categories', href: '/admin/categories', icon: FolderTree },
     { label: 'Client Inquiries', href: '/admin/inquiries', icon: MessageSquare },

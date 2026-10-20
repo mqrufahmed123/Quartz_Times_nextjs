@@ -4,8 +4,9 @@ import React, { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { Save, ArrowLeft, Loader2, AlertCircle, CheckCircle } from 'lucide-react';
 import Link from 'next/link';
-import { IProduct, ICategory } from '@/types';
+import { IProduct, ICategory, ProductType, IProductSpecifications, IProductVariant } from '@/types';
 import { MediaUploader } from './MediaUploader';
+import { PRODUCT_TYPES, SPECIFICATION_FIELDS } from '@/lib/productCatalog';
 import { slugify } from '@/lib/utils';
 
 export interface ProductFormProps {
@@ -49,18 +50,10 @@ export const ProductForm: React.FC<ProductFormProps> = ({
   const [isNewArrival, setIsNewArrival] = useState<boolean>(initialData?.isNewArrival || false);
   const [status, setStatus] = useState<IProduct['status']>(initialData?.status || 'active');
 
-  // Specifications
-  const [movement, setMovement] = useState(initialData?.specifications?.movement ?? (isEdit ? '' : 'Quartz'));
-  const [caseMaterial, setCaseMaterial] = useState(initialData?.specifications?.caseMaterial ?? (isEdit ? '' : '316L Stainless Steel'));
-  const [strapMaterial, setStrapMaterial] = useState(initialData?.specifications?.strapMaterial || '');
-  const [dialColor, setDialColor] = useState(initialData?.specifications?.dialColor || '');
-  const [waterResistance, setWaterResistance] = useState(initialData?.specifications?.waterResistance || '');
-  const [caseDiameter, setCaseDiameter] = useState(initialData?.specifications?.caseDiameter ?? (isEdit ? '' : '40 mm'));
-  const [crystal, setCrystal] = useState(initialData?.specifications?.crystal ?? (isEdit ? '' : 'Scratch-Resistant Sapphire'));
-  const [powerReserve, setPowerReserve] = useState(initialData?.specifications?.powerReserve || '');
-  const [warranty, setWarranty] = useState(initialData?.specifications?.warranty || '');
-  const [referenceNumber, setReferenceNumber] = useState(initialData?.specifications?.referenceNumber || '');
-  const [condition, setCondition] = useState(initialData?.specifications?.condition ?? (isEdit ? '' : 'New'));
+  const [productType, setProductType] = useState<ProductType>(initialData?.productType || 'watch');
+  const [specifications, setSpecifications] = useState<IProductSpecifications>(initialData?.specifications || {});
+  const [variants, setVariants] = useState<IProductVariant[]>(initialData?.variants || []);
+  const totalStock = variants.length ? variants.reduce((total, variant) => total + variant.stock, 0) : Number(stock);
 
   // Media
   const [images, setImages] = useState(initialData?.images || []);
@@ -85,7 +78,7 @@ export const ProductForm: React.FC<ProductFormProps> = ({
     e.preventDefault();
     if (loading || mediaUploading) return;
     if (!name.trim() || !brand.trim() || !description.trim() || !price || !sku.trim()) {
-      setError('Please provide the watch name, brand, description, SKU, and price.');
+      setError('Please provide the product name, brand, description, SKU, and price.');
       return;
     }
 
@@ -105,24 +98,14 @@ export const ProductForm: React.FC<ProductFormProps> = ({
       currency: currency.toUpperCase().trim(),
       tags: tags.split(',').map(tag => tag.trim()).filter(Boolean),
       sku: sku.toUpperCase().trim(),
-      stock: Number(stock),
+      stock: totalStock,
       availability,
       featured,
       isNewArrival,
       status,
-      specifications: {
-        movement,
-        caseMaterial,
-        strapMaterial,
-        dialColor,
-        waterResistance,
-        caseDiameter,
-        crystal,
-        powerReserve,
-        warranty,
-        referenceNumber,
-        condition,
-      },
+      productType,
+      variants,
+      specifications: Object.fromEntries(SPECIFICATION_FIELDS[productType].map(([key]) => [key, specifications[key] || ''])),
       images,
       video: video || null,
     };
@@ -141,7 +124,7 @@ export const ProductForm: React.FC<ProductFormProps> = ({
 
       if (!res.ok) {
         const errData = await res.json().catch(() => ({}));
-        throw new Error(res.status === 401 ? 'Your admin session expired. Sign in again before saving.' : errData.error || 'Failed to save watch.');
+        throw new Error(res.status === 401 ? 'Your admin session expired. Sign in again before saving.' : errData.error || 'Failed to save product.');
       }
 
       setSuccess(true);
@@ -153,7 +136,7 @@ export const ProductForm: React.FC<ProductFormProps> = ({
       }, 1000);
     } catch (err: any) {
       console.error(err);
-      setError(err.message || 'Error saving watch.');
+      setError(err.message || 'Error saving product.');
     } finally {
       setLoading(false);
     }
@@ -172,7 +155,7 @@ export const ProductForm: React.FC<ProductFormProps> = ({
           </Link>}
           <div>
             <Heading className="font-serif text-2xl text-slate-900 dark:text-slate-100 font-semibold break-words">
-              {isEdit ? `Edit ${name}` : 'Add Watch'}
+              {isEdit ? `Edit ${name}` : 'Add Product'}
             </Heading>
             <p className="text-xs uppercase tracking-widest text-slate-500 dark:text-slate-400 mt-0.5">
               Add product details, pricing, photos, and stock
@@ -190,7 +173,7 @@ export const ProductForm: React.FC<ProductFormProps> = ({
           ) : (
             <Save className="w-4 h-4" />
           )}
-          <span>{loading ? 'Saving...' : isEdit ? 'Update Watch' : 'Save Watch'}</span>
+          <span>{loading ? 'Saving...' : isEdit ? 'Update Product' : 'Save Product'}</span>
         </button>
       </div>
 
@@ -204,7 +187,7 @@ export const ProductForm: React.FC<ProductFormProps> = ({
       {success && (
         <div className="p-4 rounded-lg bg-emerald-50 dark:bg-emerald-950/60 border border-emerald-200 dark:border-emerald-800 text-emerald-700 dark:text-emerald-300 text-xs flex items-center gap-2" role="status">
           <CheckCircle className="w-4 h-4 shrink-0" />
-          <span>{onSaved ? 'Product changes saved.' : 'Watch saved. Returning to the product list...'}</span>
+          <span>{onSaved ? 'Product changes saved.' : 'Product saved. Returning to the product list...'}</span>
         </div>
       )}
 
@@ -232,15 +215,15 @@ export const ProductForm: React.FC<ProductFormProps> = ({
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
           <div className="sm:col-span-2 space-y-1.5">
             <label className="text-xs uppercase tracking-widest text-slate-600 dark:text-slate-300 font-medium block">
-              Watch Name *
+              Product Name *
             </label>
             <input
               type="text"
               required
-              aria-label="Watch name"
+              aria-label="Product name"
               value={name}
               onChange={(e) => handleNameChange(e.target.value)}
-              placeholder="e.g. Classic Black Dial Watch"
+              placeholder="e.g. Classic Watch, Everyday Sneakers, or Cotton T-shirt"
               className="w-full bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 rounded-lg px-4 py-2.5 text-xs text-slate-900 dark:text-slate-100 focus:border-amber-500 focus:outline-none"
             />
           </div>
@@ -255,7 +238,7 @@ export const ProductForm: React.FC<ProductFormProps> = ({
               aria-label="Brand"
               value={brand}
               onChange={(e) => setBrand(e.target.value)}
-              placeholder="e.g. Casio, Titan, Fossil"
+              placeholder="e.g. Casio, Nike, or Adidas"
               className="w-full bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 rounded-lg px-4 py-2.5 text-xs text-slate-900 dark:text-slate-100 focus:border-amber-500 focus:outline-none"
             />
           </div>
@@ -273,11 +256,17 @@ export const ProductForm: React.FC<ProductFormProps> = ({
                 setSlug(e.target.value);
                 setSlugManuallyEdited(Boolean(e.target.value));
               }}
-              placeholder="classic-black-dial-watch"
+              placeholder="everyday-sneakers"
               className="w-full bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 rounded-lg px-4 py-2.5 text-xs text-slate-900 dark:text-slate-100 font-mono focus:border-amber-500 focus:outline-none"
             />
           </div>
 
+          <div className="space-y-1.5">
+            <label htmlFor="product-type" className="block text-xs font-medium uppercase tracking-widest text-slate-600 dark:text-slate-300">Product type</label>
+            <select id="product-type" value={productType} onChange={e => setProductType(e.target.value as ProductType)} className="w-full rounded-lg border border-slate-200 bg-slate-50 px-4 py-2.5 text-xs dark:border-slate-800 dark:bg-slate-950">
+              {PRODUCT_TYPES.map(type => <option key={type.value} value={type.value}>{type.label}</option>)}
+            </select>
+          </div>
           <div className="space-y-1.5">
             <label className="text-xs uppercase tracking-widest text-slate-600 dark:text-slate-300 font-medium block">
               Category
@@ -366,7 +355,7 @@ export const ProductForm: React.FC<ProductFormProps> = ({
           </div>
           <div className="space-y-1.5">
             <label htmlFor="product-stock" className="block text-xs font-medium uppercase tracking-widest text-slate-600 dark:text-slate-300">Stock quantity</label>
-            <input id="product-stock" type="number" required min="0" step="1" value={stock} onChange={e => setStock(e.target.value)} className="w-full rounded-lg border border-slate-200 bg-slate-50 px-4 py-2.5 text-xs dark:border-slate-800 dark:bg-slate-950" />
+            <input id="product-stock" type="number" required min="0" step="1" value={variants.length ? totalStock : stock} disabled={variants.length > 0} onChange={e => setStock(e.target.value)} className="w-full rounded-lg border border-slate-200 bg-slate-50 px-4 py-2.5 text-xs dark:border-slate-800 dark:bg-slate-950" />
           </div>
           <div className="space-y-1.5">
             <label htmlFor="product-currency" className="block text-xs font-medium uppercase tracking-widest text-slate-600 dark:text-slate-300">Currency</label>
@@ -384,7 +373,7 @@ export const ProductForm: React.FC<ProductFormProps> = ({
             aria-label="Description"
               value={description}
             onChange={(e) => setDescription(e.target.value)}
-            placeholder="Describe the watch, its style, materials, and key features."
+            placeholder="Describe the product, its style, materials, and key features."
             className="w-full bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 rounded-lg px-4 py-2.5 text-xs text-slate-900 dark:text-slate-100 focus:border-amber-500 focus:outline-none"
           />
         </div>
@@ -445,167 +434,37 @@ export const ProductForm: React.FC<ProductFormProps> = ({
         </div>
       </div>
 
-      {/* SECTION 3: TECHNICAL HOROLOGY SPECS */}
-      <div className="p-6 sm:p-8 rounded-xl bg-white dark:bg-slate-900/40 border border-slate-200 dark:border-slate-800 space-y-6">
-        <h2 className="font-serif text-base text-slate-900 dark:text-slate-100 font-semibold uppercase tracking-wider border-b border-slate-200 dark:border-slate-800 pb-3">
-          3. Watch Specifications
-        </h2>
-
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-          <div className="space-y-1.5">
-            <label className="text-xs uppercase tracking-widest text-slate-600 dark:text-slate-300 font-medium block">
-              Movement Type
-            </label>
-            <input
-              type="text"
-              aria-label="Movement type"
-              value={movement}
-              onChange={(e) => setMovement(e.target.value)}
-              placeholder="e.g. Quartz or Automatic"
-              className="w-full bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 rounded-lg px-4 py-2.5 text-xs text-slate-900 dark:text-slate-100 focus:border-amber-500 focus:outline-none"
-            />
-          </div>
-
-          <div className="space-y-1.5">
-            <label className="text-xs uppercase tracking-widest text-slate-600 dark:text-slate-300 font-medium block">
-              Case Material
-            </label>
-            <input
-              type="text"
-              aria-label="Case material"
-              value={caseMaterial}
-              onChange={(e) => setCaseMaterial(e.target.value)}
-              placeholder="e.g. 316L Steel / 18K Rose Gold"
-              className="w-full bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 rounded-lg px-4 py-2.5 text-xs text-slate-900 dark:text-slate-100 focus:border-amber-500 focus:outline-none"
-            />
-          </div>
-
-          <div className="space-y-1.5">
-            <label className="text-xs uppercase tracking-widest text-slate-600 dark:text-slate-300 font-medium block">
-              Case Diameter
-            </label>
-            <input
-              type="text"
-              aria-label="Case diameter"
-              value={caseDiameter}
-              onChange={(e) => setCaseDiameter(e.target.value)}
-              placeholder="e.g. 39 mm / 40 mm"
-              className="w-full bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 rounded-lg px-4 py-2.5 text-xs text-slate-900 dark:text-slate-100 focus:border-amber-500 focus:outline-none"
-            />
-          </div>
-
-          <div className="space-y-1.5">
-            <label className="text-xs uppercase tracking-widest text-slate-600 dark:text-slate-300 font-medium block">
-              Dial Color
-            </label>
-            <input
-              type="text"
-              aria-label="Dial color"
-              value={dialColor}
-              onChange={(e) => setDialColor(e.target.value)}
-              placeholder="e.g. Black"
-              className="w-full bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 rounded-lg px-4 py-2.5 text-xs text-slate-900 dark:text-slate-100 focus:border-amber-500 focus:outline-none"
-            />
-          </div>
-
-          <div className="space-y-1.5">
-            <label className="text-xs uppercase tracking-widest text-slate-600 dark:text-slate-300 font-medium block">
-              Strap / Bracelet
-            </label>
-            <input
-              type="text"
-              aria-label="Strap or bracelet"
-              value={strapMaterial}
-              onChange={(e) => setStrapMaterial(e.target.value)}
-              placeholder="e.g. Stainless steel, leather, or silicone"
-              className="w-full bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 rounded-lg px-4 py-2.5 text-xs text-slate-900 dark:text-slate-100 focus:border-amber-500 focus:outline-none"
-            />
-          </div>
-
-          <div className="space-y-1.5">
-            <label className="text-xs uppercase tracking-widest text-slate-600 dark:text-slate-300 font-medium block">
-              Water Resistance
-            </label>
-            <input
-              type="text"
-              aria-label="Water resistance"
-              value={waterResistance}
-              onChange={(e) => setWaterResistance(e.target.value)}
-              placeholder="e.g. 50m / 5 ATM / 300m Diver"
-              className="w-full bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 rounded-lg px-4 py-2.5 text-xs text-slate-900 dark:text-slate-100 focus:border-amber-500 focus:outline-none"
-            />
-          </div>
-
-          <div className="space-y-1.5">
-            <label className="text-xs uppercase tracking-widest text-slate-600 dark:text-slate-300 font-medium block">
-              Crystal / Glass
-            </label>
-            <input
-              type="text"
-              aria-label="Crystal or glass"
-              value={crystal}
-              onChange={(e) => setCrystal(e.target.value)}
-              placeholder="e.g. Scratch-Resistant Sapphire"
-              className="w-full bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 rounded-lg px-4 py-2.5 text-xs text-slate-900 dark:text-slate-100 focus:border-amber-500 focus:outline-none"
-            />
-          </div>
-
-          <div className="space-y-1.5">
-            <label className="text-xs uppercase tracking-widest text-slate-600 dark:text-slate-300 font-medium block">
-              Power Reserve
-            </label>
-            <input
-              type="text"
-              aria-label="Power reserve"
-              value={powerReserve}
-              onChange={(e) => setPowerReserve(e.target.value)}
-              placeholder="e.g. 70 Hours"
-              className="w-full bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 rounded-lg px-4 py-2.5 text-xs text-slate-900 dark:text-slate-100 focus:border-amber-500 focus:outline-none"
-            />
-          </div>
-
-          <div className="space-y-1.5">
-            <label className="text-xs uppercase tracking-widest text-slate-600 dark:text-slate-300 font-medium block">
-              Model / Reference Number
-            </label>
-            <input
-              type="text"
-              aria-label="Model or reference number"
-              value={referenceNumber}
-              onChange={(e) => setReferenceNumber(e.target.value)}
-              placeholder="e.g. MTP-VD01D-1EV"
-              className="w-full bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 rounded-lg px-4 py-2.5 text-xs text-slate-900 dark:text-slate-100 focus:border-amber-500 focus:outline-none"
-            />
-          </div>
-
-          <div className="space-y-1.5">
-            <label className="text-xs uppercase tracking-widest text-slate-600 dark:text-slate-300 font-medium block">
-              Condition
-            </label>
-            <input
-              type="text"
-              aria-label="Condition"
-              value={condition}
-              onChange={(e) => setCondition(e.target.value)}
-              placeholder="e.g. New"
-              className="w-full bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 rounded-lg px-4 py-2.5 text-xs text-slate-900 dark:text-slate-100 focus:border-amber-500 focus:outline-none"
-            />
-          </div>
-
-          <div className="space-y-1.5 sm:col-span-2">
-            <label className="text-xs uppercase tracking-widest text-slate-600 dark:text-slate-300 font-medium block">
-              Warranty
-            </label>
-            <input
-              type="text"
-              aria-label="Warranty"
-              value={warranty}
-              onChange={(e) => setWarranty(e.target.value)}
-              placeholder="e.g. 1-year seller warranty"
-              className="w-full bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 rounded-lg px-4 py-2.5 text-xs text-slate-900 dark:text-slate-100 focus:border-amber-500 focus:outline-none"
-            />
-          </div>
+      <div className="rounded-xl border border-slate-200 bg-white p-6 dark:border-slate-800 dark:bg-slate-900/40 sm:p-8 space-y-6">
+        <h2 className="font-serif text-base font-semibold">3. Product Specifications</h2>
+        <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
+          {SPECIFICATION_FIELDS[productType].map(([key, label]) => (
+            <div key={key} className="space-y-1.5">
+              <label htmlFor={`spec-${key}`} className="block text-xs font-medium uppercase tracking-widest text-slate-600 dark:text-slate-300">{label}</label>
+              <input id={`spec-${key}`} type="text" maxLength={2000} value={specifications[key] || ''}
+                onChange={e => setSpecifications(current => ({ ...current, [key]: e.target.value }))}
+                className="w-full rounded-lg border border-slate-200 bg-slate-50 px-4 py-2.5 text-xs focus:border-amber-500 focus:outline-none dark:border-slate-800 dark:bg-slate-950" />
+            </div>
+          ))}
         </div>
+      </div>
+
+      <div className="rounded-xl border border-slate-200 bg-white p-6 dark:border-slate-800 dark:bg-slate-900/40 sm:p-8 space-y-4">
+        <h2 className="font-serif text-base font-semibold">4. Sizes &amp; Colours</h2>
+        <p className="text-xs text-slate-500 dark:text-slate-400">Add one variant for each size and colour combination. For shoes, include the sizing system (e.g. UK 8 or EU 42). Prices are shared; stock is the sum of variant quantities.</p>
+        {variants.map((variant, index) => (
+          <fieldset key={index} className="grid gap-3 rounded-lg border border-slate-200 p-4 dark:border-slate-800 sm:grid-cols-2">
+            <legend className="px-1 text-xs font-semibold">Variant {index + 1}</legend>
+            {(['sku', 'size', 'color', 'stock'] as const).map(field => (
+              <label key={field} className="space-y-1 text-xs capitalize">{field === 'color' ? 'Colour' : field}
+                <input aria-label={`Variant ${index + 1} ${field}`} type={field === 'stock' ? 'number' : 'text'} required min={0} step={1} maxLength={field === 'stock' ? undefined : 100} value={variant[field]}
+                  onChange={e => setVariants(current => current.map((item, i) => i === index ? { ...item, [field]: field === 'stock' ? Number(e.target.value) : e.target.value } : item))}
+                  className="block w-full rounded-lg border border-slate-200 bg-slate-50 px-3 py-2 dark:border-slate-800 dark:bg-slate-950" />
+              </label>
+            ))}
+            <button type="button" onClick={() => { setVariants(current => current.filter((_, i) => i !== index)); onDirtyChange?.(true); }} className="text-left text-xs text-rose-600 dark:text-rose-400">Remove variant</button>
+          </fieldset>
+        ))}
+        <button type="button" disabled={variants.length >= 100} onClick={() => { setVariants(current => [...current, { sku: '', size: '', color: '', stock: 0 }]); onDirtyChange?.(true); }} className="rounded-lg border border-amber-500 px-4 py-2 text-xs disabled:opacity-50">Add size / colour variant</button>
       </div>
 
       <div className="flex justify-end pt-4">
@@ -619,7 +478,7 @@ export const ProductForm: React.FC<ProductFormProps> = ({
           ) : (
             <Save className="w-4 h-4" />
           )}
-          <span>{loading ? 'Saving...' : isEdit ? 'Save Changes' : 'Save Watch'}</span>
+          <span>{loading ? 'Saving...' : isEdit ? 'Save Changes' : 'Save Product'}</span>
         </button>
       </div>
     </form>

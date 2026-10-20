@@ -1,3 +1,4 @@
+import { validateProductOptions, normalizeProductVariants } from '@/lib/productValidation';
 import { NextRequest, NextResponse } from 'next/server';
 import {
   getProductById,
@@ -42,7 +43,7 @@ export async function PUT(
 
     const body = await req.json();
     if (!body || typeof body !== 'object' || Array.isArray(body)) return NextResponse.json({ error: 'Invalid product details.' }, { status: 400 });
-    const fields = ['name', 'slug', 'brand', 'category', 'description', 'story', 'price', 'originalPrice', 'currency', 'sku', 'stock', 'availability', 'featured', 'isNewArrival', 'status', 'specifications', 'images', 'video', 'tags'];
+    const fields = ['name', 'slug', 'brand', 'category', 'productType', 'variants', 'description', 'story', 'price', 'originalPrice', 'currency', 'sku', 'stock', 'availability', 'featured', 'isNewArrival', 'status', 'specifications', 'images', 'video', 'tags'];
     const data = Object.fromEntries(fields.filter(field => field in body).map(field => [field, body[field]]));
     const isFullProductUpdate = ['name', 'brand', 'description', 'price', 'sku'].some(
       (field) => field in data
@@ -61,8 +62,13 @@ export async function PUT(
       ('slug' in data && (typeof data.slug !== 'string' || !/^[a-z0-9]+(?:-[a-z0-9]+)*$/i.test(data.slug)))
     ) return NextResponse.json({ error: 'Check the price, stock quantity, currency, and URL slug.' }, { status: 400 });
 
+    const optionsError = validateProductOptions(data, undefined, true);
+    if (optionsError) return NextResponse.json({ error: optionsError }, { status: 400 });
     const previous = await getProductById(id);
     if (!previous) return NextResponse.json({ error: 'Product not found for update' }, { status: 404 });
+    const mergedError = validateProductOptions(data, previous);
+    if (mergedError) return NextResponse.json({ error: mergedError }, { status: 400 });
+    normalizeProductVariants(data, previous);
     const updated = await updateProduct(id, data);
     if (!updated) {
       return NextResponse.json({ error: 'Product not found for update' }, { status: 404 });
@@ -70,6 +76,8 @@ export async function PUT(
 
     revalidatePath('/');
     revalidatePath('/watches');
+    revalidatePath('/products');
+    revalidatePath('/products/[slug]', 'page');
     revalidatePath(`/watches/${updated.slug}`);
     if (previous.slug !== updated.slug) revalidatePath(`/watches/${previous.slug}`);
     revalidatePath('/categories/[slug]', 'page');
@@ -102,7 +110,12 @@ export async function DELETE(
     }
     revalidatePath('/');
     revalidatePath('/watches');
-    return NextResponse.json({ success: true, message: 'Watch deleted' });
+    revalidatePath('/products');
+    revalidatePath('/products/[slug]', 'page');
+    revalidatePath('/categories/[slug]', 'page');
+    revalidatePath('/admin/products');
+    revalidateTag('catalogue-filters', 'max');
+    return NextResponse.json({ success: true, message: 'Product deleted' });
   } catch (err: any) {
     return NextResponse.json(
       { error: err.message || 'Error deleting product' },

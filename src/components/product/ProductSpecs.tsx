@@ -1,59 +1,39 @@
-import React from 'react';
-import { IProductSpecifications } from '@/types';
-
+import { SPECIFICATION_FIELDS } from "@/lib/productCatalog";
+import { IProductSpecifications, ProductType } from "@/types";
 export interface ProductSpecsProps {
   specifications: IProductSpecifications;
+  productType?: ProductType;
   brand: string;
   category: string;
 }
-
-export const ProductSpecs: React.FC<ProductSpecsProps> = ({
+export const ProductSpecs = ({
   specifications,
+  productType = "watch",
   brand,
   category,
-}) => {
-  const specsList = [
-    { label: 'Brand', value: brand },
-    { label: 'Category', value: category },
-    { label: 'Movement', value: specifications.movement },
-    { label: 'Case Material', value: specifications.caseMaterial },
-    { label: 'Case Diameter', value: specifications.caseDiameter },
-    { label: 'Dial Color', value: specifications.dialColor },
-    { label: 'Glass', value: specifications.crystal },
-    { label: 'Strap / Bracelet', value: specifications.strapMaterial },
-    { label: 'Water Resistance', value: specifications.waterResistance },
-    { label: 'Power Reserve', value: specifications.powerReserve },
-    { label: 'Reference Number', value: specifications.referenceNumber },
-    { label: 'Condition', value: specifications.condition },
-    { label: 'Warranty', value: specifications.warranty },
+}: ProductSpecsProps) => {
+  const specs = [
+    { label: "Brand", value: brand },
+    { label: "Collection", value: category },
+    ...SPECIFICATION_FIELDS[productType].map(([key, label]) => ({
+      label,
+      value: specifications[key],
+    })),
   ].filter((item) => Boolean(item.value));
-
   return (
-    <div className="rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900/30 p-6 sm:p-8 transition-colors shadow-sm">
-      <div className="border-b border-slate-200 dark:border-slate-800 pb-4 mb-6">
-        <h3 className="font-serif text-lg sm:text-xl font-bold text-slate-900 dark:text-slate-100">
-          Watch Specifications
-        </h3>
-        <p className="text-xs uppercase tracking-wider text-slate-500 dark:text-slate-400 mt-1 font-medium">
-          Detailed technical and material information
-        </p>
-      </div>
-
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-x-8 gap-y-4 text-xs">
-        {specsList.map((spec) => (
-          <div
-            key={spec.label}
-            className="flex items-center justify-between py-2.5 border-b border-slate-100 dark:border-slate-800/60"
-          >
-            <span className="text-slate-500 dark:text-slate-400 font-medium tracking-wider uppercase text-[11px]">
-              {spec.label}
-            </span>
-            <span className="text-slate-900 dark:text-slate-100 font-semibold text-right max-w-[60%]">
-              {spec.value}
-            </span>
+    <section className="qt-specs">
+      <h2>The details.</h2>
+      <p className="qt-muted text-sm">
+        Materials, specifications and the finer points.
+      </p>
+      <dl>
+        {specs.map((spec) => (
+          <div key={spec.label}>
+            <dt>{spec.label}</dt>
+            <dd>{spec.value}</dd>
           </div>
         ))}
-      </div>
-    </div>
+      </dl>
+    </section>
   );
 };

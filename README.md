@@ -1,77 +1,46 @@
-# Quartz Times — Luxury Horology Boutique & Catalogue (V1)
+# Quartz Times — Watches, Shoes & T-shirts
 
-**Quartz Times** is a production-grade, photography-first luxury watch boutique web application engineered for independent watch businesses, horology ateliers, and fine timepiece collectors.
+Quartz Times is a responsive, photography-first catalogue with WhatsApp conversion, inquiry capture, and a protected admin area. It supports watches, shoes, and T-shirts in one product system. It does not implement checkout or payments.
 
-Built with a **WhatsApp-first conversion architecture** that seamlessly guides buyers from discovery to personal horologist advisory.
+## Catalogue architecture
 
-Mobile phone visitors open the Shop All catalogue (`/watches`) directly when visiting the homepage. Desktop and tablet visitors retain the editorial homepage. This redirect preserves query parameters and leaves product, contact, and admin links unchanged.
+- **Shared products:** name, brand, category, pricing, publication status, media, tags, and inquiries use the same services and admin screens.
+- **Product type:** `watch`, `shoes`, or `tshirt` selects the specification fields. It is independent of admin-managed categories (such as Automatic, Sneakers, or Everyday T-shirts).
+- **Specifications:** watches retain their existing technical fields; shoes add upper/sole materials, closure, fit and care; T-shirts add fabric, fit, neckline, sleeve length, pattern and care. Common model, condition and warranty fields remain available.
+- **Variants:** optional size/colour combinations have their own SKU and nonnegative integer stock. Footwear sizes include the sizing system, e.g. `UK 8` or `EU 42`. Variant SKUs and size/colour combinations must be unique within a product. All variants share the product price and currency. The server calculates total stock from variants; zero total stock changes an in-stock product to sold out. Stock remains informational; it is not reserved by an inquiry.
+- **Compatibility:** existing products without `productType` are watches. No data migration is required. Existing categories and watch specifications are preserved.
 
-On phones the catalogue uses two compact cards per row so roughly four watches fit on a typical screen. Cards retain the watch title, price, availability and direct WhatsApp action; filtering, sorting and pagination continue to use the existing catalogue flow.
+`/products` is the shared catalogue; use `?productType=watch`, `?productType=shoes`, or `?productType=tshirt` for departments. Filters support category, brand, watch movement, size, colour, availability, price and sorting. A size and colour must match the same variant; with the in-stock filter that variant must have stock. `/products/[slug]` is the canonical detail route. `/watches` remains a watch-only catalogue, and old `/watches/[slug]` links permanently redirect to the canonical product URL. Phone visitors opening `/` are sent to `/products`, preserving query parameters.
 
-Storefront category links and filters follow active categories from the admin category list. Removed/inactive categories disappear from navigation and their category pages show the not-found view; empty categories do not display sample watches. Product forms use the managed list without hardcoded defaults. Category reads never recreate deleted defaults; use the protected seed endpoint explicitly when sample data is wanted. Run `node scripts/test-categories.mjs` for category regression checks.
+Product pages show appropriate specifications and variant choices. WhatsApp links carry the selected variant SKU, size and colour. Inquiry forms save those selections in the message and SKU; email is optional. The site remains a catalogue with lead capture, with no purchase or payment processing.
 
-After signing in as an admin, use **Edit product** on a storefront card or watch page to edit the full product in a modal without visiting the dashboard. Edit details, prices, stock, currency, tags, specifications, publishing flags, photos/video and photo descriptions, then save to refresh the storefront. Unsaved changes can be discarded; renaming follows the new watch URL and unpublishing returns to the catalogue. Visitors cannot see these controls, and every editor-data/save/upload endpoint independently checks the admin session. Run `node scripts/test-storefront-editor.mjs` for the protected editor and update regression checks.
+## Admin workflow
 
-Product photos support drag and drop from your computer or another browser tab, plus click to browse. Supported formats are JPG, PNG, WebP, GIF, AVIF, HEIC and HEIF, up to 15 MB each. Public image links are downloaded and uploaded through the protected server endpoint, with progress and per-batch errors. If a source website blocks downloads or requires a login, download the photo first and drop the saved file. Save the product after adding photos. Run `node scripts/test-image-drop.mjs`, `node scripts/test-remote-image.mjs`, and `node scripts/test-media.mjs` for drag parsing, safe remote downloads, and upload regression checks.
+In **Admin → Categories**, create any needed categories. In **Admin → Products → Add Product**, choose a product type, category, shared details, specifications and optional variants. Add photos/video through the existing Cloudinary media manager. The stock field is calculated when variants exist. Existing products remain editable with no changes to their type.
 
----
+Signed-in admins can also use **Edit product** on storefront cards and product pages. The modal reuses the full form and refreshes the storefront after saving. Editor-data, mutation and upload endpoints independently authorize admin sessions. Active category links are loaded from the managed category list; category reads never seed missing records. Database reads preserve empty category/product-list results.
 
-## ✦ Core Features & Architecture
+The demo dataset includes 15 watches and two clearly marked footwear/clothing examples without photos. Reads never add them to MongoDB. The protected seed endpoint explicitly adds sample data when requested. Replace demo details with real stock and photos before publication. Empty product galleries display a placeholder instead of an unrelated watch photo.
 
-### 1. Photography-First Editorial Design
-- Designed specifically around **real watch photography** (black gloved hands, marble flat-lays, wrist profiles, high-magnification macro movement & subdial shots).
-- Deep ebony & champagne gold aesthetic tailored for luxury horology connoisseurs.
-- Responsive high-resolution gallery with thumbnail switcher, fullscreen zoom lightbox, and product video support.
+## Stack and verification
 
-### 2. WhatsApp Direct Conversion Engine
-- Instant **Click-to-Chat** links across cards, catalogue, hero, and product pages.
-- Dynamic pre-filled inquiry messages embedding **Watch Name, Brand, Reference/SKU, and Listed Price**.
-- Direct contact configuration via `NEXT_PUBLIC_WHATSAPP_NUMBER`.
+Next.js 16 App Router, React 19, strict TypeScript, Tailwind CSS, MongoDB/Mongoose, Cloudinary, and signed HTTP-only admin sessions. Node.js 20.9 or newer is required.
 
-### 3. Comprehensive Horological Catalogue (`/watches`)
-- Real-time server-side database filtering:
-  - **Category**: Automatic, Chronograph, Quartz, Dress, Vintage & Heritage, Diver & Tool
-  - **Manufacture / Brand**: Rolex, Audemars Piguet, Patek Philippe, Omega, Grand Seiko, Cartier, etc.
-  - **Movement Calibre**: Automatic, Manual-Winding, Quartz, Spring Drive, Co-Axial Master Chronometer
-  - **Availability**: In Stock, Reserved, Acquired / Sold Out, Bespoke Sourcing
-  - **Price Range (INR ₹)** & **Sorting** (Featured, Newest, Price Low/High)
-- URL query parameter synchronization (`/watches?category=automatic&sort=price-low`).
+```bash
+npm install
+npm run dev
+npm run typecheck
+npm run lint
+node scripts/test-product-types.mjs
+node scripts/test-categories.mjs
+node scripts/test-storefront-editor.mjs
+node scripts/test-media.mjs
+npm run build
+```
 
-### 4. Direct Client Concierge Inquiry System (`/contact` & `/watches/[slug]`)
-- Integrated inquiry forms storing client leads directly into MongoDB.
-- Instant WhatsApp continuation handoff.
+The product-type regression script checks real Mongoose validation, replacement of an obsolete development schema after hot reload, legacy defaults, protected API mutations, variant validation and totals, partial updates, Mongo/demo filter parity, related products and WhatsApp selections without writing to a database. The build requires a complete production configuration, including a deployed HTTPS site origin.
 
-### 5. Protected Director Admin Portal (`/admin`)
-- Secure authentication via Jose JWT sessions & HTTP-only cookies.
-- **Vault Overview**: Total watches, active inventory, featured curations, unread inquiries.
-- **Product Management**: Add, edit, delete watches with full technical specifications (Calibre, Case Material, Strap, Dial, Water Resistance, Case Diameter, Crystal, Power Reserve, Condition, Warranty).
-- **Cloudinary Media Manager**: Multi-photo upload, live preview, primary cover selector, photo reordering, and optional product video.
-- **Category Taxonomies**: Add, edit, toggle classifications.
-- **Client Inquiry Pipeline**: Status tracker (`New` → `Contacted` → `Converted` → `Closed`) with instant one-click WhatsApp reply generator.
-
-### 6. Cloudinary & Media Optimization
-- Automatic server-side WebP/AVIF format and quality transformation.
-- HEIC/HEIF photos are explicitly converted to JPEG during Cloudinary upload. Existing Cloudinary HEIC photo URLs are delivered as JPEGs on product, category, and hero reads. Without Cloudinary, HEIC upload returns a clear error instead of saving an unrenderable data URL; use JPG/PNG/WebP for local demo uploads. Video uploads retain their existing behavior.
-- Resilient fallback for immediate local demonstration when cloud credentials are pending.
-
-Run `node scripts/test-media.mjs` for HEIC upload and delivery regression checks. These checks stub Cloudinary and admin sessions; they verify conversion options and response handling without uploading assets or changing product records.
-
----
-
-## ✦ Technology Stack
-
-| Layer | Technology |
-|---|---|
-| **Framework** | Next.js 14 (App Router, Server Components & Route Handlers) |
-| **Language** | TypeScript |
-| **Styling** | Tailwind CSS (Tailored Luxury Palette & Typography) |
-| **Database** | MongoDB Atlas with Mongoose (with in-memory fallback layer) |
-| **Media CDN** | Cloudinary Server SDK & Transformation Engine |
-| **Authentication** | Jose JWT & Bcrypt password hashing |
-| **Icons** | Lucide React |
-| **Deployment** | Vercel Ready |
-
----
+Product photos support file/browser drops and click-to-upload. Public images are imported through the protected server endpoint. HEIC/HEIF photos require Cloudinary conversion; supported browser formats retain a local demo fallback. Run `node scripts/test-image-drop.mjs` and `node scripts/test-remote-image.mjs` for image parsing and remote-import checks. Demo memory and base64 media are not durable production storage.
 
 ## ✦ Environment Configuration
 
@@ -128,3 +97,11 @@ Open [http://localhost:3000](http://localhost:3000) to view the boutique.
 - Configure a unique `ADMIN_EMAIL` and `ADMIN_PASSWORD` in the deployment environment.
 - Never deploy the example values or commit production credentials.
 # Quartz_Times_nextjs
+
+### Storefront design
+
+Light mode is the default for new visitors, regardless of device theme. Customers can switch to dark mode, and their choice is saved for future visits.
+
+The public experience uses a photography-first white/charcoal design with flat product cards, responsive grids, department shortcuts, and contextual WhatsApp inquiries. The catalogue has a collapsible desktop filter sidebar and a full-screen mobile filter draft applied with **Show results**. Search, navigation, filtering and photo zoom use accessible native dialogs. Product pages provide size/colour selection, expandable details, and an inquiry form; About, Contact, loading, empty and error states share the same design language. Admin navigation and login use matching typography and neutral surfaces.
+
+Run `node scripts/test-catalogue-navigation.mjs` for filter URL and category-navigation regression checks.

@@ -1,7 +1,8 @@
+import { validateProductOptions, normalizeProductVariants } from '@/lib/productValidation';
 import { NextRequest, NextResponse } from 'next/server';
 import { getProducts, createProduct } from '@/services/productService';
 import { getAdminSession } from '@/lib/auth';
-import { revalidatePath } from 'next/cache';
+import { revalidatePath, revalidateTag } from 'next/cache';
 
 export async function GET(req: NextRequest) {
   try {
@@ -19,6 +20,9 @@ export async function GET(req: NextRequest) {
     const featured = searchParams.get('featured') === 'true' ? true : undefined;
 
     const result = await getProducts({
+      productType: searchParams.get('productType') || undefined,
+      size: searchParams.get('size') || undefined,
+      color: searchParams.get('color') || undefined,
       category,
       brand,
       movement,
@@ -49,7 +53,19 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ error: 'Unauthorized admin access' }, { status: 401 });
     }
 
-    const data = await req.json();
+    const body = await req.json();
+    if (!body || typeof body !== 'object' || Array.isArray(body)) return NextResponse.json({ error: 'Invalid product details.' }, { status: 400 });
+    const fields = ['name', 'slug', 'brand', 'category', 'productType', 'variants', 'description', 'story', 'price', 'originalPrice', 'currency', 'sku', 'stock', 'availability', 'featured', 'isNewArrival', 'status', 'specifications', 'images', 'video', 'tags'];
+    const data = Object.fromEntries(fields.filter(field => field in body).map(field => [field, body[field]]));
+    const optionsError = validateProductOptions(data);
+    if (optionsError) return NextResponse.json({ error: optionsError }, { status: 400 });
+    if (typeof data.price !== 'number' || !Number.isFinite(data.price) || data.price <= 0 ||
+        ('stock' in data && (!Number.isSafeInteger(data.stock) || data.stock < 0)) ||
+        ('currency' in data && (typeof data.currency !== 'string' || !/^[A-Z]{3}$/.test(data.currency))) ||
+        ('slug' in data && (typeof data.slug !== 'string' || !/^[a-z0-9]+(?:-[a-z0-9]+)*$/i.test(data.slug)))) {
+      return NextResponse.json({ error: 'Check the price, stock quantity, currency, and URL slug.' }, { status: 400 });
+    }
+    normalizeProductVariants(data);
     if (!data.name || !data.brand || !data.description || !data.price || !data.sku) {
       return NextResponse.json(
         { error: 'Name, brand, description, price, and SKU are required.' },
@@ -60,7 +76,12 @@ export async function POST(req: NextRequest) {
     const created = await createProduct(data);
     revalidatePath('/');
     revalidatePath('/watches');
+    revalidatePath('/products');
+    revalidatePath('/categories/[slug]', 'page');
+    revalidatePath('/admin/products');
+    revalidateTag('catalogue-filters', 'max');
     revalidatePath(`/watches/${created.slug}`);
+    revalidatePath(`/products/${created.slug}`);
     return NextResponse.json(created, { status: 201 });
   } catch (err: any) {
     console.error('Products POST error:', err);

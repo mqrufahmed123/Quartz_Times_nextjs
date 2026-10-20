@@ -104,7 +104,7 @@ export async function uploadToCloudinary(
     outputFormat?: 'jpg';
   } = {}
 ): Promise<UploadApiResponse> {
-  const { folder = 'quartz-times/watches', resourceType = 'auto', filename, outputFormat } = options;
+  const { folder = 'quartz-times/products', resourceType = 'auto', filename, outputFormat } = options;
 
   return new Promise((resolve, reject) => {
     const uploadStream = cloudinary.uploader.upload_stream(

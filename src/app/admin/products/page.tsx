@@ -19,7 +19,7 @@ export default async function AdminProductsPage() {
           Inventory
         </span>
         <h1 className="font-serif text-2xl sm:text-3xl text-slate-900 dark:text-slate-100 font-bold">
-          All Watches
+          All Products
         </h1>
         <p className="text-xs text-slate-600 dark:text-slate-400 mt-1 hidden sm:block">
           Manage listings, update availability, edit prices, and update photos.

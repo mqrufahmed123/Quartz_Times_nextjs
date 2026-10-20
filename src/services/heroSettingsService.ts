@@ -4,11 +4,11 @@ import { IHeroSettings } from '@/types';
 import { getBrowserImageUrl } from '@/lib/imageDelivery';
 
 export const DEFAULT_HERO_SETTINGS: IHeroSettings = {
-  badgeText: 'Authentic Watch Boutique',
+  badgeText: 'Watches, Shoes & T-shirts',
   titleLine1: 'TIMECRAFTED',
   titleHighlight: 'PRECISION',
   subtitle:
-    'Discover our handpicked collection of luxury and premium watches. 100% authentic Swiss and Japanese models with fast insured delivery across India.',
+    'Discover watches, shoes, and T-shirts selected for your everyday style. Explore the collection and get personal guidance on WhatsApp.',
   heroImage:
     'https://images.unsplash.com/photo-1547996160-71dfabbce5fa?q=80&w=1200&auto=format&fit=crop',
   heroImageAlt: 'Featured Luxury Watch',

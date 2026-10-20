@@ -4,11 +4,11 @@ This file is the canonical handoff for AI coding agents working in this reposito
 
 ## Product and current scope
 
-Quartz Times is a responsive, photography-first watch catalogue for an Indian luxury/premium watch seller. The public site supports product discovery, server-side filtering, product detail pages, WhatsApp conversion, and inquiry capture. A protected admin area manages watches, categories, media, and inquiry statuses.
+Quartz Times is a responsive, photography-first catalogue for watches, shoes, and T-shirts for an Indian luxury/premium watch seller. The public site supports product discovery, server-side filtering, product detail pages, WhatsApp conversion, and inquiry capture. A protected admin area manages products, categories, media, and inquiry statuses.
 
 This is currently a catalogue plus lead-generation application, not a complete e-commerce system. There is no cart, checkout, customer account, address, order, shipment, inventory reservation, refund, or payment implementation. Product pages currently convert through WhatsApp and an inquiry form.
 
-The next requested product direction is payment integration. Do not add a payment button that trusts a browser-supplied amount. A safe implementation first needs a server-owned order/payment model and must derive amount, currency, product identity, availability, and stock from the database on the server. Provider choice and desired purchase flow (single-watch checkout versus cart; full payment versus deposit/payment link) should be confirmed before committing to a provider-specific design.
+The catalogue now supports multiple product types. Payment integration remains a future direction. Do not add a payment button that trusts a browser-supplied amount. A safe implementation first needs a server-owned order/payment model and must derive amount, currency, product identity, availability, and stock from the database on the server. Provider choice and desired purchase flow (single-watch checkout versus cart; full payment versus deposit/payment link) should be confirmed before committing to a provider-specific design.
 
 ## Technology baseline
 
@@ -55,16 +55,16 @@ Keep business/data behavior in `src/services`, persistence schemas in `src/model
 
 ## Public application flow
 
-- `/`: server-rendered homepage with 60-second ISR. It concurrently loads featured products, active categories, and new arrivals. `src/proxy.ts` redirects mobile phone visitors from `/` to `/watches` before rendering, preserving query parameters. Desktop/tablet visitors and bots keep the homepage; other routes are unaffected. Mobile redirects use private/no-store caching.
-- `/watches`: server-rendered catalogue. URL query parameters are the source of truth for filters: `category`, `brand`, `movement`, `availability`, `minPrice`, `maxPrice`, `sort`, and `search`. Phones use a compact two-column grid with 4:3 photos, two-line titles, prices, and per-watch WhatsApp buttons; desktop retains richer cards and a three-column grid. Loading skeletons match the responsive grid. The floating chat widget is hidden on mobile catalogue/category listings to avoid covering card actions.
+- `/`: server-rendered homepage with 60-second ISR. It concurrently loads featured products, active categories, and new arrivals. `src/proxy.ts` redirects mobile phone visitors from `/` to `/products` before rendering, preserving query parameters. Desktop/tablet visitors and bots keep the homepage; other routes are unaffected. Mobile redirects use private/no-store caching.
+- `/products`: server-rendered shared catalogue. `/watches` retains a watch-only listing. URL query parameters are the source of truth for filters: `productType`, `size`, `color`, `category`, `brand`, `movement`, `availability`, `minPrice`, `maxPrice`, `sort`, and `search`. The storefront uses a Nike-inspired photography-first retail system: flat cards, square image stages, readable names and prices, and contextual WhatsApp links. Phones use a two-column grid, desktop uses three columns (four on very wide screens). A shared catalogue toolbar controls sorting and filter visibility. Desktop filters apply directly; mobile filters use a native full-screen dialog with a local draft applied only on Show results. Loading skeletons match the responsive grid. The floating chat widget is hidden on all catalogue/category and product-detail pages, which already provide contextual inquiry actions.
 - `/categories/[slug]`: category-specific catalogue with the same filtering/grid machinery and a fixed category base query.
-- `/watches/[slug]`: active product detail with dynamic metadata, canonical/OpenGraph/Twitter data, Product JSON-LD, media gallery, specifications, related products, WhatsApp CTA, and inquiry form.
+- `/products/[slug]`: active product detail with dynamic metadata, canonical/OpenGraph/Twitter data, Product JSON-LD, media gallery, specifications, related products, WhatsApp CTA, and inquiry form. Old `/watches/[slug]` links permanently redirect to `/products/[slug]`.
 - `/about` and `/contact`: static marketing/support pages; contact embeds the generic inquiry form.
 - `sitemap.xml` includes static routes, active products, and active categories. `robots.txt` disallows `/admin/` and `/api/`.
-- The public shell includes announcement bar, responsive navbar/search, footer, floating WhatsApp button, dark/light theme persistence, and a navigation progress indicator. Admin routes bypass this shell.
-- Header, mobile navigation, and footer category links share `StorefrontCategoriesProvider`, fetching `/api/categories?active=true` without caching on navigation/focus. They use the real active category names/slugs; no fixed Automatic/Chronograph/Vintage list remains. Desktop shows up to three category links or a Categories menu for longer lists; the drawer is used below the xl breakpoint and mobile/footer expose all active categories. Public filter options also use only active categories. Product forms list admin-managed categories, retaining a clearly marked current value for products still assigned to a removed category.
+- The public shell includes announcement bar, responsive navbar/search, footer, floating WhatsApp button, light mode by default with a customer-controlled dark/light toggle and saved preference (independent of OS theme), and a navigation progress indicator. Admin routes bypass this shell.
+- Header, mobile navigation, and footer category links share `StorefrontCategoriesProvider`, fetching `/api/categories?active=true` without caching on navigation/focus. They use the real active category names/slugs; no fixed Automatic/Chronograph/Vintage list remains. Desktop shows department links and a Categories menu; the drawer is used below the lg breakpoint and mobile/footer expose all active categories. Public filter options also use only active categories. Product forms list admin-managed categories, retaining a clearly marked current value for products still assigned to a removed category.
 
-Catalogue filter options are wrapped in `unstable_cache` for 300 seconds under tag `catalogue-filters`. Category mutations expire this tag immediately and revalidate relevant paths. Product mutations revalidate homepage/catalogue/product paths. Category filtering resolves real category slugs to stored names, with slug aliases retained for older products. Category pages show the not-found view for removed/inactive categories and their filter sidebar correctly switches back to the catalogue when selecting another category or All Watches. The catalogue initially renders 12 products server-side; `ProductGrid` loads more through `/api/products`.
+Catalogue filter options are wrapped in `unstable_cache` for 300 seconds under tag `catalogue-filters`. Category mutations expire this tag immediately and revalidate relevant paths. Product mutations revalidate homepage/catalogue/product paths. Category filtering resolves real category slugs to stored names, with slug aliases retained for older products. Category pages show the not-found view for removed/inactive categories and their filter sidebar correctly switches back to the catalogue when selecting another category or All Products. The catalogue initially renders 12 products server-side; `ProductGrid` loads more through `/api/products`.
 
 ## Admin application flow
 
@@ -73,7 +73,7 @@ Catalogue filter options are wrapped in `unstable_cache` for 300 seconds under t
 - `/admin`: dashboard counts, configuration status, and recent inquiries.
 - `/admin/products`: list, delete, publish/status updates, and links to edit.
 - `/admin/products/new` and `/admin/products/[id]/edit`: full product form and media manager.
-- Signed-in admins also see Edit product on storefront cards and watch detail pages. `StorefrontAdminProvider` checks `/api/auth/me` client-side with private/no-store responses, keeping session-dependent controls out of public server-rendered caches. The full form is loaded only when opening a modal and fetches fresh product/categories from the independently protected `/api/admin/products/[id]/editor` endpoint. Cancel/discard stays on the storefront; save refreshes it, follows renamed slugs, and returns hidden products to the catalogue. Modal editing reuses ProductForm; admin dashboard navigation remains its default when no callbacks are provided.
+- Signed-in admins also see Edit product on storefront cards and product detail pages. `StorefrontAdminProvider` checks `/api/auth/me` client-side with private/no-store responses, keeping session-dependent controls out of public server-rendered caches. The full form is loaded only when opening a modal and fetches fresh product/categories from the independently protected `/api/admin/products/[id]/editor` endpoint. Cancel/discard stays on the storefront; save refreshes it, follows renamed slugs, and returns hidden products to the catalogue. Modal editing reuses ProductForm; admin dashboard navigation remains its default when no callbacks are provided.
 - Media controls are locked during uploads/saves. Card image loading/error state follows the image URL, and product galleries remount when their media changes so replacing photos or removing a video refreshes selection correctly.
 - `MediaUploader` has a persistent click/drag/drop photo area. `src/lib/imageDrop.ts` prefers dropped files, otherwise extracts image sources from browser HTML/URI payloads, decodes embedded raster images and same-origin blobs, and unwraps this site's Next image URLs. Each successful upload is kept even if another photo fails. Public HTTP(S) image URLs are imported through the authenticated upload endpoint; blocked/private/authenticated sources show a download-and-upload fallback message.
 - `/admin/categories`: category CRUD and active toggles. Cover images support click-to-upload, local file drops, and browser image drops through the existing authenticated upload/import endpoint and `readImageDrop` helper. A single-image preview supports replacement/removal; an optional URL field remains available. Saving and category actions are locked during uploads so late results cannot attach to another category; failed uploads preserve the previous cover.
@@ -89,11 +89,14 @@ The session cookie is `qt_admin_session`, HTTP-only, SameSite=Lax, secure in pro
 
 `IProduct` and the Mongoose Product schema contain:
 
-- Identity/catalogue: `name`, unique `slug`, `brand`, `category`, unique uppercase `sku`.
+- Identity/catalogue: `name`, unique `slug`, `brand`, `category`, unique uppercase `sku`, and `productType` (`watch`, `shoes`, `tshirt`). Missing legacy types are treated as watches in Mongo queries, serialization and UI; no migration is required. Types are independent of admin-managed category names.
+- Optional `variants`: at most 100 `{ sku, size, color, stock }` combinations, with unique SKUs and size/colour pairs within each product. Include the sizing system in footwear sizes (e.g. UK 8). All variants share product price/currency. Authenticated create/update handlers validate these fields for both MongoDB and demo writes and derive aggregate stock from variants, rejecting stock-only edits when variants exist. Unrelated partial updates leave variant inventory untouched. Zero aggregate stock changes an in-stock product to sold out; restocking still respects the admin's chosen availability. Empty variants retain product-level stock. Variant stock is informational and provides no checkout reservation or oversell protection.
+- `src/lib/productCatalog.ts` is the shared registry of product types and specification labels used by admin and public views. `src/lib/productValidation.ts` validates the new catalogue fields and normalizes variants. Size and colour filters match a single variant; in-stock filtering also checks its quantity. Related products stay within the current type.
+- In development, the Product model replaces an obsolete cached watch-only Mongoose schema after hot reload, preserving product types, variants and clothing/footwear specifications on writes. This does not migrate stored documents.
 - Content: `description`, optional `story`, optional `tags`.
 - Commerce-like fields: numeric `price`, optional `originalPrice`, `currency` (normally `INR`), integer-ish `stock`, and `availability` (`in_stock`, `reserved`, `sold_out`, `made_to_order`). These fields currently drive display/filtering only; they do not enforce checkout inventory.
-- Merchandising: `featured`, optional `isNewArrival`, and publication `status` (`active`, `draft`, `archived`). Public queries only expose active products.
-- Specifications: movement, case/strap material, dial color, water resistance, case diameter, crystal, power reserve, warranty, reference number, and condition.
+- Merchandising: `featured`, optional `isNewArrival`, and publication `status` (`active`, `draft`, `archived`). Public queries only expose active products. New product URLs, card links, search and mobile redirects use `/products`.
+- Specifications: footwear uses upper/sole material, closure, fit and care; T-shirts use fabric/material, fit, neckline, sleeve length, pattern and care; watches retain movement, case/strap material, dial color, water resistance, case diameter, crystal, power reserve, warranty, reference number, and condition.
 - Media: image array with URL/public ID/alt/dimensions/primary flag and optional video URL/public ID/thumbnail.
 - Timestamps. Services serialize Mongo ObjectIds and dates so objects can cross Server-to-Client boundaries.
 
@@ -103,7 +106,7 @@ The session cookie is `qt_admin_session`, HTTP-only, SameSite=Lax, secure in pro
 
 ### Inquiry
 
-`name`, `phone`, `email`, optional product name/ID/SKU, `message`, pipeline `status` (`new`, `contacted`, `converted`, `closed`), optional notes, and timestamps. Public POST validation requires name, phone, and message even though the TypeScript/Mongoose contracts currently declare email required; generic forms allow email to be blank, so this contract is inconsistent and should be resolved when working in this area.
+`name`, `phone`, optional `email`, optional product name/ID/SKU, `message`, pipeline `status` (`new`, `contacted`, `converted`, `closed`), optional notes, and timestamps. Public POST validation requires name, phone, and message. Email is optional in both TypeScript and Mongoose. Product inquiry messages and SKU capture the selected variant size/colour when supplied.
 
 ### Admin
 
@@ -122,7 +125,7 @@ No Order, Payment, Customer, Cart, Address, Shipment, WebhookEvent, or idempoten
 - `POST /api/categories`, `PUT|DELETE /api/categories/[id]`: admin-only.
 - `POST /api/inquiries`: public inquiry creation.
 - `GET /api/inquiries`, `PUT /api/inquiries/[id]`: admin-only.
-- `POST /api/upload`: admin-only multipart upload or JSON `{ imageUrl }` photo import, Node runtime. Images up to 15 MB; videos up to 30 MB; accepted MIME types are defined in the route, including GIF. Remote imports use `src/lib/remoteImage.ts`: checked public DNS pinned to the socket, HTTP(S) standard ports, rechecked redirects (up to three), a 15-second total deadline, bounded streaming, signature-derived raster formats, and no forwarded credentials. Cloudinary upload IDs are unique so browser-supplied filenames cannot overwrite another photo.
+- `POST /api/upload`: admin-only multipart upload or JSON `{ imageUrl }` photo import, Node runtime. Images up to 15 MB; videos up to 30 MB; accepted MIME types are defined in the route, including GIF. Remote imports use `src/lib/remoteImage.ts`: checked public DNS pinned to the socket, HTTP(S) standard ports, rechecked redirects (up to three), a 15-second total deadline, bounded streaming, signature-derived raster formats, and no forwarded credentials. New uploads use the `quartz-times/products` Cloudinary folder; stored watch media URLs remain valid. Cloudinary upload IDs are unique so browser-supplied filenames cannot overwrite another photo.
 - `POST /api/auth/login`, `POST /api/auth/logout`, `GET /api/auth/me`: admin session lifecycle.
 - `POST /api/seed`: superadmin-only idempotent-ish upsert of sample categories/products/inquiries and creation of the configured admin.
 
@@ -130,7 +133,7 @@ Route params and page params/searchParams are Promises because this code targets
 
 ## Persistence and fallback behavior
 
-The services attempt MongoDB first and fall back to module-level arrays initialized from `src/lib/mockData.ts` when `MONGODB_URI` is absent or reads cannot connect. The mock catalogue contains 15 products plus sample categories and inquiries.
+The services attempt MongoDB first and fall back to module-level arrays initialized from `src/lib/mockData.ts` when `MONGODB_URI` is absent or reads cannot connect. The mock catalogue contains 15 watches and two clearly marked footwear/clothing examples without photos, plus sample categories and inquiries.
 
 Important distinctions:
 
@@ -162,7 +165,7 @@ Required by the current deployment check:
 
 ## UI and code conventions
 
-- Visual style: clean luxury retail, high-contrast photography, slate/white light mode, ebony/slate dark mode, amber/gold accents, green only for WhatsApp/success. Inter is body text and Playfair Display is headings.
+- Visual style: photography-first retail with white/charcoal themes, flat cards, generous image areas, restrained gold branding, and green for WhatsApp/success. Public pages and admin headings use Inter; the legacy Playfair font remains available. The scoped retail tokens and responsive layout classes live in `src/app/globals.css`. Native `Modal` dialogs provide focus trapping, Escape dismissal, body-scroll locking and focus restoration for search, mobile navigation, filtering and product image zoom.
 - Design is mobile-first and responsive. Preserve both themes and accessible focus/disabled/error states.
 - Prefer Server Components. Add `'use client'` only for browser state, event handlers, effects, localStorage, or navigation hooks.
 - Use `next/image` for remote product/marketing images and maintain useful alt text.
@@ -177,11 +180,11 @@ Required by the current deployment check:
 - API input validation is currently hand-written and minimal; validate and normalize all new payment/order inputs server-side.
 - Login has no rate limiting, lockout, or CSRF token. SameSite=Lax provides partial CSRF protection, but sensitive new flows should receive an explicit threat review.
 - Public inquiry submission has no rate limiting, CAPTCHA, or abuse control.
-- Product creation still uses truthiness for price. Product updates allowlist editable fields, validate positive prices, nonnegative integer stock, currency and slug, and run Mongoose validators. Zero price is rejected even though the schema permits zero. Empty original price/video are sent as explicit nulls so removal persists. ProductForm exposes stock, currency and tags plus image-alt descriptions; saving is disabled during media uploads. Update invalidation covers old/new slugs, category pages, admin list and catalogue filter options.
+- Product creation validates a positive numeric price and allowlists editable fields. Product updates allowlist editable fields, validate positive prices, nonnegative integer stock, currency and slug, and run Mongoose validators. Zero price is rejected even though the schema permits zero. Empty original price/video are sent as explicit nulls so removal persists. ProductForm exposes stock, currency and tags plus image-alt descriptions; saving is disabled during media uploads. Update invalidation covers old/new slugs, category pages, admin list and catalogue filter options.
 - There is no transaction around stock changes and no inventory reservation strategy.
 - Cloudinary deletion is not performed when product media or products are removed, so remote assets may remain orphaned.
-- JSON-LD maps every non-`in_stock` state to PreOrder and always emits UsedCondition; revisit this if condition/availability accuracy matters.
-- The README says Next.js 14 and “V1,” while `package.json` is version 2.0.0 on Next.js 16. Source and package metadata are authoritative.
+- Product JSON-LD maps in-stock, made-to-order and unavailable states appropriately, and omits condition rather than assuming every item is used.
+- README documents the shared catalogue; source and package metadata remain authoritative.
 
 ## Payment integration guardrails and likely shape
 
@@ -204,6 +207,8 @@ Before completing a change:
 
 - Run `npm run typecheck`.
 - Run `npm run lint`.
+- For catalogue navigation/filter UI changes, run `node scripts/test-catalogue-navigation.mjs` (draft isolation, URL state, category transitions and legacy watch routes).
+- For product type/specification/variant changes, run `node scripts/test-product-types.mjs` and `node scripts/test-storefront-editor.mjs`.
 - For category changes, run `node scripts/test-categories.mjs` (authoritative category reads, active API options, slug/name matching, empty results and demo CRUD).
 - For photo drop/import changes, run `node scripts/test-image-drop.mjs`, `node scripts/test-remote-image.mjs`, and `node scripts/test-media.mjs`.
 - Run `npm run build` when deployment variables are available or the task changes build/runtime behavior; explain if the environment check prevents it.

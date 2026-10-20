@@ -36,9 +36,9 @@ export async function CatalogueResults({
   productsPromise,
   queryKey,
   baseQuery,
-  emptyTitle = 'No Watches Found',
-  emptyDescription = 'No watches match your selected filters. Try changing or resetting the filters.',
-  resetUrl = '/watches',
+  emptyTitle = 'No Products Found',
+  emptyDescription = 'No products match your selected filters. Try changing or resetting the filters.',
+  resetUrl = '/products',
 }: {
   productsPromise: Promise<IPaginatedResult<IProduct>>;
   queryKey: string;

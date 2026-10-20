@@ -35,6 +35,10 @@ function documentToProduct(doc: any): IProduct {
     ...obj,
     id: obj._id ? obj._id.toString() : obj.id,
     _id: obj._id ? obj._id.toString() : obj.id,
+    productType: obj.productType || 'watch',
+    variants: (obj.variants || []).map((variant: any) => ({
+      sku: variant.sku, size: variant.size, color: variant.color, stock: variant.stock,
+    })),
     specifications: obj.specifications ? { ...obj.specifications } : {},
     images: serializeImages(obj.images),
     video: obj.video?.url
@@ -74,6 +78,19 @@ export async function getProducts(
       // Build MongoDB query
       const query: any = params.includeInactive ? { status: { $ne: 'archived' } } : { status: 'active' };
 
+      if (params.productType && params.productType !== 'all') {
+        query.productType = params.productType === 'watch'
+          ? { $in: ['watch', null] } // Existing Mongo records have no productType.
+          : params.productType;
+      }
+      if (params.size || params.color) {
+        query.variants = { $elemMatch: {
+          ...(params.size ? { size: new RegExp(`^${escapeRegExp(params.size)}$`, 'i') } : {}),
+          ...(params.color ? { color: new RegExp(`^${escapeRegExp(params.color)}$`, 'i') } : {}),
+          ...(params.availability === 'in_stock' ? { stock: { $gt: 0 } } : {}),
+        } };
+      }
+
       if (categoryAliases) {
         query.category = { $in: categoryAliases.map((value) => new RegExp(`^${escapeRegExp(value)}$`, 'i')) };
       }
@@ -107,6 +124,7 @@ export async function getProducts(
           { brand: searchRegex },
           { description: searchRegex },
           { sku: searchRegex },
+          { 'variants.sku': searchRegex },
           { 'specifications.referenceNumber': searchRegex },
         ];
       }
@@ -145,6 +163,17 @@ export async function getProducts(
   let filtered = [...inMemoryProducts].filter((p) =>
     params.includeInactive ? p.status !== 'archived' : p.status === 'active'
   );
+
+  if (params.productType && params.productType !== 'all') {
+    filtered = filtered.filter(p => (p.productType || 'watch') === params.productType);
+  }
+  if (params.size || params.color) {
+    filtered = filtered.filter(p => p.variants?.some(variant =>
+      (!params.size || variant.size.toLowerCase() === params.size.toLowerCase()) &&
+      (!params.color || variant.color.toLowerCase() === params.color.toLowerCase()) &&
+      (params.availability !== 'in_stock' || variant.stock > 0)
+    ));
+  }
 
   if (categoryAliases) {
     filtered = filtered.filter(
@@ -187,6 +216,7 @@ export async function getProducts(
         p.name.toLowerCase().includes(q) ||
         p.brand.toLowerCase().includes(q) ||
         p.sku.toLowerCase().includes(q) ||
+        p.variants?.some(variant => variant.sku.toLowerCase().includes(q)) ||
         p.description.toLowerCase().includes(q) ||
         p.specifications?.referenceNumber?.toLowerCase().includes(q)
     );
@@ -270,9 +300,10 @@ export async function getRelatedProducts(
   currentSlug: string,
   category?: string,
   brand?: string,
-  limit = 4
+  limit = 4,
+  productType: IProduct['productType'] = 'watch'
 ): Promise<IProduct[]> {
-  const all = await getProducts({ limit: 16 });
+  const all = await getProducts({ limit: 50, productType });
   return all.items
     .filter((p) => p.slug !== currentSlug)
     .filter((p) => !category || p.category === category || p.brand === brand)
@@ -309,7 +340,7 @@ export async function getDistinctMovements(): Promise<string[]> {
 }
 
 export async function createProduct(data: Partial<IProduct>): Promise<IProduct> {
-  const slug = data.slug || slugify(data.name || 'timepiece');
+  const slug = data.slug || slugify(data.name || 'product');
 
   try {
     const conn = await connectToDatabase();
@@ -320,8 +351,8 @@ export async function createProduct(data: Partial<IProduct>): Promise<IProduct> 
       if (duplicate) {
         throw new Error(
           duplicate.slug === slug
-            ? 'A watch with this URL slug already exists.'
-            : 'A watch with this SKU already exists.'
+            ? 'A product with this URL slug already exists.'
+            : 'A product with this SKU already exists.'
         );
       }
       const doc = await Product.create({
@@ -333,7 +364,7 @@ export async function createProduct(data: Partial<IProduct>): Promise<IProduct> 
       return saved;
     }
     if (process.env.MONGODB_URI) {
-      throw new Error('Database is unavailable. The watch was not saved.');
+      throw new Error('Database is unavailable. The product was not saved.');
     }
   } catch (err) {
     console.error('Error creating product in DB:', err);
@@ -343,10 +374,13 @@ export async function createProduct(data: Partial<IProduct>): Promise<IProduct> 
   const newProd: IProduct = {
     id: `prod-${Date.now()}`,
     _id: `prod-${Date.now()}`,
-    name: data.name || 'Untitled Timepiece',
+    name: data.name || 'Untitled Product',
     slug,
-    brand: data.brand || 'Horology Atelier',
-    category: data.category || 'Automatic',
+    brand: data.brand || 'Quartz Times',
+    category: data.category || 'Uncategorized',
+    productType: data.productType || 'watch',
+    variants: data.variants || [],
+    tags: data.tags || [],
     description: data.description || '',
     story: data.story || '',
     price: Number(data.price) || 0,
@@ -387,7 +421,7 @@ export async function updateProduct(id: string, data: Partial<IProduct>): Promis
   }
 
   if (process.env.MONGODB_URI && mongoose.isValidObjectId(id)) {
-    throw new Error('Database is unavailable. The watch was not updated.');
+    throw new Error('Database is unavailable. The product was not updated.');
   }
 
   const index = inMemoryProducts.findIndex((p) => p.id === id || p._id === id);
@@ -417,7 +451,7 @@ export async function deleteProduct(id: string): Promise<boolean> {
   }
 
   if (process.env.MONGODB_URI && mongoose.isValidObjectId(id)) {
-    throw new Error('Database is unavailable. The watch was not deleted.');
+    throw new Error('Database is unavailable. The product was not deleted.');
   }
 
   inMemoryProducts = inMemoryProducts.filter((p) => p.id !== id && p._id !== id);

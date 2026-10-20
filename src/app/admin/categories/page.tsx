@@ -25,7 +25,7 @@ export default async function AdminCategoriesPage() {
           Product Categories
         </h1>
         <p className="text-xs text-slate-500 dark:text-slate-400 mt-1">
-          Create and manage the categories customers use to browse watches.
+          Create and manage the categories customers use to browse products.
         </p>
       </div>
 

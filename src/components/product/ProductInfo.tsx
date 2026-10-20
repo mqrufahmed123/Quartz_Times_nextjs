@@ -1,164 +1,127 @@
-import React from 'react';
-import {
-  MessageCircle,
-  ShieldCheck,
-  Award,
-  Truck,
-  CheckCircle2,
-} from 'lucide-react';
-import { IProduct } from '@/types';
-import { formatPrice } from '@/lib/utils';
-import { getProductWhatsAppUrl, getFormattedWhatsAppDisplay } from '@/lib/whatsapp';
-import { Badge } from '@/components/common/Badge';
-
+"use client";
+import { useState } from "react";
+import { MessageCircle, ArrowDown } from "lucide-react";
+import { IProduct } from "@/types";
+import { formatPrice } from "@/lib/utils";
+import { getProductWhatsAppUrl } from "@/lib/whatsapp";
 export interface ProductInfoProps {
   product: IProduct;
 }
-
-export const ProductInfo: React.FC<ProductInfoProps> = ({ product }) => {
-  const whatsappUrl = getProductWhatsAppUrl({
-    name: product.name,
-    slug: product.slug,
-    brand: product.brand,
-    sku: product.sku,
-    price: product.price,
-    currency: product.currency,
-    images: product.images,
-  });
-
-  const availabilityLabels = {
-    in_stock: { label: 'In Stock', variant: 'gold' as const },
-    reserved: { label: 'Reserved', variant: 'warning' as const },
-    sold_out: { label: 'Out of Stock', variant: 'danger' as const },
-    made_to_order: { label: 'Pre-Order', variant: 'neutral' as const },
-  };
-
-  const avail = availabilityLabels[product.availability] || availabilityLabels.in_stock;
-
+export const ProductInfo = ({ product }: ProductInfoProps) => {
+  const [variantSku, setVariantSku] = useState("");
+  const selectedVariant = product.variants?.find(
+    (variant) => variant.sku === variantSku,
+  );
+  const status = {
+    in_stock: "In stock",
+    reserved: "Reserved",
+    sold_out: "Sold out",
+    made_to_order: "Made to order",
+  }[product.availability];
+  const type =
+    product.productType === "shoes"
+      ? "Shoes"
+      : product.productType === "tshirt"
+        ? "T-shirt"
+        : "Watch";
   return (
-    <div className="space-y-6">
-      {/* Brand & Availability Header */}
-      <div className="space-y-2">
-        <div className="flex items-center justify-between">
-          <span className="text-xs uppercase tracking-wider text-amber-600 dark:text-amber-400 font-bold">
-            {product.brand}
-          </span>
-          <Badge variant={avail.variant} size="md">
-            {avail.label}
-          </Badge>
-        </div>
-
-        {/* Product Title */}
-        <h1 className="font-serif text-2xl sm:text-3xl lg:text-4xl text-slate-900 dark:text-slate-100 font-bold leading-tight">
-          {product.name}
-        </h1>
-
-        {/* Reference & Condition */}
-        <div className="flex flex-wrap items-center gap-3 text-xs text-slate-500 dark:text-slate-400 pt-1 font-medium">
-          {product.sku && (
-            <span>
-              SKU: <strong className="text-slate-800 dark:text-slate-200 font-mono">{product.sku}</strong>
-            </span>
-          )}
-          {product.specifications?.referenceNumber && (
-            <>
-              <span>•</span>
-              <span>Ref: {product.specifications.referenceNumber}</span>
-            </>
-          )}
-          {product.specifications?.condition && (
-            <>
-              <span>•</span>
-              <span className="text-amber-600 dark:text-amber-400 font-semibold">{product.specifications.condition}</span>
-            </>
-          )}
-        </div>
+    <div className="qt-product-info">
+      <div className="flex justify-between gap-4 text-sm">
+        <span>{product.brand}</span>
+        <span className="qt-muted">{status}</span>
       </div>
-
-      {/* Pricing Card */}
-      <div className="p-4 rounded-xl bg-slate-100 dark:bg-slate-900/60 border border-slate-200 dark:border-slate-800 space-y-1">
-        <span className="text-[11px] uppercase tracking-wider text-slate-500 dark:text-slate-400 font-medium">
-          Price (Taxes Included)
-        </span>
-        <div className="flex items-baseline gap-3">
-          <span className="text-2xl sm:text-3xl font-serif font-bold text-slate-900 dark:text-slate-100">
-            {formatPrice(product.price, product.currency)}
-          </span>
-          {product.originalPrice && product.originalPrice > product.price && (
-            <span className="text-sm text-slate-400 line-through">
-              {formatPrice(product.originalPrice, product.currency)}
-            </span>
-          )}
-        </div>
-      </div>
-
-      {/* Primary Action Button */}
-      <div className="space-y-3 pt-1">
-        <a
-          href={whatsappUrl}
-          target="_blank"
-          rel="noopener noreferrer"
-          className="w-full flex items-center justify-center gap-3 bg-[#25D366] hover:bg-[#20bd5a] text-white font-bold text-sm uppercase tracking-wider py-4 px-6 rounded-lg shadow-md transition-all duration-200 active:scale-[0.99]"
-        >
-          <MessageCircle className="w-5 h-5 fill-current" />
-          <span>Chat on WhatsApp ({getFormattedWhatsAppDisplay()})</span>
-        </a>
-
-        <p className="text-xs text-center text-slate-500 dark:text-slate-400 font-medium">
-          ⚡ Connect directly for live watch photos, videos, and fast delivery details.
-        </p>
-      </div>
-
-      {/* Description */}
-      <div className="space-y-3 pt-4 border-t border-slate-200 dark:border-slate-800">
-        <h3 className="font-serif text-sm font-bold uppercase tracking-wider text-slate-900 dark:text-slate-100">
-          Watch Description
-        </h3>
-        <p className="text-sm text-slate-700 dark:text-slate-300 leading-relaxed whitespace-pre-line font-normal">
-          {product.description}
-        </p>
-
-        {product.story && (
-          <div className="p-4 rounded-lg bg-amber-500/10 border-l-3 border-amber-500 text-xs text-slate-700 dark:text-slate-300 font-medium leading-relaxed">
-            &ldquo;{product.story}&rdquo;
-          </div>
+      <h1>{product.name}</h1>
+      <p className="qt-muted text-sm">
+        {type}
+        {product.specifications?.condition
+          ? ` · ${product.specifications.condition}`
+          : ""}
+      </p>
+      <div className="qt-detail-price">
+        {formatPrice(product.price, product.currency)}
+        {!!product.originalPrice && product.originalPrice > product.price && (
+          <del className="ml-3 text-base font-normal qt-muted">
+            {formatPrice(product.originalPrice, product.currency)}
+          </del>
         )}
       </div>
-
-      {/* Trust Badges */}
-      <div className="grid grid-cols-2 gap-3 pt-4 border-t border-slate-200 dark:border-slate-800">
-        <div className="flex items-start gap-2.5 p-3 rounded-lg bg-slate-50 dark:bg-slate-900/50 border border-slate-200 dark:border-slate-800">
-          <ShieldCheck className="w-4 h-4 text-amber-500 shrink-0 mt-0.5" />
-          <div className="text-[11px]">
-            <strong className="text-slate-900 dark:text-slate-200 block font-semibold">100% Authentic</strong>
-            <span className="text-slate-500 dark:text-slate-400">Verified by experts</span>
+      <p className="qt-muted text-xs">
+        Price shown in {product.currency || "INR"}. Confirm delivery details
+        with our team.
+      </p>
+      {!!product.variants?.length && (
+        <fieldset className="mt-8">
+          <legend className="text-sm font-medium">Select size & colour</legend>
+          <div className="qt-variant-grid">
+            {product.variants.map((variant) => (
+              <button
+                key={variant.sku}
+                type="button"
+                aria-pressed={variantSku === variant.sku}
+                onClick={() =>
+                  setVariantSku(variantSku === variant.sku ? "" : variant.sku)
+                }
+              >
+                {variant.size} · {variant.color}
+                <span>
+                  {variant.stock > 0 ? "In stock" : "Ask about availability"}
+                </span>
+              </button>
+            ))}
           </div>
-        </div>
-
-        <div className="flex items-start gap-2.5 p-3 rounded-lg bg-slate-50 dark:bg-slate-900/50 border border-slate-200 dark:border-slate-800">
-          <Truck className="w-4 h-4 text-amber-500 shrink-0 mt-0.5" />
-          <div className="text-[11px]">
-            <strong className="text-slate-900 dark:text-slate-200 block font-semibold">Free Shipping</strong>
-            <span className="text-slate-500 dark:text-slate-400">Insured Pan-India delivery</span>
-          </div>
-        </div>
-
-        <div className="flex items-start gap-2.5 p-3 rounded-lg bg-slate-50 dark:bg-slate-900/50 border border-slate-200 dark:border-slate-800">
-          <Award className="w-4 h-4 text-amber-500 shrink-0 mt-0.5" />
-          <div className="text-[11px]">
-            <strong className="text-slate-900 dark:text-slate-200 block font-semibold">Warranty</strong>
-            <span className="text-slate-500 dark:text-slate-400">{product.specifications?.warranty || 'Ask about warranty details'}</span>
-          </div>
-        </div>
-
-        <div className="flex items-start gap-2.5 p-3 rounded-lg bg-slate-50 dark:bg-slate-900/50 border border-slate-200 dark:border-slate-800">
-          <CheckCircle2 className="w-4 h-4 text-amber-500 shrink-0 mt-0.5" />
-          <div className="text-[11px]">
-            <strong className="text-slate-900 dark:text-slate-200 block font-semibold">Box & Papers</strong>
-            <span className="text-slate-500 dark:text-slate-400">Complete set</span>
-          </div>
-        </div>
+          <p className="qt-muted text-xs mt-3">
+            {selectedVariant
+              ? `Your inquiry will include ${selectedVariant.size}, ${selectedVariant.color}.`
+              : "Choose an option, or ask us for help with sizing."}
+          </p>
+        </fieldset>
+      )}
+      <div className="mt-8 space-y-3">
+        <a
+          href={getProductWhatsAppUrl({ ...product, variant: selectedVariant })}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="qt-button qt-button-whatsapp w-full"
+        >
+          <MessageCircle size={18} />
+          {product.availability === "sold_out" || selectedVariant?.stock === 0
+            ? "Ask about availability"
+            : "Inquire on WhatsApp"}
+        </a>
+        <a
+          href="#product-inquiry"
+          className="qt-button qt-button-secondary w-full"
+        >
+          Send an inquiry <ArrowDown size={16} />
+        </a>
+        <p className="qt-muted text-xs leading-6 text-center">
+          Ask for more photos, sizing advice and delivery options.
+        </p>
       </div>
+      <details open className="qt-accordion mt-6">
+        <summary>About this product</summary>
+        <p>{product.description}</p>
+        {product.story && <p>{product.story}</p>}
+      </details>
+      <details className="qt-accordion">
+        <summary>Product reference</summary>
+        <p>
+          SKU: {product.sku}
+          {product.specifications?.referenceNumber
+            ? `\nReference: ${product.specifications.referenceNumber}`
+            : ""}
+          {product.specifications?.warranty
+            ? `\nWarranty: ${product.specifications.warranty}`
+            : ""}
+        </p>
+      </details>
+      <details className="qt-accordion">
+        <summary>Delivery & personal assistance</summary>
+        <p>
+          Speak with our team to confirm availability, delivery timing,
+          packaging and any included accessories before arranging your purchase.
+        </p>
+      </details>
     </div>
   );
 };

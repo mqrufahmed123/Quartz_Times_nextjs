@@ -22,6 +22,7 @@ export async function PUT(
     revalidateTag('catalogue-filters', { expire: 0 });
     revalidatePath('/');
     revalidatePath('/watches');
+    revalidatePath('/products');
     revalidatePath('/admin/categories');
     revalidatePath('/categories/[slug]', 'page');
     return NextResponse.json(updated);
@@ -48,6 +49,7 @@ export async function DELETE(
     revalidateTag('catalogue-filters', { expire: 0 });
     revalidatePath('/');
     revalidatePath('/watches');
+    revalidatePath('/products');
     revalidatePath('/admin/categories');
     revalidatePath('/categories/[slug]', 'page');
     return NextResponse.json({ success: true });

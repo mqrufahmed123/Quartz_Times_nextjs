@@ -13,7 +13,25 @@ export interface IProductVideo {
   thumbnailUrl?: string;
 }
 
+export type ProductType = 'watch' | 'shoes' | 'tshirt';
+
+export interface IProductVariant {
+  sku: string;
+  size: string; // Include the sizing system for footwear, e.g. UK 8 or EU 42.
+  color: string;
+  stock: number;
+}
+
 export interface IProductSpecifications {
+  material?: string;
+  upperMaterial?: string;
+  soleMaterial?: string;
+  closure?: string;
+  fit?: string;
+  neckline?: string;
+  sleeveLength?: string;
+  pattern?: string;
+  careInstructions?: string;
   movement?: string; // Automatic, Manual Wind, Quartz, Solar, Co-Axial
   caseMaterial?: string; // 316L Stainless Steel, Titanium, Rose Gold, Ceramic
   strapMaterial?: string; // Genuine Leather, Oyster Steel, Rubber, NATO
@@ -33,6 +51,8 @@ export interface IProduct {
   name: string;
   slug: string;
   brand: string;
+  productType?: ProductType; // Missing on legacy records means watch.
+  variants?: IProductVariant[];
   category: string; // e.g. "Automatic", "Quartz", "Vintage", "Chronograph", "Dive"
   description: string;
   story?: string;
@@ -71,7 +91,7 @@ export interface IInquiry {
   id?: string;
   name: string;
   phone: string;
-  email: string;
+  email?: string;
   product?: string;
   productId?: string;
   productSku?: string;
@@ -92,6 +112,9 @@ export interface IAdminUser {
 }
 
 export interface IProductFilterQuery {
+  productType?: string;
+  size?: string;
+  color?: string;
   category?: string;
   brand?: string;
   movement?: string;

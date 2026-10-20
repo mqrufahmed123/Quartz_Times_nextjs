@@ -1,8 +1,8 @@
-'use client';
+"use client";
 
-import React, { useState, useEffect } from 'react';
-import Link from 'next/link';
-import { usePathname, useRouter } from 'next/navigation';
+import React, { useState, useEffect } from "react";
+import Link from "next/link";
+import { usePathname, useRouter } from "next/navigation";
 import {
   LayoutDashboard,
   Watch,
@@ -17,20 +17,26 @@ import {
   Sun,
   Moon,
   Sparkles,
-} from 'lucide-react';
-import { useTheme } from '@/components/common/ThemeProvider';
-import { cn } from '@/lib/utils';
+} from "lucide-react";
+import { useTheme } from "@/components/common/ThemeProvider";
+import { cn } from "@/lib/utils";
 
 const navLinks = [
-  { label: 'Dashboard', href: '/admin', icon: LayoutDashboard, exact: true },
-  { label: 'All Watches', href: '/admin/products', icon: Watch },
-  { label: 'Add Watch', href: '/admin/products/new', icon: PlusCircle },
-  { label: 'Categories', href: '/admin/categories', icon: FolderTree },
-  { label: 'Hero Banner', href: '/admin/hero', icon: Sparkles },
-  { label: 'Customer Inquiries', href: '/admin/inquiries', icon: MessageSquare },
+  { label: "Dashboard", href: "/admin", icon: LayoutDashboard, exact: true },
+  { label: "All Products", href: "/admin/products", icon: Watch },
+  { label: "Add Product", href: "/admin/products/new", icon: PlusCircle },
+  { label: "Categories", href: "/admin/categories", icon: FolderTree },
+  { label: "Hero Banner", href: "/admin/hero", icon: Sparkles },
+  {
+    label: "Customer Inquiries",
+    href: "/admin/inquiries",
+    icon: MessageSquare,
+  },
 ];
 
-export const AdminShell: React.FC<{ children: React.ReactNode }> = ({ children }) => {
+export const AdminShell: React.FC<{ children: React.ReactNode }> = ({
+  children,
+}) => {
   const pathname = usePathname();
   const router = useRouter();
   const [sidebarOpen, setSidebarOpen] = useState(false);
@@ -42,18 +48,20 @@ export const AdminShell: React.FC<{ children: React.ReactNode }> = ({ children }
   }, [pathname]);
 
   useEffect(() => {
-    document.body.style.overflow = sidebarOpen ? 'hidden' : '';
-    return () => { document.body.style.overflow = ''; };
+    document.body.style.overflow = sidebarOpen ? "hidden" : "";
+    return () => {
+      document.body.style.overflow = "";
+    };
   }, [sidebarOpen]);
 
   const handleLogout = async () => {
     setLoggingOut(true);
     try {
-      await fetch('/api/auth/logout', { method: 'POST' });
-      router.push('/admin/login');
+      await fetch("/api/auth/logout", { method: "POST" });
+      router.push("/admin/login");
       router.refresh();
     } catch (e) {
-      console.error('Logout error:', e);
+      console.error("Logout error:", e);
       setLoggingOut(false);
     }
   };
@@ -69,16 +77,18 @@ export const AdminShell: React.FC<{ children: React.ReactNode }> = ({ children }
             const Icon = link.icon;
             const isActive = link.exact
               ? pathname === link.href
-              : pathname.startsWith(link.href);
+              : pathname === link.href ||
+                (link.href !== "/admin/products" &&
+                  pathname.startsWith(`${link.href}/`));
             return (
               <Link
                 key={link.href}
                 href={link.href}
                 className={cn(
-                  'flex items-center gap-3 px-3.5 py-2.5 rounded-lg text-xs font-bold uppercase tracking-wider transition-colors',
+                  "flex items-center gap-3 px-3.5 py-2.5 rounded-lg text-sm font-medium transition-colors",
                   isActive
-                    ? 'bg-amber-500/15 text-amber-600 dark:text-amber-400 border border-amber-500/30'
-                    : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-slate-100 hover:bg-slate-100 dark:hover:bg-slate-800'
+                    ? "bg-slate-100 text-slate-950 dark:bg-white/10 dark:text-white border border-transparent"
+                    : "text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-slate-100 hover:bg-slate-100 dark:hover:bg-slate-800",
                 )}
               >
                 <Icon className="w-4 h-4 shrink-0" />
@@ -89,28 +99,35 @@ export const AdminShell: React.FC<{ children: React.ReactNode }> = ({ children }
         </div>
       </div>
       <div className="p-3 rounded-lg bg-slate-100 dark:bg-slate-900 border border-slate-200 dark:border-slate-800 text-[11px] text-slate-500 dark:text-slate-400 space-y-1">
-        <p className="text-slate-800 dark:text-slate-200 font-bold">Cloudinary & MongoDB</p>
-        <p className="text-slate-500">Sync Active</p>
+        <p className="text-slate-800 dark:text-slate-200 font-bold">
+          Store management
+        </p>
+        <p className="text-slate-500">Products, collections & inquiries</p>
       </div>
     </div>
   );
 
   return (
-    <div className="min-h-screen bg-slate-50 dark:bg-[#0A0A0B] text-slate-900 dark:text-slate-100 flex flex-col transition-colors">
+    <div className="qt-admin min-h-screen flex flex-col">
       {/* Navbar */}
-      <header className="bg-white dark:bg-[#0A0A0B] border-b border-slate-200 dark:border-slate-800 py-3 px-3 sm:px-6 sticky top-0 z-30 flex items-center justify-between shadow-sm">
+      <header className="bg-white dark:bg-[#0A0A0B] border-b border-slate-200 dark:border-slate-800 py-3 px-3 sm:px-6 sticky top-0 z-30 flex items-center justify-between ">
         <div className="min-w-0 flex flex-1 items-center gap-1 sm:gap-3">
           <button
             onClick={() => setSidebarOpen(true)}
             className="lg:hidden flex min-h-10 min-w-10 shrink-0 items-center justify-center p-2 -ml-1 text-slate-700 dark:text-slate-300 hover:text-amber-500 transition-colors"
             aria-label="Open menu"
+            aria-expanded={sidebarOpen}
           >
             <Menu className="w-5 h-5" />
           </button>
 
-          <Link href="/admin" className="flex min-w-0 items-center gap-2" title="Quartz Times Admin">
+          <Link
+            href="/admin"
+            className="flex min-w-0 items-center gap-2"
+            title="Quartz Times Admin"
+          >
             <Shield className="w-5 h-5 text-amber-500 hidden sm:block" />
-            <span className="truncate whitespace-nowrap font-serif text-sm sm:text-lg font-bold sm:tracking-wider text-slate-900 dark:text-slate-100">
+            <span className="truncate whitespace-nowrap font-sans text-sm sm:text-lg font-bold tracking-tight text-slate-900 dark:text-slate-100">
               QUARTZ TIMES
             </span>
             <span className="text-[10px] uppercase tracking-wider text-amber-600 dark:text-amber-400 bg-amber-500/15 px-2 py-0.5 rounded border border-amber-500/30 hidden xs:inline font-bold">
@@ -125,7 +142,11 @@ export const AdminShell: React.FC<{ children: React.ReactNode }> = ({ children }
             className="flex min-h-10 min-w-10 items-center justify-center p-2 text-slate-600 dark:text-slate-300 hover:text-amber-500 transition-colors rounded-full hover:bg-slate-100 dark:hover:bg-slate-800"
             title="Toggle theme"
           >
-            {theme === 'dark' ? <Sun className="w-4 h-4 text-amber-400" /> : <Moon className="w-4 h-4 text-slate-700" />}
+            {theme === "dark" ? (
+              <Sun className="w-4 h-4 text-amber-400" />
+            ) : (
+              <Moon className="w-4 h-4 text-slate-700" />
+            )}
           </button>
 
           <Link
@@ -144,11 +165,17 @@ export const AdminShell: React.FC<{ children: React.ReactNode }> = ({ children }
           <button
             onClick={handleLogout}
             disabled={loggingOut}
-            aria-label={loggingOut ? 'Signing out' : 'Sign out'}
+            aria-label={loggingOut ? "Signing out" : "Sign out"}
             className="min-h-10 min-w-10 justify-center text-xs uppercase tracking-wider text-rose-600 dark:text-rose-400 hover:text-rose-500 font-bold transition-colors flex items-center gap-1.5 bg-rose-50 dark:bg-rose-950/40 border border-rose-200 dark:border-rose-900/60 px-2 sm:px-3 py-1.5 rounded-lg"
           >
-            {loggingOut ? <span className="h-3.5 w-3.5 animate-spin rounded-full border-2 border-rose-300 border-t-rose-600" /> : <LogOut className="w-3.5 h-3.5" />}
-            <span className="hidden sm:inline">{loggingOut ? 'Signing Out...' : 'Sign Out'}</span>
+            {loggingOut ? (
+              <span className="h-3.5 w-3.5 animate-spin rounded-full border-2 border-rose-300 border-t-rose-600" />
+            ) : (
+              <LogOut className="w-3.5 h-3.5" />
+            )}
+            <span className="hidden sm:inline">
+              {loggingOut ? "Signing Out..." : "Sign Out"}
+            </span>
           </button>
         </div>
       </header>
@@ -164,12 +191,13 @@ export const AdminShell: React.FC<{ children: React.ReactNode }> = ({ children }
 
         <div
           className={cn(
-            'fixed inset-y-0 left-0 z-50 w-72 bg-white dark:bg-[#0A0A0B] border-r border-slate-200 dark:border-slate-800 p-6 flex flex-col shadow-2xl transition-transform duration-300 lg:hidden',
-            sidebarOpen ? 'translate-x-0' : '-translate-x-full'
+            "fixed inset-y-0 left-0 z-50 w-72 bg-white dark:bg-[#0A0A0B] border-r border-slate-200 dark:border-slate-800 p-6 flex flex-col shadow-2xl transition-transform duration-300 lg:hidden",
+            sidebarOpen ? "translate-x-0" : "-translate-x-full",
           )}
         >
           <button
             onClick={() => setSidebarOpen(false)}
+            aria-label="Close admin menu"
             className="absolute top-4 right-4 p-1.5 text-slate-400 hover:text-slate-900 dark:hover:text-white"
           >
             <X className="w-5 h-5" />

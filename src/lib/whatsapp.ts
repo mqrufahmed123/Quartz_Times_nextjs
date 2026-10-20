@@ -1,7 +1,7 @@
 /**
  * WhatsApp Business integration utilities
  */
-import type { IProductMedia } from '@/types';
+import type { IProductMedia, IProductVariant } from '@/types';
 
 // Click-to-chat supports text, so share a public photo URL rather than an attachment.
 function getWatchPhotoText(images: IProductMedia[] = []): string {
@@ -41,10 +41,11 @@ export function getProductWhatsAppUrl(product: {
   price?: number;
   currency?: string;
   images?: IProductMedia[];
+  variant?: IProductVariant;
 }): string {
   const number = getWhatsAppNumber();
   const brandPart = product.brand ? `\nBrand: ${product.brand}` : '';
-  const skuPart = product.sku ? `\nSKU: ${product.sku}` : '';
+  const skuPart = (product.variant?.sku || product.sku) ? `\nSKU: ${product.variant?.sku || product.sku}` : '';
   const pricePart = product.price !== undefined
     ? `\nPrice: ${new Intl.NumberFormat('en-IN', {
         style: 'currency',
@@ -53,11 +54,11 @@ export function getProductWhatsAppUrl(product: {
       }).format(product.price)}`
     : '';
   const siteUrl = (process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3000').replace(/\/$/, '');
-  const productUrl = `${siteUrl}/watches/${encodeURIComponent(product.slug)}`;
+  const productUrl = `${siteUrl}/products/${encodeURIComponent(product.slug)}`;
 
-  const message = `Watch: ${product.name}${brandPart}${skuPart}${pricePart}${getWatchPhotoText(product.images)}
+  const message = `Product: ${product.name}${brandPart}${skuPart}${pricePart}${product.variant ? `\nSize: ${product.variant.size}\nColour: ${product.variant.color}` : ''}${getWatchPhotoText(product.images)}
 Link: ${productUrl}
-Query: Is this watch available?`;
+Query: Is this product available?`;
 
   return `https://wa.me/${number}?text=${encodeURIComponent(message)}`;
 }
@@ -67,7 +68,7 @@ Query: Is this watch available?`;
  */
 export function getGeneralWhatsAppUrl(subject?: string): string {
   const number = getWhatsAppNumber();
-  const message = `Query: ${subject || 'Watch collection'}
+  const message = `Query: ${subject || 'Product collection'}
 Message: Please share more details.`;
 
   return `https://wa.me/${number}?text=${encodeURIComponent(message)}`;
@@ -84,7 +85,7 @@ export function getInquiryWhatsAppUrl(inquiry: {
 }): string {
   const number = getWhatsAppNumber();
   const text = `Name: ${inquiry.name}
-${inquiry.product ? `Watch: ${inquiry.product}\n` : ''}Query: ${inquiry.message}${getWatchPhotoText(inquiry.images)}`;
+${inquiry.product ? `Product: ${inquiry.product}\n` : ''}Query: ${inquiry.message}${getWatchPhotoText(inquiry.images)}`;
 
   return `https://wa.me/${number}?text=${encodeURIComponent(text)}`;
 }

@@ -55,6 +55,8 @@ export const sampleCategories: ICategory[] = [
     active: true,
     itemCount: 4,
   },
+  { id: 'cat-shoes', name: 'Sneakers', slug: 'sneakers', description: 'Everyday footwear in a range of sizes.', active: true },
+  { id: 'cat-tshirts', name: 'Everyday T-shirts', slug: 'everyday-tshirts', description: 'Comfortable everyday essentials.', active: true },
 ];
 
 export const sampleProducts: IProduct[] = [
@@ -648,6 +650,26 @@ export const sampleProducts: IProduct[] = [
         isPrimary: true,
       },
     ],
+  },
+  {
+    id: 'prod-shoes-demo', productType: 'shoes', name: 'Everyday Sneakers', slug: 'everyday-sneakers',
+    brand: 'Quartz Essentials', category: 'Sneakers', description: 'Demo footwear listing with size and colour options. Add your own product photos and details before publishing.',
+    price: 3499, currency: 'INR', sku: 'QT-SHOES-DEMO', stock: 5, availability: 'in_stock', featured: false, isNewArrival: true, status: 'active',
+    specifications: { upperMaterial: 'Canvas', soleMaterial: 'Rubber', closure: 'Lace-up', condition: 'New' },
+    variants: [
+      { sku: 'QT-SHOES-UK8-WHT', size: 'UK 8', color: 'White', stock: 3 },
+      { sku: 'QT-SHOES-UK9-WHT', size: 'UK 9', color: 'White', stock: 2 },
+    ], images: [],
+  },
+  {
+    id: 'prod-tshirt-demo', productType: 'tshirt', name: 'Everyday Cotton T-shirt', slug: 'everyday-cotton-tshirt',
+    brand: 'Quartz Essentials', category: 'Everyday T-shirts', description: 'Demo clothing listing with size and colour options. Add your own product photos and details before publishing.',
+    price: 999, currency: 'INR', sku: 'QT-TEE-DEMO', stock: 10, availability: 'in_stock', featured: false, isNewArrival: true, status: 'active',
+    specifications: { material: 'Cotton', fit: 'Regular', neckline: 'Crew neck', sleeveLength: 'Short sleeve', condition: 'New' },
+    variants: [
+      { sku: 'QT-TEE-M-BLK', size: 'M', color: 'Black', stock: 6 },
+      { sku: 'QT-TEE-L-BLK', size: 'L', color: 'Black', stock: 4 },
+    ], images: [],
   },
 ];
 

@@ -5,7 +5,7 @@ export function proxy(request: NextRequest) {
     const { device, isBot } = userAgent(request);
     if (!isBot && device.type === 'mobile') {
       const destination = request.nextUrl.clone();
-      destination.pathname = '/watches';
+      destination.pathname = '/products';
       const response = NextResponse.redirect(destination);
       // Device-specific redirects must not be reused for desktop visitors.
       response.headers.set('Cache-Control', 'private, no-store');

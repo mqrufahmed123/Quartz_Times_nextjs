@@ -1,192 +1,214 @@
-'use client';
+"use client";
 
-import React, { useState } from 'react';
-import { Send, CheckCircle2, MessageCircle, AlertCircle } from 'lucide-react';
-import { IProduct } from '@/types';
-import { getInquiryWhatsAppUrl } from '@/lib/whatsapp';
+import React, { useState } from "react";
+import { Send, CheckCircle2, MessageCircle, AlertCircle } from "lucide-react";
+import { IProduct } from "@/types";
+import { getInquiryWhatsAppUrl } from "@/lib/whatsapp";
 
 export interface DirectInquiryFormProps {
   product?: IProduct;
 }
 
-export const DirectInquiryForm: React.FC<DirectInquiryFormProps> = ({ product }) => {
-  const [name, setName] = useState('');
-  const [phone, setPhone] = useState('');
-  const [email, setEmail] = useState('');
+export const DirectInquiryForm: React.FC<DirectInquiryFormProps> = ({
+  product,
+}) => {
+  const [variantSku, setVariantSku] = useState("");
+  const variant = product?.variants?.find((item) => item.sku === variantSku);
+  const [name, setName] = useState("");
+  const [phone, setPhone] = useState("");
+  const [email, setEmail] = useState("");
   const [message, setMessage] = useState(
     product
-      ? 'Is this watch available?'
-      : 'Please share the available watches.'
+      ? "Is this product available?"
+      : "Please share the available products.",
   );
+
+  const inquiryMessage = variant
+    ? `${message}\nSize: ${variant.size}\nColour: ${variant.color}\nVariant SKU: ${variant.sku}`
+    : message;
 
   const [loading, setLoading] = useState(false);
   const [success, setSuccess] = useState(false);
-  const [error, setError] = useState('');
+  const [error, setError] = useState("");
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!name.trim() || !phone.trim() || !message.trim()) {
-      setError('Please provide your name, phone number, and message.');
+      setError("Please provide your name, phone number, and message.");
       return;
     }
 
     setLoading(true);
-    setError('');
+    setError("");
 
     try {
-      const res = await fetch('/api/inquiries', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+      const res = await fetch("/api/inquiries", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           name,
           phone,
           email,
-          message,
+          message: inquiryMessage,
           product: product ? `${product.brand} - ${product.name}` : undefined,
           productId: product?.id || product?._id,
-          productSku: product?.sku,
+          productSku: variant?.sku || product?.sku,
         }),
       });
 
       if (!res.ok) {
-        throw new Error('Failed to submit inquiry.');
+        throw new Error("Failed to submit inquiry.");
       }
 
       setSuccess(true);
     } catch (err: any) {
       console.error(err);
-      setError(err.message || 'Unable to submit inquiry right now.');
+      setError(err.message || "Unable to submit inquiry right now.");
     } finally {
       setLoading(false);
     }
   };
 
   const directWhatsAppUrl = getInquiryWhatsAppUrl({
-    name: name || 'Customer',
-    product: product ? `${product.brand} ${product.name} (${product.sku})` : undefined,
-    message,
+    name: name || "Customer",
+    product: product
+      ? `${product.brand} ${product.name} (${product.sku})`
+      : undefined,
+    message: inquiryMessage,
     images: product?.images,
   });
 
   return (
-    <div className="rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900/40 p-6 sm:p-8 transition-colors shadow-sm">
-      <div className="border-b border-slate-200 dark:border-slate-800 pb-4 mb-6">
-        <h3 className="font-serif text-lg sm:text-xl font-bold text-slate-900 dark:text-slate-100">
-          Inquire About This Watch
-        </h3>
-        <p className="text-xs text-slate-500 dark:text-slate-400 mt-1 font-medium">
-          Send us a message and our team will get back to you right away.
-        </p>
-      </div>
-
+    <section
+      id="product-inquiry"
+      className="qt-inquiry scroll-mt-28"
+      aria-labelledby="inquiry-heading"
+    >
+      <h2 id="inquiry-heading">
+        {product ? "Ask us about it." : "Leave us a message."}
+      </h2>
+      <p className="qt-muted text-sm leading-6 mb-7">
+        {product
+          ? "A closer look, a size check, or the next steps. We’re here to help."
+          : "Share your question and a number where our team can reach you."}
+      </p>
       {success ? (
-        <div className="p-6 rounded-lg bg-emerald-50 dark:bg-emerald-950/40 border border-emerald-300 dark:border-emerald-800/60 text-center space-y-4">
-          <CheckCircle2 className="w-10 h-10 text-emerald-600 dark:text-emerald-400 mx-auto" />
-          <h4 className="font-serif text-lg font-bold text-emerald-900 dark:text-emerald-200">
-            Inquiry Sent Successfully!
-          </h4>
-          <p className="text-xs text-slate-600 dark:text-slate-300 max-w-md mx-auto leading-relaxed">
-            Thank you, <strong className="text-slate-900 dark:text-white">{name}</strong>. Our team has received your message and will reach out via Phone / WhatsApp shortly.
+        <div role="status" className="space-y-4 py-5">
+          <CheckCircle2 size={32} className="text-emerald-600" />
+          <h3 className="text-xl font-medium">Message received.</h3>
+          <p className="qt-muted text-sm leading-7">
+            Thank you, {name}. Our team will contact you by phone or WhatsApp
+            during support hours.
           </p>
-          <div className="pt-2">
-            <a
-              href={directWhatsAppUrl}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="inline-flex items-center gap-2 bg-[#25D366] hover:bg-[#20bd5a] text-white font-bold text-xs uppercase tracking-wider px-5 py-2.5 rounded-lg transition-all"
-            >
-              <MessageCircle className="w-4 h-4 fill-current" />
-              <span>Chat Directly on WhatsApp</span>
-            </a>
-          </div>
+          <a
+            href={directWhatsAppUrl}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="qt-button qt-button-whatsapp"
+          >
+            <MessageCircle size={17} /> Continue on WhatsApp
+          </a>
         </div>
       ) : (
-        <form onSubmit={handleSubmit} className="space-y-4">
+        <form onSubmit={handleSubmit} className="space-y-5" aria-busy={loading}>
           {error && (
-            <div className="p-3 rounded bg-rose-50 dark:bg-rose-950/60 border border-rose-200 dark:border-rose-800/80 text-rose-700 dark:text-rose-300 text-xs flex items-center gap-2">
-              <AlertCircle className="w-4 h-4 shrink-0" />
-              <span>{error}</span>
+            <div
+              role="alert"
+              className="flex gap-2 text-sm text-rose-600 dark:text-rose-400"
+            >
+              <AlertCircle size={18} />
+              {error}
             </div>
           )}
-
+          {!!product?.variants?.length && (
+            <div>
+              <label htmlFor="inquiry-variant">Size & colour (optional)</label>
+              <select
+                id="inquiry-variant"
+                value={variantSku}
+                onChange={(event) => setVariantSku(event.target.value)}
+              >
+                <option value="">Ask about available options</option>
+                {product.variants.map((item) => (
+                  <option key={item.sku} value={item.sku}>
+                    {item.size} / {item.color}
+                    {item.stock === 0 ? " (out of stock)" : ""}
+                  </option>
+                ))}
+              </select>
+            </div>
+          )}
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-            <div className="space-y-1">
-              <label className="text-[11px] uppercase tracking-wider text-slate-600 dark:text-slate-400 font-bold block">
-                Your Full Name *
+            <div>
+              <label htmlFor="inquiry-name">
+                Name <span className="qt-muted">(required)</span>
               </label>
               <input
-                type="text"
+                id="inquiry-name"
+                autoComplete="name"
                 required
                 value={name}
-                onChange={(e) => setName(e.target.value)}
-                placeholder="e.g. Rahul Sharma"
-                className="w-full bg-slate-50 dark:bg-slate-950 border border-slate-300 dark:border-slate-700 focus:border-amber-500 rounded-lg px-3.5 py-2.5 text-xs text-slate-900 dark:text-slate-100 placeholder-slate-400 focus:outline-none transition-colors font-medium"
+                onChange={(event) => setName(event.target.value)}
+                placeholder="Your full name"
               />
             </div>
-
-            <div className="space-y-1">
-              <label className="text-[11px] uppercase tracking-wider text-slate-600 dark:text-slate-400 font-bold block">
-                WhatsApp / Phone Number *
+            <div>
+              <label htmlFor="inquiry-phone">
+                Phone <span className="qt-muted">(required)</span>
               </label>
               <input
+                id="inquiry-phone"
                 type="tel"
+                autoComplete="tel"
                 required
                 value={phone}
-                onChange={(e) => setPhone(e.target.value)}
-                placeholder="+91 98765 43210"
-                className="w-full bg-slate-50 dark:bg-slate-950 border border-slate-300 dark:border-slate-700 focus:border-amber-500 rounded-lg px-3.5 py-2.5 text-xs text-slate-900 dark:text-slate-100 placeholder-slate-400 focus:outline-none transition-colors font-medium"
+                onChange={(event) => setPhone(event.target.value)}
+                placeholder="Including country code"
               />
             </div>
           </div>
-
-          <div className="space-y-1">
-            <label className="text-[11px] uppercase tracking-wider text-slate-600 dark:text-slate-400 font-bold block">
-              Email Address (Optional)
+          <div>
+            <label htmlFor="inquiry-email">
+              Email <span className="qt-muted">(optional)</span>
             </label>
             <input
+              id="inquiry-email"
               type="email"
+              autoComplete="email"
               value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              placeholder="rahul@example.com"
-              className="w-full bg-slate-50 dark:bg-slate-950 border border-slate-300 dark:border-slate-700 focus:border-amber-500 rounded-lg px-3.5 py-2.5 text-xs text-slate-900 dark:text-slate-100 placeholder-slate-400 focus:outline-none transition-colors font-medium"
+              onChange={(event) => setEmail(event.target.value)}
+              placeholder="you@example.com"
             />
           </div>
-
-          <div className="space-y-1">
-            <label className="text-[11px] uppercase tracking-wider text-slate-600 dark:text-slate-400 font-bold block">
-              Your Message *
+          <div>
+            <label htmlFor="inquiry-message">
+              Message <span className="qt-muted">(required)</span>
             </label>
             <textarea
-              rows={3}
+              id="inquiry-message"
+              rows={4}
               required
               value={message}
-              onChange={(e) => setMessage(e.target.value)}
-              className="w-full bg-slate-50 dark:bg-slate-950 border border-slate-300 dark:border-slate-700 focus:border-amber-500 rounded-lg px-3.5 py-2.5 text-xs text-slate-900 dark:text-slate-100 placeholder-slate-400 focus:outline-none transition-colors font-medium"
+              onChange={(event) => setMessage(event.target.value)}
             />
           </div>
-
-          <div className="flex flex-col sm:flex-row items-center gap-3 pt-2">
-            <button
-              type="submit"
-              disabled={loading}
-              className="w-full sm:w-auto flex-1 bg-amber-500 hover:bg-amber-600 text-slate-950 font-bold text-xs uppercase tracking-wider py-3 px-6 rounded-lg transition-all flex items-center justify-center gap-2 shadow-sm disabled:opacity-50"
-            >
-              <Send className="w-4 h-4" />
-              <span>{loading ? 'Sending...' : 'Submit Inquiry'}</span>
-            </button>
-
-            <a
-              href={directWhatsAppUrl}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="w-full sm:w-auto flex items-center justify-center gap-2 bg-emerald-50 dark:bg-emerald-950/40 hover:bg-emerald-600 dark:hover:bg-emerald-500 text-emerald-700 dark:text-emerald-400 hover:text-white border border-emerald-300 dark:border-emerald-700/60 text-xs font-bold uppercase tracking-wider py-3 px-5 rounded-lg transition-all"
-            >
-              <MessageCircle className="w-4 h-4 fill-current" />
-              <span>Instant WhatsApp</span>
-            </a>
-          </div>
+          <p className="qt-muted text-xs leading-6">
+            We’ll use these details to respond to your inquiry.
+          </p>
+          <button type="submit" disabled={loading} className="qt-button w-full">
+            <Send size={16} />
+            {loading ? "Sending your message…" : "Send message"}
+          </button>
+          <a
+            href={directWhatsAppUrl}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="qt-card-action mx-auto !flex justify-center"
+          >
+            <MessageCircle size={16} /> Prefer WhatsApp? Chat directly
+          </a>
         </form>
       )}
-    </div>
+    </section>
   );
 };

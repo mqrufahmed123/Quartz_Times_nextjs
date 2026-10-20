@@ -1,11 +1,11 @@
-'use client';
+"use client";
 
-import React, { useEffect, useState } from 'react';
-import { Loader2 } from 'lucide-react';
-import { useSearchParams } from 'next/navigation';
-import { IProduct } from '@/types';
-import { ProductCard } from './ProductCard';
-import { EmptyState } from '@/components/common/EmptyState';
+import React, { useEffect, useState } from "react";
+import { Loader2 } from "lucide-react";
+import { useSearchParams } from "next/navigation";
+import { IProduct } from "@/types";
+import { ProductCard } from "./ProductCard";
+import { EmptyState } from "@/components/common/EmptyState";
 
 export interface ProductGridProps {
   products: IProduct[];
@@ -30,50 +30,58 @@ export const ProductGrid: React.FC<ProductGridProps> = ({
   initialHasMore = false,
   pageSize = 12,
   baseQuery = {},
-  queryKey = '',
+  queryKey = "",
 }) => {
   const searchParams = useSearchParams();
   const [items, setItems] = useState(products || []);
   const [page, setPage] = useState(initialPage);
   const [hasMore, setHasMore] = useState(initialHasMore);
   const [loadingMore, setLoadingMore] = useState(false);
-  const [loadError, setLoadError] = useState('');
+  const [loadError, setLoadError] = useState("");
 
   useEffect(() => {
     setItems(products || []);
     setPage(initialPage);
     setHasMore(initialHasMore);
-    setLoadError('');
+    setLoadError("");
   }, [products, initialPage, initialHasMore, queryKey]);
 
   const loadMore = async () => {
     if (loadingMore || !hasMore) return;
     setLoadingMore(true);
-    setLoadError('');
+    setLoadError("");
 
     try {
       const params = new URLSearchParams(searchParams.toString());
-      Object.entries(baseQuery).forEach(([key, value]) => params.set(key, value));
-      params.set('page', String(page + 1));
-      params.set('limit', String(pageSize));
+      Object.entries(baseQuery).forEach(([key, value]) =>
+        params.set(key, value),
+      );
+      params.set("page", String(page + 1));
+      params.set("limit", String(pageSize));
 
       const response = await fetch(`/api/products?${params.toString()}`, {
-        headers: { Accept: 'application/json' },
+        headers: { Accept: "application/json" },
       });
-      if (!response.ok) throw new Error('Could not load more watches.');
+      if (!response.ok) throw new Error("Could not load more products.");
 
       const result = await response.json();
       setItems((current) => {
-        const existing = new Set(current.map((product) => product.id || product._id || product.slug));
+        const existing = new Set(
+          current.map((product) => product.id || product._id || product.slug),
+        );
         const next = (result.items as IProduct[]).filter(
-          (product) => !existing.has(product.id || product._id || product.slug)
+          (product) => !existing.has(product.id || product._id || product.slug),
         );
         return [...current, ...next];
       });
       setPage(result.page);
       setHasMore(result.hasMore);
     } catch (error) {
-      setLoadError(error instanceof Error ? error.message : 'Could not load more watches.');
+      setLoadError(
+        error instanceof Error
+          ? error.message
+          : "Could not load more products.",
+      );
     } finally {
       setLoadingMore(false);
     }
@@ -92,14 +100,23 @@ export const ProductGrid: React.FC<ProductGridProps> = ({
 
   return (
     <div className="space-y-8">
-      <div className="grid grid-cols-2 lg:grid-cols-3 gap-2 sm:gap-6 lg:gap-8" aria-live="polite">
+      <div className="qt-product-grid" aria-live="polite">
         {items.map((product, idx) => (
-          <ProductCard key={product.id || product.slug} product={product} priority={idx < 2} />
+          <ProductCard
+            key={product.id || product.slug}
+            product={product}
+            priority={idx < 2}
+          />
         ))}
       </div>
 
       {loadError && (
-        <p className="text-center text-sm text-rose-600 dark:text-rose-400" role="alert">{loadError}</p>
+        <p
+          className="text-center text-sm text-rose-600 dark:text-rose-400"
+          role="alert"
+        >
+          {loadError}
+        </p>
       )}
 
       {hasMore && (
@@ -108,10 +125,10 @@ export const ProductGrid: React.FC<ProductGridProps> = ({
             type="button"
             onClick={loadMore}
             disabled={loadingMore}
-            className="inline-flex min-w-44 items-center justify-center gap-2 rounded-lg border border-amber-500 bg-amber-500 px-6 py-3 text-xs font-bold uppercase tracking-wider text-slate-950 transition-colors hover:bg-amber-600 disabled:cursor-wait disabled:opacity-70"
+            className="qt-button qt-button-secondary min-w-52"
           >
             {loadingMore && <Loader2 className="h-4 w-4 animate-spin" />}
-            {loadingMore ? 'Loading watches...' : 'Load More Watches'}
+            {loadingMore ? "Loading products..." : "Load More Products"}
           </button>
         </div>
       )}
